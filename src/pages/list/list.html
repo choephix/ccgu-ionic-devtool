@@ -1,19 +1,23 @@
 <ion-header>
   <ion-navbar>
-    
+
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <ion-row class="filters">
-      <ion-col no-padding>
-        <ion-slides (ionSlideDidChange)="slideChanged()" slidesPerView="10">
-          <ion-slide (click)="selectFilter(segment)" *ngFor="let segment of segments">
-            <button class="slide" [class.selected]="selectedSegment === segment" ion-button full large clear>{{ segment.name }}</button>
-          </ion-slide>
-        </ion-slides>
-      </ion-col>
-    </ion-row>
+    <ion-grid grid-padding-width="1px">
+      <ion-row class="filters">
+        <ion-col no-padding *ngFor="let segment of segments">
+              <button 
+                class="page-button"
+                class.selected="{{segment===selectedSegment}}" 
+
+                ion-button clear full>
+                {{ segment.name }}
+              </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
   </ion-navbar>
 </ion-header>
@@ -22,18 +26,18 @@
 
     <ion-scroll scrollX="true" scrollY="true" style="width: 100%; height: 100%; background: #789">
         <div *ngFor="let card of cards" 
-        (window:resize)="onResize($event)"
-              [style.width]="cardWidth + 'px'"
-              [style.height]="cardHeight + 'px'"
-              [style.left]="getX(card.index) + 'px'"
-              [style.top]="getY(card.index) + 'px'"
-              style.margin="{{cardMargin}}px"
+              style.width="{{cardWidth}}px"
+              style.height="{{cardHeight}}px"
+              style.left="{{getX(card.index)}}px"
+              style.top="{{getY(card.index)}}px"
               class="lecard {{getColorClass(card)}}">
           <ion-input [(ngModel)]="card.icon"></ion-input>
           <p>{{card.title}}</p>
           <p>{{card.note}}</p>
         </div>
-        <div [style.width]="(cardXFactor*cardColumnsCount+2) + 'px'">.</div>
+        <div style.width="{{cardXFactor*cardColumnsCount+2}}px"
+             style.height]="{{cardYFactor*cardRowsCount+200}}px"
+            >.</div>
     </ion-scroll>
     
 </ion-content>

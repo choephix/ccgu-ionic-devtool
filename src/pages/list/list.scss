@@ -2,10 +2,10 @@ page-list {
     
     .lecard
     {
-        margin: 10px;
         position: absolute;
         text-align: center;
         // transform: rotate(-90deg);
+        border: 1px solid rgba(0,0,0,.5);
     }
 
     .lecard.sneak  { background : #EA4 }

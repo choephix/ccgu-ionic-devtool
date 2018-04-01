@@ -22,26 +22,10 @@ export class ListPage {
     this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
     'american-football', 'boat', 'bluetooth', 'build'];
 
-    this.cards = [];
-    for (let i = 0; i < 256; i++) {
-      this.cards.push({
-        index: i,
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
-    }
-
-    this.onResize(null);
-  }
-
-  public onResize(event)
-  {
-    console.log( "RESIZE: " + ( event == null ? "null" : event.target.innerWidth ) );
-    // this.cards[0].title = "RESIZE: " + event.target.innerWidth;
+    const CARDS_COUNT:number = 256;
 
     this.cardColumnsCount = 16;
-    this.cardRowsCount = Math.ceil( this.cards.length / this.cardColumnsCount );
+    this.cardRowsCount = Math.ceil( CARDS_COUNT / this.cardColumnsCount );
 
     this.cardWidth = this.minCardWidth;
     this.cardHeight = this.minCardHeight;
@@ -49,11 +33,22 @@ export class ListPage {
     this.cardXFactor = this.cardWidth + this.cardMargin;
     this.cardYFactor = this.cardHeight + this.cardMargin;
 
+    this.cards = [];
+    for (let i = 0; i < CARDS_COUNT; i++) {
+      this.cards.push({
+        index: i,
+        title: 'Item ' + i,
+        note: 'This is item #' + i,
+        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
+      });
+    }
   }
 
   public minCardWidth:number = 160;
   public minCardHeight:number = 120;
-  public cardMargin:number = 2;
+  public cardMargin:number = 1;
+  public marginX:number = 8;
+  public marginY:number = 16;
 
   public cardWidth:number;
   public cardHeight:number;
@@ -67,8 +62,8 @@ export class ListPage {
   // countCols():number { return Math.floor( this.platform.width() / this.minCardWidth ) }
   // countRows():number { return 10 }
 
-  public getX( i:number ):number { return Math.floor( i % this.cardColumnsCount ) * this.cardXFactor; }
-  public getY( i:number ):number { return Math.floor( i / this.cardColumnsCount ) * this.cardYFactor; }
+  public getX( i:number ):number { return this.marginX + Math.floor( i % this.cardColumnsCount ) * this.cardXFactor; }
+  public getY( i:number ):number { return this.marginY + Math.floor( i / this.cardColumnsCount ) * this.cardYFactor; }
   public getColorClass( card )
   {
     var col:number = Math.floor( card.index % this.cardColumnsCount );
