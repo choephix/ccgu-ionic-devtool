@@ -1,0 +1,95 @@
+<ion-header>
+
+</ion-header>
+
+<ion-content padding>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-3>
+        <ion-item>
+          <ion-label color="primary" stacked>ID</ion-label>
+          <ion-input type="text" [(ngModel)]="card.id"> </ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-6>
+        <ion-item>
+          <ion-label color="primary" stacked>Slug</ion-label>
+          <ion-input type="text" [(ngModel)]="card.slug"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-3>
+        <button ion-button (click)="card.isTrap=!card.isTrap" full large>
+          {{card.isTrap?"TRAP":"UNIT"}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-item>
+    <ion-label color="primary" stacked>Name ({{card.prettyStatus}})</ion-label>
+    <ion-input type="text" [(ngModel)]="card.name"></ion-input>
+  </ion-item>
+
+  <ion-item *ngIf="!card.isTrap">
+    <ion-label range-left color="primary" stacked>Power</ion-label>
+    <ion-range [(ngModel)]="card.power" color="danger" min="0" max="20" step="1" snaps="true">
+      <ion-icon range-left name="ios-flame" color="danger"></ion-icon>
+      <ion-badge range-right round color="danger" mode="ios">{{card?.power}}</ion-badge>
+    </ion-range>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" stacked>Description</ion-label>
+    <ion-textarea  [(ngModel)]="card.description"></ion-textarea>
+  </ion-item>
+  <div>
+    <ion-chip color="secondary">
+      <button ion-button mini clear (click)="save()" color="light">
+        <ion-icon name="md-add"></ion-icon>
+      </button>
+    </ion-chip>
+    <ion-chip *ngFor="let tag of card.tags" color="primary">
+      <ion-icon name="md-pricetag"></ion-icon>
+      <ion-label text-uppercase>{{tag}}</ion-label>
+      <button ion-button mini clear (click)="save()" color="light">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-chip>
+  </div>
+
+  <ion-item>
+    <ion-range [(ngModel)]="card.status" pin="true" color="primary" min="0" max="10" step="1" snaps="true">
+      <ion-icon range-left name="checkmark-circle" color="primary"></ion-icon>
+    </ion-range>
+  </ion-item>
+
+  <ion-item>
+    <ion-range [(ngModel)]="card.priority" pin="true" color="primary" min="0" max="10" step="1" snaps="true">
+      <ion-icon range-left name="warning" color="primary"></ion-icon>
+    </ion-range>
+  </ion-item>
+
+  <ion-item>
+    <ion-range [(ngModel)]="card.rarity" pin="true" color="primary" min="0" max="10" step="1" snaps="true">
+      <ion-icon range-left name="star" color="primary"></ion-icon>
+    </ion-range>
+  </ion-item>
+
+  <!-- <ion-chip color="secondary">{{card.getStringForDevelopmentStatus()}}</ion-chip> -->
+
+
+
+  <ion-fab bottom left>
+    <button ion-fab large color="primary" (click)="navCtrl.pop()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <ion-fab bottom right>
+    <button ion-fab large color="primary" (click)="save()">
+      <ion-icon name="checkmark"></ion-icon>
+    </button>
+  </ion-fab>
+
+</ion-content>

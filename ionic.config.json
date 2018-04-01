@@ -1,0 +1,8 @@
+{
+  "name": "CCGU Admin Tool",
+  "app_id": "",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}

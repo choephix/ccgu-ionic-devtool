@@ -1,0 +1,28 @@
+<ion-header class="bar-positive">
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+
+  <ion-toolbar class="le-toolbar">
+    <ion-row class="filters">
+      <ion-col no-padding>
+        <ion-slides (ionSlideDidChange)="slideChanged()" slidesPerView="10">
+          <ion-slide (click)="selectFilter(segment)" *ngFor="let segment of segments">
+            <button class="slide" [class.selected]="selectedSegment === segment" ion-button full large clear>{{ segment.name }}</button>
+          </ion-slide>
+        </ion-slides>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding header-shrink scroll-event-interval="5">
+
+  <ion-list *ngFor="let card of cards">
+    <button ion-item (click)="selectCard(card)">{{card.slug}}</button>
+  </ion-list>
+
+</ion-content>

@@ -1,0 +1,24 @@
+page-home
+ {
+    .scroll-content
+    {
+        padding: 0px !important;
+        margin: 0px;
+    }
+
+    .filters
+    {
+        .slide
+        {
+            border-bottom: 4px solid rgba(0, 0, 0, .0);
+            transition: border .250s, color .250s;   
+            color: rgba(0, 0, 0, .33);
+        }
+
+        .slide.selected
+        {
+            border-bottom-color: color($colors,primary);
+            color: color($colors,primary);
+        }
+    }
+}

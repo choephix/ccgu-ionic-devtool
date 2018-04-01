@@ -1,0 +1,15 @@
+page-list {
+    
+    .lecard
+    {
+        margin: 10px;
+        position: absolute;
+        text-align: center;
+        // transform: rotate(-90deg);
+    }
+
+    .lecard.sneak  { background : #EA4 }
+    .lecard.normal { background : #EC8 }
+    .lecard.grand  { background : #EEC }
+    .lecard.trap   { background : #ECE }
+}
