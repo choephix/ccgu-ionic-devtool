@@ -1,5 +1,6 @@
 import { CardModel } from './../../app/models';
 import { Component } from '@angular/core';
+import { FabContainer } from 'ionic-angular';
 
 @Component({
   selector: 'page-list',
@@ -28,7 +29,7 @@ export class ListPage
   public cardColumnsCount:number;
   public cardRowsCount:number;
   
-  public moveMode:boolean;
+  public mode:Mode = Mode.Edit;
   public selectedIndices:Array<number> = [];
 
   constructor()
@@ -62,50 +63,55 @@ export class ListPage
       this.cardViews.push( { index : i, data : null } );
 
     this.selectBundle(this.bundles[0]);
-    this.moveMode = true;
   }
 
   public onSelect(card:CardView)
   {
-    if ( this.selectedIndices.length < 1 )
+    if ( this.mode == Mode.Edit )
     {
-      if ( this.hasData( card ) )
-        card.data.power++;
-      this.selectedIndices.push( card.index );
+
     }
     else
-    if ( this.selectedIndices.indexOf( card.index ) >= 0 )
+    if ( this.mode == Mode.SwapOne || this.mode == Mode.SwapMany )
     {
-      this.selectedIndices.splice( this.selectedIndices.indexOf( card.index ), 1 );
-    }
-    else
-    {
-      for (let i = 0; i < this.selectedIndices.length; i++)
+      if ( this.selectedIndices.length < 1 )
       {
-        var iA:number = card.index + i;
-        var iB:number = this.selectedIndices[i];
-
-        var vA:CardView = this.cardViews[ iA ];
-        var vB:CardView = this.cardViews[ iB ];
-        var cA:CardModel = vA.data;
-        var cB:CardModel = vB.data;
-        var idA:number = this.getSupposedCardID( vA );
-        var idB:number = this.getSupposedCardID( vB );
-
-        if ( cA ) cA.id = idB;
-        if ( cB ) cB.id = idA;
-
-        this.cards[idA] = vA.data = cB;
-        this.cards[idB] = vB.data = cA;
-
-        console.log( "swapped " + idA + " with " + idB );
+        if ( this.hasData( card ) )
+          card.data.power++;
+        this.selectedIndices.push( card.index );
       }
+      else
+      if ( this.selectedIndices.indexOf( card.index ) >= 0 )
+      {
+        this.selectedIndices.splice( this.selectedIndices.indexOf( card.index ), 1 );
+      }
+      else
+      {
+        for (let i = 0; i < this.selectedIndices.length; i++)
+        {
+          var iA:number = card.index + i;
+          var iB:number = this.selectedIndices[i];
+          var vA:CardView = this.cardViews[ iA ];
+          var vB:CardView = this.cardViews[ iB ];
+          var cA:CardModel = vA.data;
+          var cB:CardModel = vB.data;
+          var idA:number = this.getSupposedCardID( vA );
+          var idB:number = this.getSupposedCardID( vB );
+          if ( cA ) cA.id = idB;
+          if ( cB ) cB.id = idA;
+          this.cards[idA] = vA.data = cB;
+          this.cards[idB] = vB.data = cA;
+          console.log( "swapped " + idA + " with " + idB );
+        }
 
-      this.selectedIndices.length = 0;
-      this.selectBundle(this.selectedBundle);
+        this.selectedIndices.length = 0;
+        // this.selectBundle(this.selectedBundle);
+      }
     }
-
-    console.log( "Selected: " + this.selectedIndices );
+    else
+    {
+      this.selectedIndices.length = 0;
+    }
   }
 
   public getSupposedCardID( cv:CardView )
@@ -131,7 +137,23 @@ export class ListPage
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
       this.cardViews[ i ].data = this.cards[ i + bundle.startIndex ];
   }
+
+  public onModeFab( mode:number, fab:FabContainer ):void
+  { 
+    this.mode = mode;
+    fab.close();
+  }
+
+  public getModeIcon( mode:number ):string
+  {
+    if ( mode == Mode.Edit ) return "create";
+    if ( mode == Mode.SwapOne ) return "code";
+    if ( mode == Mode.SwapMany ) return "code-working";
+    return "cog";
+  }
 }
+
+const enum Mode { Edit, SwapOne, SwapMany }
 
 export class CardView {
   data:CardModel;

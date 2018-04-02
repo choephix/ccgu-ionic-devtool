@@ -4,13 +4,28 @@ page-list {
     {
         color: #FFAA11;
     }
+
+    #lescroll
+    {
+        width: 100%;
+        height: 100%; 
+        background-color: #789;
+        transition: background-color .5s;
+    }
+    #lescroll.mode-1, #lescroll.mode-2
+    { background-color: rgb(93, 142, 242); }
+      
+    .scroll-content { overflow: hidden; }
     
     .lecard
     {
         padding: 0px;
         position: absolute;
-        border: 1px solid rgba(0,0,0,.5);
-        // text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        transition: border .25s;
+        transition: outline .25s;
+        transition: background-color .25s;
+        transition: opacity .25s;
         // transform: rotate(-90deg);
 
         input, p, textarea
@@ -76,58 +91,22 @@ page-list {
     .lecard.normal { background : #EC8 }
     .lecard.grand  { background : #EEC }
     .lecard.trap   { background : #ECE }
+     
+    .lecard.empty
+    {
+        opacity: .33;
+    }
 
     .lecard.selected
     {
-        outline: 12px double aqua;
+        border: 1px solid yellow;
+        outline: 1px solid aqua;
     }
-                
-    .zoom-pane {
-        width: 100%;
-        height: 100%;
-    }
-    
-    
-    .zoom-pane .scroll {
-        min-height: 100%;
-        /* Vertical align */
-        display: -webkit-box;
-        display: -moz-box;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-box-direction: normal;
-        -moz-box-direction: normal;
-        -webkit-box-orient: horizontal;
-        -moz-box-orient: horizontal;
-        -webkit-flex-direction: row;
-        -ms-flex-direction: row;
-        flex-direction: row;
-        -webkit-flex-wrap: nowrap;
-        -ms-flex-wrap: nowrap;
-        flex-wrap: nowrap;
-        -webkit-box-pack: center;
-        -moz-box-pack: center;
-        -webkit-justify-content: center;
-        -ms-flex-pack: center;
-        justify-content: center;
-        -webkit-align-content: stretch;
-        -ms-flex-line-pack: stretch;
-        align-content: stretch;
-        -webkit-box-align: center;
-        -moz-box-align: center;
-        -webkit-align-items: center;
-        -ms-flex-align: center;
-        align-items: center;
-    }
-    
-    .zoom-pane img {
-        width: 100%;
-        vertical-align: middle;
-    }
-      
-    .scroll-content {
-        overflow-y: hidden;
+     
+    .lecard.selected.empty
+    {
+        background: none;
+        opacity: 1;
     }
 
     ::-webkit-scrollbar {

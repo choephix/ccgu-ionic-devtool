@@ -8,13 +8,13 @@
     <ion-grid grid-padding-width="1px">
       <ion-row class="filters">
         <ion-col no-padding *ngFor="let bundle of bundles">
-              <button 
-                class="page-button"
-                [class.selected]="bundle==selectedBundle" 
-                (click)="selectBundle(bundle)"
-                ion-button clear full round>
-                {{ bundle.name }}
-              </button>
+          <button 
+            class="page-button"
+            [class.selected]="bundle==selectedBundle" 
+            (click)="selectBundle(bundle)"
+            ion-button clear full round>
+            {{ bundle.name }}
+          </button>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -23,8 +23,17 @@
 </ion-header>
 
 <ion-content>
+
+    <ion-fab top right edge #fabMode>
+      <button ion-fab mini><ion-icon [name]="getModeIcon(mode)"></ion-icon></button>
+      <ion-fab-list>
+        <button ion-fab (click)="onModeFab(0,fabMode)"><ion-icon name="{{getModeIcon(0)}}"></ion-icon></button>
+        <button ion-fab (click)="onModeFab(1,fabMode)"><ion-icon name="{{getModeIcon(1)}}"></ion-icon></button>
+        <button ion-fab (click)="onModeFab(2,fabMode)"><ion-icon name="{{getModeIcon(2)}}"></ion-icon></button>
+      </ion-fab-list>
+    </ion-fab>
   
-    <ion-scroll zooming="true" direction="xy" scrollX="true" scrollY="true" style="width: 100%; height: 100%; background: #789;">
+    <ion-scroll id="lescroll" [class]="'mode-'+mode" zooming="true" direction="xy" scrollX="true" scrollY="true">
 
         <div *ngFor="let card of cardViews" 
               (click)="onSelect(card)"
@@ -32,9 +41,8 @@
               style.height="{{cardHeight}}px"
               style.left="{{getX(card.index)}}px"
               style.top="{{getY(card.index)}}px"
-              [style.opacity]="hasData(card)?1.0:0.5"
               [class.selected]="isSelected(card)"
-              class="lecard {{getColorClass(card)}}">
+              class="lecard {{getColorClass(card)}} {{hasData(card)?'non-empty':'empty'}}">
           <div *ngIf="hasData(card)">
             <ion-input [(ngModel)]="card.data.slug" class="slug"></ion-input>
             <!-- <ion-input [(ngModel)]="card.data.name" class="name"></ion-input> -->
