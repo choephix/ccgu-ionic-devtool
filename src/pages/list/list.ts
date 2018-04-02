@@ -72,7 +72,7 @@ export class ListPage
 
     }
     else
-    if ( this.mode == Mode.SwapOne || this.mode == Mode.SwapMany )
+    if ( this.mode == Mode.Swap )
     {
       if ( this.selectedIndices.length < 1 )
       {
@@ -147,13 +147,12 @@ export class ListPage
   public getModeIcon( mode:number ):string
   {
     if ( mode == Mode.Edit ) return "create";
-    if ( mode == Mode.SwapOne ) return "code";
-    if ( mode == Mode.SwapMany ) return "code-working";
+    if ( mode == Mode.Swap ) return "resize";
     return "cog";
   }
 }
 
-const enum Mode { Edit, SwapOne, SwapMany }
+const enum Mode { Edit, Swap }
 
 export class CardView {
   data:CardModel;

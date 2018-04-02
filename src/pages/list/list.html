@@ -22,14 +22,13 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content no-scroll>
 
-    <ion-fab top right edge #fabMode>
-      <button ion-fab mini><ion-icon [name]="getModeIcon(mode)"></ion-icon></button>
-      <ion-fab-list>
+    <ion-fab bottom right #fabMode>
+      <button ion-fab large><ion-icon [name]="getModeIcon(mode)"></ion-icon></button>
+      <ion-fab-list side="left">
         <button ion-fab (click)="onModeFab(0,fabMode)"><ion-icon name="{{getModeIcon(0)}}"></ion-icon></button>
         <button ion-fab (click)="onModeFab(1,fabMode)"><ion-icon name="{{getModeIcon(1)}}"></ion-icon></button>
-        <button ion-fab (click)="onModeFab(2,fabMode)"><ion-icon name="{{getModeIcon(2)}}"></ion-icon></button>
       </ion-fab-list>
     </ion-fab>
   
@@ -47,7 +46,6 @@
             <ion-input [(ngModel)]="card.data.slug" class="slug"></ion-input>
             <!-- <ion-input [(ngModel)]="card.data.name" class="name"></ion-input> -->
             <div class="description">{{card.data.description}}</div>
-            <div class="id"> .... {{card.data.id}}</div>
             <div class="power">{{card.data.power}}</div>
             <div class="dev-status" [style.background]="card.data.prettyStatusColor">{{card.data.prettyStatus}}</div>
           </div>
