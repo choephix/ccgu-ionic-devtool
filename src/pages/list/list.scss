@@ -1,15 +1,73 @@
 page-list {
+
+    .page-button.selected
+    {
+        color: #FFAA11;
+    }
     
     .lecard
     {
+        padding: 0px;
         position: absolute;
-        text-align: center;
-        // transform: rotate(-90deg);
         border: 1px solid rgba(0,0,0,.5);
+        // text-align: center;
+        // transform: rotate(-90deg);
+
+        input, p, textarea
+        {
+            margin: 0px;
+            padding: 2px;
+            width: 100%;
+        }
+
+        .slug, .name
+        {
+            font-weight: bold;
+        }
+
+        textarea
+        {
+            white-space: pre-wrap;
+            background: rgba(255,255,255,.20);
+            border: none;
+            height: 80px;
+            // resize: vertical;
+            resize: none;
+            font-size: 11px;
+        }
+        
+        ::-webkit-scrollbar {
+            width:2px; // manage scrollbar width here
+        }
+        ::-webkit-scrollbar * {
+            background:transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background:rgba(0,0,0,0.25) !important;
+        }
+    }
+
+    .scroll-content {
+        overflow-y: hidden;
     }
 
     .lecard.sneak  { background : #EA4 }
     .lecard.normal { background : #EC8 }
     .lecard.grand  { background : #EEC }
     .lecard.trap   { background : #ECE }
+        
+    ::-webkit-scrollbar {
+        width:12px;
+        height:16px;
+    }
+    ::-webkit-scrollbar * {
+        background:transparent;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background:rgba(0,0,0,0.25) !important;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-corner 
+    { display: none; }
 }

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
 
-    <button ion-button menuToggle>
+    <button ion-button menuToggle end>
       <ion-icon name="menu"></ion-icon>
     </button>
 
@@ -10,9 +10,9 @@
         <ion-col no-padding *ngFor="let segment of segments">
               <button 
                 class="page-button"
-                class.selected="{{segment===selectedSegment}}" 
-
-                ion-button clear full>
+                [class.selected]="segment==selectedSegment" 
+                (click)="selectFilter(segment)"
+                ion-button clear full round>
                 {{ segment.name }}
               </button>
         </ion-col>
@@ -24,16 +24,19 @@
 
 <ion-content>
 
-    <ion-scroll scrollX="true" scrollY="true" style="width: 100%; height: 100%; background: #789">
-        <div *ngFor="let card of cards" 
+    <ion-scroll scrollX="true" scrollY="true" style="width: 100%; height: 100%; background: #789;">
+        <div *ngFor="let card of cardViews" 
               style.width="{{cardWidth}}px"
               style.height="{{cardHeight}}px"
               style.left="{{getX(card.index)}}px"
               style.top="{{getY(card.index)}}px"
+              [style.opacity]="card.data==null?0.5:1.0"
               class="lecard {{getColorClass(card)}}">
-          <ion-input [(ngModel)]="card.icon"></ion-input>
-          <p>{{card.title}}</p>
-          <p>{{card.note}}</p>
+          <div *ngIf="card.data!=null">
+            <ion-input [(ngModel)]="card.data.slug" class="slug"></ion-input>
+            <!-- <ion-input [(ngModel)]="card.data.name" class="name"></ion-input> -->
+            <textarea class="description">{{card.data.description}}</textarea>
+          </div>
         </div>
         <div style.width="{{cardXFactor*cardColumnsCount+2}}px"
              style.height]="{{cardYFactor*cardRowsCount+200}}px"
