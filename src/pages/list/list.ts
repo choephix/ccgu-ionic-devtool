@@ -1,6 +1,5 @@
 import { CardModel } from './../../app/models';
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
 
 @Component({
   selector: 'page-list',
@@ -32,7 +31,7 @@ export class ListPage
   public moveMode:boolean;
   public selectedIndices:Array<number> = [];
 
-  constructor( private navCtrl: NavController, navParams: NavParams )
+  constructor()
   {
     this.cards = FakeCardsData.getData();
 
@@ -70,7 +69,8 @@ export class ListPage
   {
     if ( this.selectedIndices.length < 1 )
     {
-      card.data.slug += " -";
+      if ( this.hasData( card ) )
+        card.data.slug += " -";
       this.selectedIndices.push( card.index );
     }
     else
