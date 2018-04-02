@@ -33,3 +33,24 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+
+
+node_modules/
+temp/
+*.DS_Store
+*.log
+*.swp
+www
+.idea
+.temp
+.sass-cache
+<%= appPath %>/bower_components
+coverage
+platforms
+plugins
+*.swp
+*.swo
+*.log
+*.DS_Store
+
+app/scripts/configuration.js
