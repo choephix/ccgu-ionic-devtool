@@ -70,7 +70,7 @@ export class ListPage
     if ( this.selectedIndices.length < 1 )
     {
       if ( this.hasData( card ) )
-        card.data.slug += " -";
+        card.data.power++;
       this.selectedIndices.push( card.index );
     }
     else
@@ -82,16 +82,21 @@ export class ListPage
     {
       for (let i = 0; i < this.selectedIndices.length; i++)
       {
-        var cA:CardView = this.cardViews[ card.index + i ];
-        var cB:CardView = this.cardViews[ this.selectedIndices[i] ];
-        var idA:number = this.getSupposedCardID( cA );
-        var idB:number = this.getSupposedCardID( cB );
+        var iA:number = card.index + i;
+        var iB:number = this.selectedIndices[i];
 
-        if ( cA.data != null ) cA.data.id = idB;
-        if ( cB.data != null ) cB.data.id = idA;
+        var vA:CardView = this.cardViews[ iA ];
+        var vB:CardView = this.cardViews[ iB ];
+        var cA:CardModel = vA.data;
+        var cB:CardModel = vB.data;
+        var idA:number = this.getSupposedCardID( vA );
+        var idB:number = this.getSupposedCardID( vB );
 
-        this.cards[idA] = cA.data;
-        this.cards[idB] = cB.data;
+        if ( cA ) cA.id = idB;
+        if ( cB ) cB.id = idA;
+
+        this.cards[idA] = vA.data = cB;
+        this.cards[idB] = vB.data = cA;
 
         console.log( "swapped " + idA + " with " + idB );
       }
