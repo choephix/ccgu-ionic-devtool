@@ -23,8 +23,8 @@
 </ion-header>
 
 <ion-content>
-
-    <ion-scroll scrollX="true" scrollY="true" style="width: 100%; height: 100%; background: #789;">
+  
+    <ion-scroll zooming="true" direction="xy" scrollX="true" scrollY="true" style="width: 100%; height: 100%; background: #789;">
         <div *ngFor="let card of cardViews" 
               style.width="{{cardWidth}}px"
               style.height="{{cardHeight}}px"
@@ -36,13 +36,14 @@
             <ion-input [(ngModel)]="card.data.slug" class="slug"></ion-input>
             <!-- <ion-input [(ngModel)]="card.data.name" class="name"></ion-input> -->
             <textarea class="description">{{card.data.description}}</textarea>
-            <p>{{card.data.prettyStatus}}</p>
+            <div class="power">{{card.data.power}}</div>
+            <div class="dev-status" [style.background]="card.data.prettyStatusColor">{{card.data.prettyStatus}}</div>
           </div>
 
         </div>
         <div style.width="{{cardXFactor*cardColumnsCount+2}}px"
-             style.height="{{cardYFactor*cardRowsCount+200}}px"
-            >.</div>
+             style.height="{{cardYFactor*cardRowsCount+200}}px">.</div>
     </ion-scroll>
-    
+
 </ion-content>
+

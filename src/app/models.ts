@@ -13,24 +13,30 @@ export class CardModel {
 
     tags:Array<string> = ["Grand","storm","noattack"];
 
-    public get prettyStatus():string {
-        //return "Unset";
-        return CardModel.StatusStrings[this.status];
-    }
+    public get prettyStatus():string
+    { return StatusViewGuru.ARRAY[this.status].text; }
 
-    public static StatusStrings:Array<string> = [
-        "Draft",
-        "Concept",
-        "Unimplemented",
-        "Unfinished",
-        "Untested",
-        "Alpha",
-        "Beta",
-        "NoArt",
-        "Unpolished",
-        "Ready",
-        "Published",
-        "Retired",
-        "Skip"
-    ];
+    public get prettyStatusColor():string
+    { return StatusViewGuru.ARRAY[this.status].color; }
 }
+
+export class StatusViewGuru
+{
+    public static readonly ARRAY:StatusViewProperties[] = [
+        { text:"Draft", color:"#none" },
+        { text:"Concept", color:"#none" },
+        { text:"Unimplemented", color:"#E33" },
+        { text:"Unfinished", color:"#FF0" },
+        { text:"Untested", color:"#AF0" },
+        { text:"Alpha", color:"#CAD" },
+        { text:"Beta", color:"#BBD" },
+        { text:"NoArt", color:"#0BF" },
+        { text:"Unpolished", color:"#2DF" },
+        { text:"Ready", color:"#FFF" },
+        { text:"Published", color:"#none" },
+        { text:"Retired", color:"#none" },
+        { text:"Skip", color:"#333" },
+    ]
+}
+
+export class StatusViewProperties { text:string; color:string }

@@ -47,6 +47,15 @@ export class ListPage
            startIndex : i * ListPage.PAGE_CARDS_COUNT, 
            name : i.toString(16) } );
 
+    for (let i = 0; i < 13; i++)
+    {
+        this.cards[64+i] = new CardModel();
+        this.cards[64+i].slug = "gagagigo";
+        this.cards[64+i].name = "gagagigo";
+        this.cards[64+i].power = i;
+        this.cards[64+i].status = i;
+    }
+
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
       this.cardViews.push( { index : i, data : null } );
 
@@ -113,6 +122,7 @@ export class FakeCardsData {
     c.name = o["Name"];
     c.isTrap = o["IsTrap"];
     c.power = o["Power"];
+    c.status = o["Status"];
     c.description = o["Description"];
     return c;
   }
