@@ -14,8 +14,8 @@ export class CardModel {
     tags:Array<string> = ["Grand","storm","noattack"];
 
     public get prettyStatus():string {
-        return "Unset";
-        // return CardModel.StatusStrings[0];
+        //return "Unset";
+        return CardModel.StatusStrings[this.status];
     }
 
     public static StatusStrings:Array<string> = [

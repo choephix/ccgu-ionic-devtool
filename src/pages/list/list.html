@@ -36,7 +36,9 @@
             <ion-input [(ngModel)]="card.data.slug" class="slug"></ion-input>
             <!-- <ion-input [(ngModel)]="card.data.name" class="name"></ion-input> -->
             <textarea class="description">{{card.data.description}}</textarea>
+            <p>{{card.data.prettyStatus}}</p>
           </div>
+
         </div>
         <div style.width="{{cardXFactor*cardColumnsCount+2}}px"
              style.height]="{{cardYFactor*cardRowsCount+200}}px"
