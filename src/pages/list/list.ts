@@ -1,6 +1,6 @@
 import { CardModel } from './../../app/models';
 import { Component } from '@angular/core';
-import { NavController, NavParams, Platform } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 
 @Component({
   selector: 'page-list',
@@ -13,8 +13,8 @@ export class ListPage
   cards:CardMap = {};
   cardViews: Array<CardView> = [];
 
-  selectedSegment : CardFilter = null;
-  segments : Array<CardFilter> = [];
+  selectedBundle : CardViewBundle = null;
+  bundles : Array<CardViewBundle> = [];
 
   public minCardWidth:number = 157;
   public minCardHeight:number = 120;
@@ -29,7 +29,10 @@ export class ListPage
   public cardColumnsCount:number;
   public cardRowsCount:number;
   
-  constructor( private navCtrl: NavController, navParams: NavParams, private platform:Platform )
+  public moveMode:boolean;
+  public selectedIndices:Array<number> = [];
+
+  constructor( private navCtrl: NavController, navParams: NavParams )
   {
     this.cards = FakeCardsData.getData();
 
@@ -43,7 +46,7 @@ export class ListPage
     this.cardYFactor = this.cardHeight + this.cardMargin;
 
     for ( let i = 0; i < 16; i++ )
-      this.segments.push( { 
+      this.bundles.push( { 
            startIndex : i * ListPage.PAGE_CARDS_COUNT, 
            name : i.toString(16) } );
 
@@ -59,12 +62,52 @@ export class ListPage
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
       this.cardViews.push( { index : i, data : null } );
 
-    this.selectFilter(this.segments[0]);
+    this.selectBundle(this.bundles[0]);
+    this.moveMode = true;
   }
 
-  // {return this.minCardWidth + ( this.platform.width() % this.minCardWidth ) / this.countCols() }
-  // countCols():number { return Math.floor( this.platform.width() / this.minCardWidth ) }
-  // countRows():number { return 10 }
+  public onSelect(card:CardView)
+  {
+    if ( this.selectedIndices.length < 1 )
+    {
+      card.data.slug += " -";
+      this.selectedIndices.push( card.index );
+    }
+    else
+    if ( this.selectedIndices.indexOf( card.index ) >= 0 )
+    {
+      this.selectedIndices.splice( this.selectedIndices.indexOf( card.index ), 1 );
+    }
+    else
+    {
+      for (let i = 0; i < this.selectedIndices.length; i++)
+      {
+        var cA:CardView = this.cardViews[ card.index + i ];
+        var cB:CardView = this.cardViews[ this.selectedIndices[i] ];
+        var idA:number = this.getSupposedCardID( cA );
+        var idB:number = this.getSupposedCardID( cB );
+
+        if ( cA.data != null ) cA.data.id = idB;
+        if ( cB.data != null ) cB.data.id = idA;
+
+        this.cards[idA] = cA.data;
+        this.cards[idB] = cB.data;
+
+        console.log( "swapped " + idA + " with " + idB );
+      }
+
+      this.selectedIndices.length = 0;
+      this.selectBundle(this.selectedBundle);
+    }
+
+    console.log( "Selected: " + this.selectedIndices );
+  }
+
+  public getSupposedCardID( cv:CardView )
+  { return this.selectedBundle.startIndex + cv.index; }
+
+  public hasData( card:CardView ):boolean { return card.data != null && card.data != undefined }
+  public isSelected( card:CardView ) { return this.selectedIndices.indexOf( card.index ) >= 0 }
 
   public getX( i:number ):number { return this.marginX + Math.floor( i % this.cardColumnsCount ) * this.cardXFactor; }
   public getY( i:number ):number { return this.marginY + Math.floor( i / this.cardColumnsCount ) * this.cardYFactor; }
@@ -77,13 +120,11 @@ export class ListPage
     return "trap";
   }
 
-  public selectFilter(segment:CardFilter): void {
-    this.selectedSegment = segment;
-
+  public selectBundle( bundle:CardViewBundle ): void 
+  {
+    this.selectedBundle = bundle;
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
-    {
-      this.cardViews[ i ].data = this.cards[ i + segment.startIndex ];
-    }
+      this.cardViews[ i ].data = this.cards[ i + bundle.startIndex ];
   }
 }
 
@@ -92,7 +133,7 @@ export class CardView {
   index:number;
 }
 
-export class CardFilter {
+export class CardViewBundle {
   name: string;
   startIndex: number;
 }

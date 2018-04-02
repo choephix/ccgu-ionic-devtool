@@ -25,7 +25,7 @@ page-list {
             font-weight: bold;
         }
 
-        textarea
+        .description
         {
             white-space: pre-wrap;
             background: rgba(255,255,255,.10);
@@ -72,6 +72,16 @@ page-list {
         }
     }
 
+    .lecard.sneak  { background : #EA4 }
+    .lecard.normal { background : #EC8 }
+    .lecard.grand  { background : #EEC }
+    .lecard.trap   { background : #ECE }
+
+    .lecard.selected
+    {
+        outline: 12px double aqua;
+    }
+                
     .zoom-pane {
         width: 100%;
         height: 100%;
@@ -120,11 +130,6 @@ page-list {
         overflow-y: hidden;
     }
 
-    .lecard.sneak  { background : #EA4 }
-    .lecard.normal { background : #EC8 }
-    .lecard.grand  { background : #EEC }
-    .lecard.trap   { background : #ECE }
-        
     ::-webkit-scrollbar {
         width:12px;
         height:16px;
