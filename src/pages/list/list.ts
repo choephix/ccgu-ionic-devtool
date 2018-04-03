@@ -141,8 +141,11 @@ export class ListPage
       if ( params.del )
       {
         delete this.cards[card.id];
-        this.selectBundle(this.selectedBundle);
       }
+      else
+        this.cards[id] = card;
+      
+      this.selectBundle(this.selectedBundle);
     });
 
     modal.present();
