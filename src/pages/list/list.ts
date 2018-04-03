@@ -139,11 +139,10 @@ export class ListPage
 
     modal.onDidDismiss(()=>
     {
-      console.log( params );
-      if ( params.del )
-      {
+      let del:boolean = params.del || ( !card.slug && !card.description );
+
+      if ( del )
         delete this.cards[card.id];
-      }
       else
         this.cards[id] = card;
       
