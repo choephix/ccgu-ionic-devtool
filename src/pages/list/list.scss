@@ -25,10 +25,7 @@ page-list {
         padding: 0px;
         position: absolute;
         border: 1px solid rgba(0, 0, 0, 0.5);
-        transition: border .25s;
-        transition: outline .25s;
-        transition: opacity .25s;
-        transition: background-color .25s;
+        transition: border .25s, outline .25s, opacity .25s, background-color .25s;
         // transform: rotate(-90deg);
 
         input, p, textarea
