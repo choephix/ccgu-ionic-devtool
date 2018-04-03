@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CardModel } from '../../app/models';
+import { DataProvider } from '../../providers/data/data';
 import { CardViewPage } from '../card-view/card-view';
 import { FabContainer, ModalController } from 'ionic-angular';
 
@@ -34,7 +35,7 @@ export class ListPage
   public mode:Mode = Mode.Edit;
   public selectedCardIDs:Array<number> = [];
 
-  constructor( private modalCtrl:ModalController )
+  constructor( private modalCtrl:ModalController, private data:DataProvider )
   {
     this.cards = FakeCardsData.getData();
 
@@ -126,6 +127,8 @@ export class ListPage
     {
       this.selectedCardIDs.length = 0;
     }
+
+    this.data.load();
   }
 
   private viewCard( id:number )
