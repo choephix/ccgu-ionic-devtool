@@ -32,7 +32,7 @@ export class ListPage
   public cardRowsCount:number;
   
   public mode:Mode = Mode.Edit;
-  public selectedIndices:Array<number> = [];
+  public selectedCardIDs:Array<number> = [];
 
   constructor( private modalCtrl:ModalController )
   {
@@ -105,51 +105,56 @@ export class ListPage
     else
     if ( this.mode == Mode.Swap )
     {
-      if ( this.selectedIndices.length < 1 )
-      {
-        if ( this.hasData( cv ) )
-          cv.data.power++;
-        this.selectedIndices.push( cv.index );
-      }
-      else
-      if ( this.selectedIndices.indexOf( cv.index ) >= 0 )
-      {
-        this.selectedIndices.splice( this.selectedIndices.indexOf( cv.index ), 1 );
-      }
-      else
-      {
-        for (let i = 0; i < this.selectedIndices.length; i++)
-        {
-          var iA:number = cv.index + i;
-          var iB:number = this.selectedIndices[i];
-          var vA:CardView = this.cardViews[ iA ];
-          var vB:CardView = this.cardViews[ iB ];
-          var cA:CardModel = vA.data;
-          var cB:CardModel = vB.data;
-          var idA:number = this.getSupposedCardID( vA );
-          var idB:number = this.getSupposedCardID( vB );
-          if ( cA ) cA.id = idB;
-          if ( cB ) cB.id = idA;
-          this.cards[idA] = vA.data = cB;
-          this.cards[idB] = vB.data = cA;
-          console.log( "swapped " + idA + " with " + idB );
-        }
+      let cvID:number = this.getSupposedCardID( cv );
+      let seleIndex:number = this.selectedCardIDs.indexOf( cvID );
 
-        this.selectedIndices.length = 0;
-        // this.selectBundle(this.selectedBundle);
+      if ( this.selectedCardIDs.length < 1 )
+      {
+        this.selectedCardIDs.push( cvID );
+      }
+      else
+      if ( seleIndex >= 0 )
+      {
+        this.selectedCardIDs.splice( seleIndex, 1 );
+      }
+      else
+      {
+        let seleID = this.selectedCardIDs[ 0 ];
+        this.setCardID( this.cards[ seleID ], cvID );
+
+        this.selectedCardIDs.length = 0;
+        this.selectBundle(this.selectedBundle);
       }
     }
     else
     {
-      this.selectedIndices.length = 0;
+      this.selectedCardIDs.length = 0;
     }
+  }
+
+  private setCardID( card:CardModel, id:number )
+  {
+    let coll = this.cards[id];
+    if ( coll )
+    {
+      coll.id = card.id;
+      this.cards[card.id] = coll;
+    }
+    else
+    {
+      this.cards[card.id] = null;
+    }
+
+    card.id = id;
+    this.cards[id] = card;
   }
 
   public getSupposedCardID( cv:CardView )
   { return this.selectedBundle.startIndex + cv.index; }
 
   public hasData( card:CardView ):boolean { return card.data != null && card.data != undefined }
-  public isSelected( card:CardView ) { return this.selectedIndices.indexOf( card.index ) >= 0 }
+  public isSelected( card:CardView )
+  { return this.selectedCardIDs.indexOf( this.getSupposedCardID( card ) ) >= 0 }
 
   public getX( i:number ):number { return this.marginX + Math.floor( i % this.cardColumnsCount ) * this.cardXFactor; }
   public getY( i:number ):number { return this.marginY + Math.floor( i / this.cardColumnsCount ) * this.cardYFactor; }

@@ -38,6 +38,14 @@ page-list {
             width: 100%;
         }
 
+        .id
+        {
+            font-size: 9px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
         .slug, .name
         {
             font-weight: bold;
@@ -63,8 +71,6 @@ page-list {
             padding: 0px;
             margin: -4px 3px;
             position: absolute;
-            // bottom: 0;
-            // left: 0;
             top: 0;
             right: 0;
         }
@@ -83,7 +89,6 @@ page-list {
             position: absolute;
             opacity: .67;
             text-align: center;
-            // width: 50%;
             bottom: 1пь;
             left: 0;
         }
