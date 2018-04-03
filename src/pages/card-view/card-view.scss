@@ -1,11 +1,28 @@
 page-card-view {
-    input.text-input.text-input-md {
+
+    .hidable 
+    {
+        transition: max-height .35s, opacity .25s; 
+        max-height: 256px; 
+        opacity: 1.0;
         margin: 0px;
-        height: 64px;
+        padding: 0px;
+    }
+    .hidden 
+    {
+        max-height:0px !important;
+        overflow:hidden;
+        opacity: 0.0;
+    }
+    
+    input.text-input.text-input-md {
+        margin: 0px 0px;
+        height: 48px;
         width: 100%;
         font-size: 32px;
-        background: rgba(255,255,255,.25);
+        background: rgba(255,255,255,.125);
         padding: 4px;
+        text-align: center;
     }
     input.text-input.text-input-md:hover {
         outline: 1px solid orange;
@@ -33,5 +50,12 @@ page-card-view {
     .item
     {
         // background: none;
+    }
+
+    .power-fab .fab .button-inner
+    {
+        font-size: 32px;
+        font-weight: bolder;
+        color: #975;
     }
 }

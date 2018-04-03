@@ -1,24 +1,50 @@
-<ion-header [class]="getColorClass()+' pad'">
-
-    <ion-grid>
-        <ion-row>
-          <ion-col col-9>
-              <ion-input type="text" [(ngModel)]="card.slug"></ion-input>
-          </ion-col>
-          <ion-col col-3>
-            <button ion-button (click)="card.isTrap=!card.isTrap" full large clear>
-              {{card.isTrap?"TRAP":"UNIT"}}
-            </button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    
-</ion-header>
-
 <ion-content padding [class]="getColorClass()+' pad'">
 
-  <!-- <ion-input type="text" [(ngModel)]="card.name"></ion-input> -->
+  <div>
+    <div>
+      <ion-input type="text" [(ngModel)]="card.slug"></ion-input>
+    </div>
+    <div>
 
+      <script>
+        function test() { console.log("gaaa") }
+      </script>
+
+    <ion-grid grid-padding-width="1px" #hidablePower class="powers hidable" [class.hidden]="true">
+        <ion-row>
+          <ion-col col-2 no-padding><button ion-button clear large full (click)="toggle(hidablePower);card.isTrap=true" >Trap</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 1);toggle(hidablePower)"> 1</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 2);toggle(hidablePower)"> 2</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 3);toggle(hidablePower)"> 3</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 4);toggle(hidablePower)"> 4</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 5);toggle(hidablePower)"> 5</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 6);toggle(hidablePower)"> 6</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 7);toggle(hidablePower)"> 7</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 8);toggle(hidablePower)"> 8</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 9);toggle(hidablePower)"> 9</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(10);toggle(hidablePower)">10</button></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-2 no-padding><button ion-button clear large full (click)="setPower( 0);toggle(hidablePower)"> 0</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(11);toggle(hidablePower)">11</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(12);toggle(hidablePower)">12</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(13);toggle(hidablePower)">13</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(14);toggle(hidablePower)">14</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(15);toggle(hidablePower)">15</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(16);toggle(hidablePower)">16</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(17);toggle(hidablePower)">17</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(18);toggle(hidablePower)">18</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(19);toggle(hidablePower)">19</button></ion-col>
+          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(20);toggle(hidablePower)">20</button></ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <div>
+      <ion-input type="text" [(ngModel)]="card.name"></ion-input>
+    </div>
+  </div>
+    
   <ion-textarea  [(ngModel)]="card.description"></ion-textarea>
 
   <ion-item *ngIf="!card.isTrap">
@@ -49,15 +75,21 @@
 
   <!-- <ion-chip color="secondary">{{card.getStringForDevelopmentStatus()}}</ion-chip> -->
 
+  <ion-fab top left class="power-fab">
+    <button ion-fab large color="primary" (click)="hidablePower.classList.toggle('hidden')"  color="light">
+        {{card.isTrap?"🤐":card.power}}
+    </button>
+  </ion-fab>
+  
 
-  <ion-fab bottom left>
+  <ion-fab bottom right>
     <button ion-fab large color="primary"><ion-icon name="more"></ion-icon></button>
     <ion-fab-list side="right">
         <button ion-fab large color="primary" (click)="delete()"><ion-icon name="trash"></ion-icon></button>
     </ion-fab-list>
   </ion-fab>
   
-  <ion-fab bottom right>
+  <ion-fab top right>
     <button ion-fab large color="primary" (click)="save()">
       <ion-icon name="checkmark"></ion-icon>
     </button>

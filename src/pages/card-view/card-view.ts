@@ -30,6 +30,15 @@ export class CardViewPage {
     this.navCtrl.pop();
   }
 
+  setPower( value:number ):void
+  {
+    this.card.power = value;
+    this.card.isTrap = false;
+  }
+
+  toggle( hidable:Element ):void
+  { hidable.classList.toggle('hidden'); }
+
   public getColorClass()
   {
     if ( this.card.isTrap ) return "trap";
