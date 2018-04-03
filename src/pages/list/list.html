@@ -67,9 +67,9 @@
             <ion-badge mode="ios" style="position:absolute; right:5px; top:-5px;" color="light" *ngIf="mode==1">{{card.data.id}}</ion-badge>
             <div class="slug">{{card.data.slug}}</div>
             <div class="description">{{card.data.description}}</div>
-            <div class="power" *ngIf="!card.data.isTrap">{{card.data.power}}</div>
-            <div class="priority" *ngIf="mode!=2">{{getPriority(card)}}</div>
-            <div class="rarity" *ngIf="mode==2">{{getRarity(card)}}</div>
+            <div class="power"      *ngIf="!card.data.isTrap">{{card.data.power}}</div>
+            <div class="priority"   *ngIf="mode!=2">{{getPriority(card)}}</div>
+            <div class="rarity"     *ngIf="mode==2">{{getRarity(card)}}</div>
             <div class="dev-status" *ngIf="mode!=2" [style.background]="card.data.prettyStatusColor">{{card.data.prettyStatus}}</div>
           </div>
         </div>
