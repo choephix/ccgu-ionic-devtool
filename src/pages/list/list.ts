@@ -29,7 +29,8 @@ export class ListPage
   public cardYFactor:number;
   public cardColumnsCount:number;
   public cardRowsCount:number;
-  
+
+  public zoom:number = 1.0;
   public mode:Mode = Mode.Edit;
   public selectedCardIDs:Array<number> = [];
 
@@ -204,11 +205,7 @@ export class ListPage
       this.cardViews[ i ].data = this.cards[ i + bundle.startIndex ];
   }
 
-  public onModeFab( mode:number, fab:FabContainer ):void
-  { 
-    this.mode = mode;
-    fab.close();
-  }
+  public setMode( mode:number, fab:FabContainer ):void { this.mode = mode; }
 
   public getModeIcon( mode:number ):string
   {

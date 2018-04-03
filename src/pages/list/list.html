@@ -27,13 +27,30 @@
     <ion-fab bottom right #fabMode>
       <button ion-fab large><ion-icon [name]="getModeIcon(mode)"></ion-icon></button>
       <ion-fab-list side="left">
-        <button ion-fab (click)="onModeFab(0,fabMode)"><ion-icon name="{{getModeIcon(0)}}"></ion-icon></button>
-        <button ion-fab (click)="onModeFab(1,fabMode)"><ion-icon name="{{getModeIcon(1)}}"></ion-icon></button>
-        <button ion-fab (click)="onModeFab(2,fabMode)"><ion-icon name="{{getModeIcon(2)}}"></ion-icon></button>
+        <button ion-fab (click)="setMode(0);fabMode.close()"><ion-icon name="{{getModeIcon(0)}}"></ion-icon></button>
+        <button ion-fab (click)="setMode(1);fabMode.close()"><ion-icon name="{{getModeIcon(1)}}"></ion-icon></button>
+        <button ion-fab (click)="setMode(2);fabMode.close()"><ion-icon name="{{getModeIcon(2)}}"></ion-icon></button>
       </ion-fab-list>
     </ion-fab>
   
-    <ion-scroll id="lescroll" [class]="'mode-'+mode" zooming="true" zoom="true"  min-zoom="0.5" maxZoom="10" direction="xy" scrollX="true" scrollY="true">
+    <ion-fab bottom left #fabZoom>
+      <button ion-fab large><ion-icon name="search"></ion-icon></button>
+      <ion-fab-list side="right">
+        <button ion-fab (click)="zoom=1.00;fabZoom.close();">100%</button>
+        <button ion-fab (click)="zoom=0.75;fabZoom.close();">75%</button>
+        <button ion-fab (click)="zoom=0.50;fabZoom.close();">50%</button>
+        <button ion-fab (click)="zoom=0.25;fabZoom.close();">25%</button>
+      </ion-fab-list>
+    </ion-fab>
+  
+    <ion-scroll #lescroll id="lescroll" 
+                [class]="'mode-'+mode" 
+                [style.zoom]="zoom"
+                zooming="true" zoom="true"  
+                min-zoom="0.5" max-zoom="2" 
+                minZoom="0.5" maxZoom="2" 
+                direction="xy" 
+                scrollX="true" scrollY="true">
 
         <div *ngFor="let card of cardViews" 
               (click)="onSelect(card)"
