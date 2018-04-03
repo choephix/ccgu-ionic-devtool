@@ -33,7 +33,7 @@
       </ion-fab-list>
     </ion-fab>
   
-    <ion-scroll id="lescroll" [class]="'mode-'+mode" zooming="true" direction="xy" scrollX="true" scrollY="true">
+    <ion-scroll id="lescroll" [class]="'mode-'+mode" zooming="true" zoom="true" direction="xy" scrollX="true" scrollY="true">
 
         <div *ngFor="let card of cardViews" 
               (click)="onSelect(card)"
