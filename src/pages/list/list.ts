@@ -1,4 +1,3 @@
-import { CardModel } from './../../app/models';
 import { Component } from '@angular/core';
 import { CardModel } from '../../app/models';
 import { CardViewPage } from '../card-view/card-view';
@@ -160,11 +159,21 @@ export class ListPage
   public getY( i:number ):number { return this.marginY + Math.floor( i / this.cardColumnsCount ) * this.cardYFactor; }
   public getColorClass( card:CardView )
   {
-    var col:number = Math.floor( card.index % this.cardColumnsCount );
-    if ( col < 2 ) return "sneak";
-    if ( col < 10 ) return "normal";
-    if ( col < 12 ) return "grand";
-    return "trap";
+    if( card.data )
+    {
+      if ( card.data.isTrap ) return "trap";
+      if ( card.data.isGrand ) return "grand";
+      if ( card.data.isSneak ) return "sneak";
+      return "normal";
+    }
+    else
+    {
+      var col:number = Math.floor( card.index % this.cardColumnsCount );
+      if ( col < 2 ) return "sneak";
+      if ( col < 10 ) return "normal";
+      if ( col < 12 ) return "grand";
+      return "trap";
+    }
   }
 
   public selectBundle( bundle:CardViewBundle ): void 

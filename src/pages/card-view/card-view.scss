@@ -1,3 +1,11 @@
 page-card-view {
-
+    input.text-input.text-input-md {
+        margin: 5px;
+        height: 55px;
+        width: 100%;
+        font-size: 32px;
+    }
+    input.text-input.text-input-md:hover {
+        outline: 1px solid orange;
+    }
 }

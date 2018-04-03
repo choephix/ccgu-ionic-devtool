@@ -13,6 +13,12 @@ export class CardModel {
 
     tags:Array<string> = ["Grand","storm","noattack"];
 
+    public get isGrand():boolean
+    { return this.description.toLowerCase().indexOf("#grand") > -1 }
+
+    public get isSneak():boolean
+    { return this.description.toLowerCase().indexOf("#sneak") > -1 }
+
     public get prettyStatus():string
     { return StatusViewGuru.ARRAY[this.status].text; }
 
