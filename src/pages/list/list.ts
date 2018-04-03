@@ -129,8 +129,10 @@ export class ListPage
 
   private viewCard( id:number )
   {
-    let card = this.cards[id] ? this.cards[id] : new CardModel();
+    let card = this.cards[id] ? this.cards[id] : new CardModel();    
     let params = { del : false };
+    
+    card.id = id;
 
     console.log( params );
     let modal = this.modalCtrl.create( CardViewPage, { card : card, params : params } );
