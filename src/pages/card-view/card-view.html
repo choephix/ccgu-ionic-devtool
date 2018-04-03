@@ -50,13 +50,13 @@
   <!-- <ion-chip color="secondary">{{card.getStringForDevelopmentStatus()}}</ion-chip> -->
 
 
-
   <ion-fab bottom left>
-    <button ion-fab large color="primary" (click)="navCtrl.pop()">
-      <ion-icon name="arrow-back"></ion-icon>
-    </button>
+    <button ion-fab large color="primary"><ion-icon name="more"></ion-icon></button>
+    <ion-fab-list side="right">
+        <button ion-fab large color="primary" (click)="delete()"><ion-icon name="trash"></ion-icon></button>
+    </ion-fab-list>
   </ion-fab>
-
+  
   <ion-fab bottom right>
     <button ion-fab large color="primary" (click)="save()">
       <ion-icon name="checkmark"></ion-icon>

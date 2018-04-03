@@ -20,6 +20,11 @@ export class CardViewPage {
     console.log('ionViewDidLoad CardViewPage');
   }
 
+  delete() {
+    this.navParams.get('params').del = true;
+    this.navCtrl.pop();
+  }
+
   save() {
     console.log('Save CardViewPage');
     this.navCtrl.pop();

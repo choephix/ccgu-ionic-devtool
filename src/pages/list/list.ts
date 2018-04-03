@@ -95,11 +95,7 @@ export class ListPage
   {
     if ( this.mode == Mode.Edit )
     {
-      let card = cv.data ? cv.data : new CardModel();
-      card.id = this.getSupposedCardID(cv);
-
-      let modal = this.modalCtrl.create( CardViewPage, { card : card } );
-      modal.present();
+      this.viewCard( this.getSupposedCardID(cv) );
     }
     else
     if ( this.mode == Mode.Swap )
@@ -129,6 +125,27 @@ export class ListPage
     {
       this.selectedCardIDs.length = 0;
     }
+  }
+
+  private viewCard( id:number )
+  {
+    let card = this.cards[id] ? this.cards[id] : new CardModel();
+    let params = { del : false };
+
+    console.log( params );
+    let modal = this.modalCtrl.create( CardViewPage, { card : card, params : params } );
+
+    modal.onDidDismiss(()=>
+    {
+      console.log( params );
+      if ( params.del )
+      {
+        delete this.cards[card.id];
+        this.selectBundle(this.selectedBundle);
+      }
+    });
+
+    modal.present();
   }
 
   private setCardID( card:CardModel, id:number )
