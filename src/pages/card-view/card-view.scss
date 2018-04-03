@@ -1,5 +1,9 @@
 page-card-view {
 
+    .item {
+      min-height: 32px;
+    }
+
     .hidable 
     {
         transition: max-height .35s, opacity .25s; 
@@ -14,7 +18,26 @@ page-card-view {
         overflow:hidden;
         opacity: 0.0;
     }
-    
+    .faded 
+    {
+        opacity: 0.125;
+    }
+
+    .scroll-content
+    {
+        overflow: auto;
+    }
+
+    .pad
+    {
+        background : white;
+        transition: background-color .4s;
+    }
+    .pad.sneak  { background : #EA4 }
+    .pad.normal { background : #EC8 }
+    .pad.grand  { background : #EED }
+    .pad.trap   { background : #ECE }
+     
     input.text-input.text-input-md {
         margin: 0px 0px;
         height: 48px;
@@ -37,19 +60,38 @@ page-card-view {
         padding: 6px !important;
     }
 
-    .pad
+    .status-button
     {
-        background : white;
-        transition: background-color .4s;
+        text-transform: uppercase;
+        // font-weight: bold;
     }
-    .pad.sneak  { background : #EA4 }
-    .pad.normal { background : #EC8 }
-    .pad.grand  { background : #EED }
-    .pad.trap   { background : #ECE }
-     
-    .item
+
+    .item.status-label
     {
-        // background: none;
+        text-align: center;
+        margin:0px;
+        padding:0px;
+        color: black;
+
+        .item-inner
+        {
+            margin: 0px;
+            padding:0px;
+            border: none;
+        }
+
+        .label
+        {
+            margin:0px;
+            padding:0px;
+        }
+    }
+
+    .status-options .item.status-label
+    {
+        border: 1px solid rgba(0,0,0,.2);
+        font-size: 12px;
+        height: 48px;
     }
 
     .power-fab .fab .button-inner

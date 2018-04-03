@@ -1,90 +1,111 @@
 <ion-content padding [class]="getColorClass()+' pad'">
 
-  <div>
-    <div>
-      <ion-input type="text" [(ngModel)]="card.slug"></ion-input>
-    </div>
-    <div>
+  <ion-input type="text" [(ngModel)]="card.slug"></ion-input>
 
-      <script>
-        function test() { console.log("gaaa") }
-      </script>
+  <ion-grid no-padding #hidablePower class="power-options hidable" [class.hidden]="true">
+    <ion-row>
+      <ion-col col-2><button ion-button clear large full (click)="toggle(hidablePower);card.isTrap=true" >Trap</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower( 1);toggle(hidablePower)"> 1</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower( 2);toggle(hidablePower)"> 2</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower( 3);toggle(hidablePower)"> 3</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower( 4);toggle(hidablePower)"> 4</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower( 5);toggle(hidablePower)"> 5</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower( 6);toggle(hidablePower)"> 6</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower( 7);toggle(hidablePower)"> 7</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower( 8);toggle(hidablePower)"> 8</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower( 9);toggle(hidablePower)"> 9</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower(10);toggle(hidablePower)">10</button></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-2><button ion-button clear large full (click)="setPower( 0);toggle(hidablePower)"> 0</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower(11);toggle(hidablePower)">11</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower(12);toggle(hidablePower)">12</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower(13);toggle(hidablePower)">13</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower(14);toggle(hidablePower)">14</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower(15);toggle(hidablePower)">15</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower(16);toggle(hidablePower)">16</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower(17);toggle(hidablePower)">17</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower(18);toggle(hidablePower)">18</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower(19);toggle(hidablePower)">19</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPower(20);toggle(hidablePower)">20</button></ion-col>
+    </ion-row>
+  </ion-grid>
 
-    <ion-grid grid-padding-width="1px" #hidablePower class="powers hidable" [class.hidden]="true">
-        <ion-row>
-          <ion-col col-2 no-padding><button ion-button clear large full (click)="toggle(hidablePower);card.isTrap=true" >Trap</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 1);toggle(hidablePower)"> 1</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 2);toggle(hidablePower)"> 2</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 3);toggle(hidablePower)"> 3</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 4);toggle(hidablePower)"> 4</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 5);toggle(hidablePower)"> 5</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 6);toggle(hidablePower)"> 6</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 7);toggle(hidablePower)"> 7</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 8);toggle(hidablePower)"> 8</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower( 9);toggle(hidablePower)"> 9</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(10);toggle(hidablePower)">10</button></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-2 no-padding><button ion-button clear large full (click)="setPower( 0);toggle(hidablePower)"> 0</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(11);toggle(hidablePower)">11</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(12);toggle(hidablePower)">12</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(13);toggle(hidablePower)">13</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(14);toggle(hidablePower)">14</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(15);toggle(hidablePower)">15</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(16);toggle(hidablePower)">16</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(17);toggle(hidablePower)">17</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(18);toggle(hidablePower)">18</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(19);toggle(hidablePower)">19</button></ion-col>
-          <ion-col col-1 no-padding><button ion-button clear large full (click)="setPower(20);toggle(hidablePower)">20</button></ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
-
-    <div>
-      <ion-input type="text" [(ngModel)]="card.name"></ion-input>
-    </div>
-  </div>
+  <ion-input type="text" [(ngModel)]="card.name"></ion-input>
     
   <ion-textarea  [(ngModel)]="card.description"></ion-textarea>
 
-  <ion-item *ngIf="!card.isTrap">
-    <ion-label range-left color="primary" stacked>Power</ion-label>
-    <ion-range [(ngModel)]="card.power" color="danger" min="0" max="20" step="1" snaps="true">
-      <ion-icon range-left name="ios-flame" color="danger"></ion-icon>
-      <ion-badge range-right round color="danger" mode="ios">{{card?.power}}</ion-badge>
-    </ion-range>
-  </ion-item>
+  <div ion-item full #buttonStatus
+          color="devstatus-{{card.status}}"
+          class="status-button status-label hidable" 
+          [class.hidden]="false" 
+          (click)="toggle(hidableStatus)"
+          style="text-align:center;color:black;"
+           >{{getPrettyStatus(card.status)}}</div>
+  
+  <ion-grid no-padding #hidableStatus class="status-options hidable" [class.hidden]="true">
+    <ion-row>
+      <ion-col col-2><div ion-item class="status-label" color="devstatus-0" (click)="setStatus(0);toggle(hidableStatus);" >{{getPrettyStatus(0)}}</div></ion-col>
+      <ion-col col-2><div ion-item class="status-label" color="devstatus-1" (click)="setStatus(1);toggle(hidableStatus);" >{{getPrettyStatus(1)}}</div></ion-col>
+      <ion-col col-2><div ion-item class="status-label" color="devstatus-2" (click)="setStatus(2);toggle(hidableStatus);" >{{getPrettyStatus(2)}}</div></ion-col>
+      <ion-col col-2><div ion-item class="status-label" color="devstatus-3" (click)="setStatus(3);toggle(hidableStatus);" >{{getPrettyStatus(3)}}</div></ion-col>
+      <ion-col col-2><div ion-item class="status-label" color="devstatus-4" (click)="setStatus(4);toggle(hidableStatus);" >{{getPrettyStatus(4)}}</div></ion-col>
+      <ion-col col-2><div ion-item class="status-label" color="devstatus-5" (click)="setStatus(5);toggle(hidableStatus);" >{{getPrettyStatus(5)}}</div></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-2><div ion-item class="status-label" color="devstatus-6"  (click)="setStatus(6);toggle(hidableStatus);" >{{getPrettyStatus(6)}}</div></ion-col>
+      <ion-col col-2><div ion-item class="status-label" color="devstatus-7"  (click)="setStatus(7);toggle(hidableStatus);" >{{getPrettyStatus(7)}}</div></ion-col>
+      <ion-col col-2><div ion-item class="status-label" color="devstatus-8"  (click)="setStatus(8);toggle(hidableStatus);" >{{getPrettyStatus(8)}}</div></ion-col>
+      <ion-col col-2><div ion-item class="status-label" color="devstatus-9"  (click)="setStatus(9);toggle(hidableStatus);" >{{getPrettyStatus(9)}}</div></ion-col>
+      <ion-col col-2><div ion-item class="status-label" color="devstatus-10" (click)="setStatus(10);toggle(hidableStatus);">{{getPrettyStatus(10)}}</div></ion-col>
+      <ion-col col-2><div ion-item class="status-label" color="devstatus-11" (click)="setStatus(11);toggle(hidableStatus);">{{getPrettyStatus(11)}}</div></ion-col>
+    </ion-row>
+  </ion-grid>
+    
+  <ion-grid no-padding #hidablePriority class="priority-options hidable" [class.hidden]="false">
+    <ion-row>
+      <ion-col col-1><button ion-button clear large full [class.faded]="0>card.priority"  (click)="setPriority(0);" >➖</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="1>card.priority"  (click)="setPriority(1);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="2>card.priority"  (click)="setPriority(2);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="3>card.priority"  (click)="setPriority(3);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="4>card.priority"  (click)="setPriority(4);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="5>card.priority"  (click)="setPriority(5);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="6>card.priority"  (click)="setPriority(6);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="7>card.priority"  (click)="setPriority(7);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="8>card.priority"  (click)="setPriority(8);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="9>card.priority"  (click)="setPriority(9);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="10>card.priority" (click)="setPriority(10);">💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setPriority(-1);">✖</button></ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <ion-item>
-    <ion-range [(ngModel)]="card.status" pin="true" color="primary" min="0" max="10" step="1" snaps="true">
-      <ion-icon range-left name="checkmark-circle" color="primary"></ion-icon>
-    </ion-range>
-  </ion-item>
-
-  <ion-item>
-    <ion-range [(ngModel)]="card.priority" pin="true" color="primary" min="0" max="10" step="1" snaps="true">
-      <ion-icon range-left name="warning" color="primary"></ion-icon>
-    </ion-range>
-  </ion-item>
-
-  <ion-item>
-    <ion-range [(ngModel)]="card.rarity" pin="true" color="primary" min="0" max="10" step="1" snaps="true">
-      <ion-icon range-left name="star" color="primary"></ion-icon>
-    </ion-range>
-  </ion-item>
-
-  <!-- <ion-chip color="secondary">{{card.getStringForDevelopmentStatus()}}</ion-chip> -->
+  <ion-grid no-padding #hidableRarity class="rarity-options hidable" [class.hidden]="false">
+    <ion-row>
+      <ion-col col-1><button ion-button clear large full [class.faded]="0>card.rarity"  (click)="setRarity(0);" >➖</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="1>card.rarity"  (click)="setRarity(1);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="2>card.rarity"  (click)="setRarity(2);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="3>card.rarity"  (click)="setRarity(3);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="4>card.rarity"  (click)="setRarity(4);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="5>card.rarity"  (click)="setRarity(5);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="6>card.rarity"  (click)="setRarity(6);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="7>card.rarity"  (click)="setRarity(7);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="8>card.rarity"  (click)="setRarity(8);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="9>card.rarity"  (click)="setRarity(9);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="10>card.rarity" (click)="setRarity(10);">⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full (click)="setRarity(-1);">✖</button></ion-col>
+    </ion-row>
+  </ion-grid>
+  
 
   <ion-fab top left class="power-fab">
     <button ion-fab large color="primary" (click)="hidablePower.classList.toggle('hidden')"  color="light">
         {{card.isTrap?"🤐":card.power}}
     </button>
   </ion-fab>
-  
 
   <ion-fab bottom right>
     <button ion-fab large color="primary"><ion-icon name="more"></ion-icon></button>
-    <ion-fab-list side="right">
+    <ion-fab-list side="left">
         <button ion-fab large color="primary" (click)="delete()"><ion-icon name="trash"></ion-icon></button>
     </ion-fab-list>
   </ion-fab>
