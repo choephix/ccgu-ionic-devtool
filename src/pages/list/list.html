@@ -49,7 +49,7 @@
             <div class="id">{{card.data.id}}</div>
             <div class="slug">{{card.data.slug}}</div>
             <div class="description">{{card.data.description}}</div>
-            <div class="power">{{card.data.power}}</div>
+            <div class="power" *ngIf="!card.data.isTrap">{{card.data.power}}</div>
             <div class="priority" *ngIf="mode!=2">{{getPriority(card)}}</div>
             <div class="rarity" *ngIf="mode==2">{{getRarity(card)}}</div>
             <div class="dev-status" *ngIf="mode!=2" [style.background]="card.data.prettyStatusColor">{{card.data.prettyStatus}}</div>
