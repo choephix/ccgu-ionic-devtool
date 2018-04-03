@@ -15,10 +15,10 @@ page-list {
         transition: background-color .5s;
         .scroll-content { overflow: scroll; }
     }
-    #lescroll.mode-1, #lescroll.mode-2
-    {
-        background-color: rgb(93, 142, 242);
-    }
+    #lescroll.mode-1
+    { background-color: rgb(93, 142, 242); }
+    #lescroll.mode-2
+    { background-color:#581c1c; }
       
     .lecard
     {
@@ -41,6 +41,7 @@ page-list {
         .slug, .name
         {
             font-weight: bold;
+            text-align: center;
         }
 
         .description
@@ -62,10 +63,30 @@ page-list {
             padding: 0px;
             margin: -4px 3px;
             position: absolute;
-            bottom: 0;
-            left: 0;
+            // bottom: 0;
+            // left: 0;
+            top: 0;
+            right: 0;
         }
         
+        .rarity {
+            font-size: 9px;
+            text-align: center;
+            margin-top: -9px;
+            text-shadow: 0px 1px 20px white;
+            position: absolute;
+            width: 100%;
+        }
+
+        .priority {
+            font-size: 18px;
+            margin-top: -9px;
+            position: absolute;
+            opacity: .4;
+            text-align: center;
+            width: 100%;
+        }
+
         .dev-status
         {
             font-weight: bold;
@@ -110,6 +131,11 @@ page-list {
     {
         background: none;
         opacity: 1;
+    }
+
+    .mode-2 .lecard.empty
+    {
+        opacity: 0.05;
     }
 
     ::-webkit-scrollbar {

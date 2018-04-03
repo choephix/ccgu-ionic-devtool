@@ -29,6 +29,7 @@
       <ion-fab-list side="left">
         <button ion-fab (click)="onModeFab(0,fabMode)"><ion-icon name="{{getModeIcon(0)}}"></ion-icon></button>
         <button ion-fab (click)="onModeFab(1,fabMode)"><ion-icon name="{{getModeIcon(1)}}"></ion-icon></button>
+        <button ion-fab (click)="onModeFab(2,fabMode)"><ion-icon name="{{getModeIcon(2)}}"></ion-icon></button>
       </ion-fab-list>
     </ion-fab>
   
@@ -43,11 +44,14 @@
               [class.selected]="isSelected(card)"
               class="lecard {{getColorClass(card)}} {{hasData(card)?'non-empty':'empty'}}">
           <div *ngIf="hasData(card)">
-            <ion-input [(ngModel)]="card.data.slug" class="slug"></ion-input>
+            <!-- <ion-input [(ngModel)]="card.data.slug" class="slug"></ion-input> -->
             <!-- <ion-input [(ngModel)]="card.data.name" class="name"></ion-input> -->
+            <div class="slug">{{card.data.slug}}</div>
             <div class="description">{{card.data.description}}</div>
             <div class="power">{{card.data.power}}</div>
-            <div class="dev-status" [style.background]="card.data.prettyStatusColor">{{card.data.prettyStatus}}</div>
+            <div class="priority" *ngIf="mode!=2">{{getPriority(card)}}</div>
+            <div class="rarity" *ngIf="mode==2">{{getRarity(card)}}</div>
+            <div class="dev-status" *ngIf="mode!=2" [style.background]="card.data.prettyStatusColor">{{card.data.prettyStatus}}</div>
           </div>
         </div>
 

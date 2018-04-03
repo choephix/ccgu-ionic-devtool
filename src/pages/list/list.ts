@@ -1,6 +1,8 @@
 import { CardModel } from './../../app/models';
 import { Component } from '@angular/core';
-import { FabContainer } from 'ionic-angular';
+import { CardModel } from '../../app/models';
+import { CardViewPage } from '../card-view/card-view';
+import { FabContainer, ModalController } from 'ionic-angular';
 
 @Component({
   selector: 'page-list',
@@ -32,7 +34,7 @@ export class ListPage
   public mode:Mode = Mode.Edit;
   public selectedIndices:Array<number> = [];
 
-  constructor()
+  constructor( private modalCtrl:ModalController )
   {
     this.cards = FakeCardsData.getData();
 
@@ -53,10 +55,35 @@ export class ListPage
     for (let i = 0; i < 13; i++)
     {
         this.cards[64+i] = new CardModel();
-        this.cards[64+i].slug = "gagagigo";
-        this.cards[64+i].name = "gagagigo";
+        this.cards[64+i].slug = "status-" + i;
         this.cards[64+i].power = i;
         this.cards[64+i].status = i;
+    }
+
+    for (let i = 0; i <= 10; i++)
+    {
+        this.cards[80+i] = new CardModel();
+        this.cards[80+i].slug = "rarity-" + i;
+        this.cards[80+i].power = i;
+        this.cards[80+i].rarity = i;
+    }
+
+    for (let i = 0; i <= 10; i++)
+    {
+        this.cards[96+i] = new CardModel();
+        this.cards[96+i].slug = "priority-" + i;
+        this.cards[96+i].power = i;
+        this.cards[96+i].priority = i;
+    }
+
+    for (let i = 0; i <= 10; i++)
+    {
+        this.cards[112+i] = new CardModel();
+        this.cards[112+i].slug = "fullstack-" + i;
+        this.cards[112+i].power = 10+i;
+        this.cards[112+i].status = i;
+        this.cards[112+i].rarity = i;
+        this.cards[112+i].priority = i;
     }
 
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
@@ -65,31 +92,35 @@ export class ListPage
     this.selectBundle(this.bundles[0]);
   }
 
-  public onSelect(card:CardView)
+  public onSelect(cv:CardView)
   {
     if ( this.mode == Mode.Edit )
     {
+      let card = cv.data ? cv.data : new CardModel();
+      card.id = this.getSupposedCardID(cv);
 
+      let modal = this.modalCtrl.create( CardViewPage, { card : card } );
+      modal.present();
     }
     else
     if ( this.mode == Mode.Swap )
     {
       if ( this.selectedIndices.length < 1 )
       {
-        if ( this.hasData( card ) )
-          card.data.power++;
-        this.selectedIndices.push( card.index );
+        if ( this.hasData( cv ) )
+          cv.data.power++;
+        this.selectedIndices.push( cv.index );
       }
       else
-      if ( this.selectedIndices.indexOf( card.index ) >= 0 )
+      if ( this.selectedIndices.indexOf( cv.index ) >= 0 )
       {
-        this.selectedIndices.splice( this.selectedIndices.indexOf( card.index ), 1 );
+        this.selectedIndices.splice( this.selectedIndices.indexOf( cv.index ), 1 );
       }
       else
       {
         for (let i = 0; i < this.selectedIndices.length; i++)
         {
-          var iA:number = card.index + i;
+          var iA:number = cv.index + i;
           var iB:number = this.selectedIndices[i];
           var vA:CardView = this.cardViews[ iA ];
           var vB:CardView = this.cardViews[ iB ];
@@ -148,11 +179,38 @@ export class ListPage
   {
     if ( mode == Mode.Edit ) return "create";
     if ( mode == Mode.Swap ) return "resize";
+    if ( mode == Mode.Special ) return "star";
     return "cog";
+  }
+
+  public getPriority( cv:CardView ):string
+  {
+    switch( cv.data.priority )
+    {
+      //
+      case 1:  return '️-';
+      case 2:  return '--';
+      case 3:  return '️---';
+      case 4:  return '----';
+      case 5:  return '-----';
+      case 6:  return '--+--';
+      case 7:  return '-❕-';
+      case 8:  return '-❗-';
+      case 9:  return '-❗❗-';
+      case 10: return '🛑';
+      default: return '';
+    }
+  }
+
+  public getRarity( cv:CardView ):string
+  {
+    let s:string = '';
+    for (let i = 0; i < cv.data.rarity; i++) s += '⭐';
+    return s;
   }
 }
 
-const enum Mode { Edit, Swap }
+const enum Mode { Edit, Swap, Special }
 
 export class CardView {
   data:CardModel;
@@ -189,8 +247,11 @@ export class FakeCardsData {
     c.name = o["Name"];
     c.isTrap = o["IsTrap"];
     c.power = o["Power"];
-    c.status = o["Status"];
     c.description = o["Description"];
+    c.status = o["Status"];
+    c.priority = o["Priority"];
+    c.rarity = o["Rarity"];
+    c.isTrap = o["Type"] == 1;
     return c;
   }
 
