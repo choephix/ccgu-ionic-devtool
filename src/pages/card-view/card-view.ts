@@ -24,4 +24,12 @@ export class CardViewPage {
     console.log('Save CardViewPage');
     this.navCtrl.pop();
   }
+
+  public getColorClass()
+  {
+    if ( this.card.isTrap ) return "trap";
+    if ( this.card.isGrand ) return "grand";
+    if ( this.card.isSneak ) return "sneak";
+    return "normal";
+  }
 }

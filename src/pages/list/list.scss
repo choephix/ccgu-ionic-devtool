@@ -27,8 +27,8 @@ page-list {
         border: 1px solid rgba(0, 0, 0, 0.5);
         transition: border .25s;
         transition: outline .25s;
-        transition: background-color .25s;
         transition: opacity .25s;
+        transition: background-color .25s;
         // transform: rotate(-90deg);
 
         input, p, textarea
@@ -118,7 +118,7 @@ page-list {
 
     .lecard.sneak  { background : #EA4 }
     .lecard.normal { background : #EC8 }
-    .lecard.grand  { background : #EEC }
+    .lecard.grand  { background : #EED }
     .lecard.trap   { background : #ECE }
      
     .lecard.empty

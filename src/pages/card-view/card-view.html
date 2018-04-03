@@ -1,23 +1,25 @@
-<ion-header>
+<ion-header [class]="getColorClass()+' pad'">
 
+    <ion-grid>
+        <ion-row>
+          <ion-col col-9>
+              <ion-input type="text" [(ngModel)]="card.slug"></ion-input>
+          </ion-col>
+          <ion-col col-3>
+            <button ion-button (click)="card.isTrap=!card.isTrap" full large clear>
+              {{card.isTrap?"TRAP":"UNIT"}}
+            </button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    
 </ion-header>
 
-<ion-content padding>
+<ion-content padding [class]="getColorClass()+' pad'">
 
-  <ion-grid>
-    <ion-row>
-      <ion-col col-9>
-          <ion-input type="text" [(ngModel)]="card.slug"></ion-input>
-      </ion-col>
-      <ion-col col-3>
-        <button ion-button (click)="card.isTrap=!card.isTrap" full large>
-          {{card.isTrap?"TRAP":"UNIT"}}
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <!-- <ion-input type="text" [(ngModel)]="card.name"></ion-input> -->
 
-    <ion-input type="text" [(ngModel)]="card.name"></ion-input>
+  <ion-textarea  [(ngModel)]="card.description"></ion-textarea>
 
   <ion-item *ngIf="!card.isTrap">
     <ion-label range-left color="primary" stacked>Power</ion-label>
@@ -26,25 +28,6 @@
       <ion-badge range-right round color="danger" mode="ios">{{card?.power}}</ion-badge>
     </ion-range>
   </ion-item>
-
-  <ion-item>
-    <ion-label color="primary" stacked>Description</ion-label>
-    <ion-textarea  [(ngModel)]="card.description"></ion-textarea>
-  </ion-item>
-  <div>
-    <ion-chip color="secondary">
-      <button ion-button mini clear (click)="save()" color="light">
-        <ion-icon name="md-add"></ion-icon>
-      </button>
-    </ion-chip>
-    <ion-chip *ngFor="let tag of card.tags" color="primary">
-      <ion-icon name="md-pricetag"></ion-icon>
-      <ion-label text-uppercase>{{tag}}</ion-label>
-      <button ion-button mini clear (click)="save()" color="light">
-        <ion-icon name="close"></ion-icon>
-      </button>
-    </ion-chip>
-  </div>
 
   <ion-item>
     <ion-range [(ngModel)]="card.status" pin="true" color="primary" min="0" max="10" step="1" snaps="true">

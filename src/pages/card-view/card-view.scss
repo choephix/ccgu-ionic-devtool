@@ -1,11 +1,37 @@
 page-card-view {
     input.text-input.text-input-md {
-        margin: 5px;
-        height: 55px;
+        margin: 0px;
+        height: 64px;
         width: 100%;
         font-size: 32px;
+        background: rgba(255,255,255,.25);
+        padding: 4px;
     }
     input.text-input.text-input-md:hover {
         outline: 1px solid orange;
+    }
+
+    textarea {
+        background: rgba(255,255,255,.25) !important;
+        height: 200px  !important;
+        width: 100% !important;
+        margin: 0px !important;
+        // font-size: 32px;
+        padding: 6px !important;
+    }
+
+    .pad
+    {
+        background : white;
+        transition: background-color .4s;
+    }
+    .pad.sneak  { background : #EA4 }
+    .pad.normal { background : #EC8 }
+    .pad.grand  { background : #EED }
+    .pad.trap   { background : #ECE }
+     
+    .item
+    {
+        // background: none;
     }
 }
