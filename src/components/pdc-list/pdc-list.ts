@@ -5,8 +5,8 @@ import { DataProvider } from '../../providers/data/data';
   selector: 'pdc-list',
   templateUrl: 'pdc-list.html'
 })
-export class PdcListComponent {
-
+export class PdcListComponent
+{
   chars: { origin: string; name: string; id: number; }[];
   
   constructor( private data:DataProvider )
