@@ -1,6 +1,6 @@
 <ion-content padding [class]="getColorClass()+' pad'">
 
-  <ion-input type="text" [(ngModel)]="card.slug"></ion-input>
+  <ion-input type="text" class="slug" [(ngModel)]="card.slug"></ion-input>
 
   <ion-grid no-padding #hidablePower class="power-options hidable" [class.hidden]="true">
     <ion-row>
@@ -31,9 +31,9 @@
     </ion-row>
   </ion-grid>
 
-  <ion-input type="text" [(ngModel)]="card.name"></ion-input>
+  <ion-input type="text" class="name" [(ngModel)]="card.name"></ion-input>
     
-  <ion-textarea  [(ngModel)]="card.description"></ion-textarea>
+  <ion-textarea [(ngModel)]="card.description"></ion-textarea>
 
   <div ion-item full #buttonStatus
           color="devstatus-{{card.status}}"
