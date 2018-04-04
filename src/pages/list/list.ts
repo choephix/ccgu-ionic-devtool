@@ -54,42 +54,8 @@ export class ListPage
            startIndex : i * ListPage.PAGE_CARDS_COUNT, 
            name : i.toString(16) } );
 
-    for (let i = 0; i < 13; i++)
-    {
-        this.cards[64+i] = new CardModel();
-        this.cards[64+i].slug = "status-" + i;
-        this.cards[64+i].power = i;
-        this.cards[64+i].status = i;
-    }
-
-    for (let i = 0; i <= 10; i++)
-    {
-        this.cards[80+i] = new CardModel();
-        this.cards[80+i].slug = "rarity-" + i;
-        this.cards[80+i].power = i;
-        this.cards[80+i].rarity = i;
-    }
-
-    for (let i = 0; i <= 10; i++)
-    {
-        this.cards[96+i] = new CardModel();
-        this.cards[96+i].slug = "priority-" + i;
-        this.cards[96+i].power = i;
-        this.cards[96+i].priority = i;
-    }
-
-    for (let i = 0; i <= 10; i++)
-    {
-        this.cards[112+i] = new CardModel();
-        this.cards[112+i].slug = "fullstack-" + i;
-        this.cards[112+i].power = 10+i;
-        this.cards[112+i].status = i;
-        this.cards[112+i].rarity = i;
-        this.cards[112+i].priority = i;
-    }
-
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
-      this.cardViews.push( { index : i, data : null } );
+      this.cardViews.push( { index : i, model : null } );
 
     this.selectBundle(this.bundles[0]);
   }
@@ -134,20 +100,18 @@ export class ListPage
 
   private viewCard( id:number )
   {
-    let card = this.cards[id] ? this.cards[id] : new CardModel();    
+    let card = this.cards[id] ? this.cards[id] : new CardModel( id );    
     let params = { del : false };
     
-    card.id = id;
-
     console.log( params );
     let modal = this.modalCtrl.create( CardViewPage, { card : card, params : params } );
 
     modal.onDidDismiss(()=>
     {
-      let del:boolean = params.del || ( !card.slug && !card.description );
+      let del:boolean = params.del || card.practicallyNull;
 
       if ( del )
-        delete this.cards[card.id];
+        delete this.cards[card.ID];
       else
         this.cards[id] = card;
       
@@ -162,22 +126,22 @@ export class ListPage
     let coll = this.cards[id];
     if ( coll )
     {
-      coll.id = card.id;
-      this.cards[card.id] = coll;
+      coll.setID( card.ID );
+      this.cards[card.ID] = coll;
     }
     else
     {
-      this.cards[card.id] = null;
+      this.cards[card.ID] = null;
     }
 
-    card.id = id;
+    card.setID( id );
     this.cards[id] = card;
   }
 
   public getSupposedCardID( cv:CardView )
   { return this.selectedBundle.startIndex + cv.index; }
 
-  public hasData( card:CardView ):boolean { return card.data != null && card.data != undefined }
+  public hasData( card:CardView ):boolean { return card.model != null && card.model != undefined }
   public isSelected( card:CardView )
   { return this.selectedCardIDs.indexOf( this.getSupposedCardID( card ) ) >= 0 }
 
@@ -185,11 +149,11 @@ export class ListPage
   public getY( i:number ):number { return this.marginY + Math.floor( i / this.cardColumnsCount ) * this.cardYFactor; }
   public getColorClass( card:CardView )
   {
-    if( card.data )
+    if( card.model )
     {
-      if ( card.data.isTrap ) return "trap";
-      if ( card.data.isGrand ) return "grand";
-      if ( card.data.isSneak ) return "sneak";
+      if ( card.model.isTrap ) return "trap";
+      if ( card.model.isGrand ) return "grand";
+      if ( card.model.isSneak ) return "sneak";
       return "normal";
     }
     else
@@ -206,7 +170,7 @@ export class ListPage
   {
     this.selectedBundle = bundle;
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
-      this.cardViews[ i ].data = this.cards[ i + bundle.startIndex ];
+      this.cardViews[ i ].model = this.cards[ i + bundle.startIndex ];
   }
 
   public setMode( mode:number, fab:FabContainer ):void { this.mode = mode; }
@@ -221,7 +185,7 @@ export class ListPage
 
   public getPriority( cv:CardView ):string
   {
-    switch( cv.data.priority )
+    switch( cv.model.properties.priority )
     {
       case 7:  return '❕';
       case 8:  return '❗';
@@ -234,7 +198,7 @@ export class ListPage
   public getRarity( cv:CardView ):string
   {
     let s:string = '';
-    for (let i = 0; i < cv.data.rarity; i++) s += '⭐';
+    for (let i = 0; i < cv.model.properties.rarity; i++) s += '⭐';
     return s;
   }
 }
@@ -242,7 +206,7 @@ export class ListPage
 const enum Mode { Edit, Swap, Special }
 
 export class CardView {
-  data:CardModel;
+  model:CardModel;
   index:number;
 }
 

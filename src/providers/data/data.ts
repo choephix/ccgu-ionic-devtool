@@ -35,18 +35,17 @@ export class DataProvider
     for (let i = 0; i < data.length; i++)
     {
       var o:object = data[i];
-      var c:CardModel = new CardModel();
-      c.id = o["ID"];
-      c.slug = o["Slug"];
-      c.name = o["Name"];
-      c.isTrap = o["IsTrap"];
-      c.power = o["Power"];
-      c.description = o["Description"];
-      c.status = o["Status"];
-      c.priority = o["Priority"];
-      c.rarity = o["Rarity"];
-      c.isTrap = o["Type"] == 1;
-      result[ c.id ] = c;
+      var id:number = o["ID"];
+      var c:CardModel = new CardModel( id );
+      c.properties.slug = o["Slug"];
+      c.properties.name = o["Name"];
+      c.properties.type = o["Type"];
+      c.properties.power = o["Power"];
+      c.properties.description = o["Description"];
+      c.properties.status = o["Status"];
+      c.properties.priority = o["Priority"];
+      c.properties.rarity = o["Rarity"];
+      result[ id ] = c;
     }
 
     return result;

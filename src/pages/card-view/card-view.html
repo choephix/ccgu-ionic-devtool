@@ -1,6 +1,6 @@
 <ion-content padding [class]="getColorClass()+' pad'">
 
-  <ion-input type="text" class="slug" [(ngModel)]="card.slug"></ion-input>
+  <ion-input type="text" class="slug" [(ngModel)]="card.properties.slug"></ion-input>
 
   <ion-grid no-padding #hidablePower class="power-options hidable" [class.hidden]="true">
     <ion-row>
@@ -31,17 +31,17 @@
     </ion-row>
   </ion-grid>
 
-  <ion-input type="text" class="name" [(ngModel)]="card.name"></ion-input>
+  <ion-input type="text" class="name" [(ngModel)]="card.properties.name"></ion-input>
     
-  <ion-textarea [(ngModel)]="card.description"></ion-textarea>
+  <ion-textarea [(ngModel)]="card.properties.description"></ion-textarea>
 
   <div ion-item full #buttonStatus
-          color="devstatus-{{card.status}}"
+          color="devstatus-{{card.properties.status}}"
           class="status-button status-label hidable" 
           [class.hidden]="false" 
           (click)="toggle(hidableStatus)"
           style="text-align:center;color:black;"
-           >{{getPrettyStatus(card.status)}}</div>
+           >{{getPrettyStatus(card.properties.status)}}</div>
   
   <ion-grid no-padding #hidableStatus class="status-options hidable" [class.hidden]="true">
     <ion-row>
@@ -64,34 +64,34 @@
     
   <ion-grid no-padding #hidablePriority class="priority-options hidable" [class.hidden]="false">
     <ion-row>
-      <ion-col col-1><button ion-button clear large full [class.faded]="0>card.priority"  (click)="setPriority(0);" >➖</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="1>card.priority"  (click)="setPriority(1);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="2>card.priority"  (click)="setPriority(2);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="3>card.priority"  (click)="setPriority(3);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="4>card.priority"  (click)="setPriority(4);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="5>card.priority"  (click)="setPriority(5);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="6>card.priority"  (click)="setPriority(6);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="7>card.priority"  (click)="setPriority(7);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="8>card.priority"  (click)="setPriority(8);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="9>card.priority"  (click)="setPriority(9);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="10>card.priority" (click)="setPriority(10);">💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 0 > card.properties.priority" (click)="setPriority(0);" >➖</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 1 > card.properties.priority" (click)="setPriority(1);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 2 > card.properties.priority" (click)="setPriority(2);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 3 > card.properties.priority" (click)="setPriority(3);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 4 > card.properties.priority" (click)="setPriority(4);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 5 > card.properties.priority" (click)="setPriority(5);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 6 > card.properties.priority" (click)="setPriority(6);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 7 > card.properties.priority" (click)="setPriority(7);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 8 > card.properties.priority" (click)="setPriority(8);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 9 > card.properties.priority" (click)="setPriority(9);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="10 > card.properties.priority" (click)="setPriority(10);">💙</button></ion-col>
       <ion-col col-1><button ion-button clear large full (click)="setPriority(-1);">✖</button></ion-col>
     </ion-row>
   </ion-grid>
 
   <ion-grid no-padding #hidableRarity class="rarity-options hidable" [class.hidden]="false">
     <ion-row>
-      <ion-col col-1><button ion-button clear large full [class.faded]="0>card.rarity"  (click)="setRarity(0);" >➖</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="1>card.rarity"  (click)="setRarity(1);" >⭐</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="2>card.rarity"  (click)="setRarity(2);" >⭐</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="3>card.rarity"  (click)="setRarity(3);" >⭐</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="4>card.rarity"  (click)="setRarity(4);" >⭐</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="5>card.rarity"  (click)="setRarity(5);" >⭐</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="6>card.rarity"  (click)="setRarity(6);" >⭐</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="7>card.rarity"  (click)="setRarity(7);" >⭐</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="8>card.rarity"  (click)="setRarity(8);" >⭐</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="9>card.rarity"  (click)="setRarity(9);" >⭐</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="10>card.rarity" (click)="setRarity(10);">⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 0 > card.properties.rarity" (click)="setRarity(0);" >➖</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 1 > card.properties.rarity" (click)="setRarity(1);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 2 > card.properties.rarity" (click)="setRarity(2);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 3 > card.properties.rarity" (click)="setRarity(3);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 4 > card.properties.rarity" (click)="setRarity(4);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 5 > card.properties.rarity" (click)="setRarity(5);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 6 > card.properties.rarity" (click)="setRarity(6);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 7 > card.properties.rarity" (click)="setRarity(7);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 8 > card.properties.rarity" (click)="setRarity(8);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 9 > card.properties.rarity" (click)="setRarity(9);" >⭐</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="10 > card.properties.rarity" (click)="setRarity(10);">⭐</button></ion-col>
       <ion-col col-1><button ion-button clear large full (click)="setRarity(-1);">✖</button></ion-col>
     </ion-row>
   </ion-grid>
@@ -99,7 +99,7 @@
 
   <ion-fab top left class="power-fab">
     <button ion-fab large color="primary" (click)="hidablePower.classList.toggle('hidden')"  color="light">
-        {{card.isTrap?"🤐":card.power}}
+        {{card.isTrap?"🤐":card.prettyPower}}
     </button>
   </ion-fab>
 

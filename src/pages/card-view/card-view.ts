@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { CardModel, StatusViewGuru } from '../../app/models';
+import { CardModel, CardType } from '../../app/models';
 
 @IonicPage()
 @Component({
@@ -32,13 +32,13 @@ export class CardViewPage {
 
   setPower( value:number ):void
   {
-    this.card.power = value;
-    this.card.isTrap = false;
+    this.card.properties.power = value;
+    this.card.properties.type = CardType.Unit;
   }
 
-  setStatus( value:number ):void   { this.card.status = value; }
-  setPriority( value:number ):void { this.card.priority = value; }
-  setRarity( value:number ):void   { this.card.rarity = value; }
+  setStatus( value:number ):void   { this.card.properties.status = value; }
+  setPriority( value:number ):void { this.card.properties.priority = value; }
+  setRarity( value:number ):void   { this.card.properties.rarity = value; }
 
   toggle( ...hidables:Element[] ):void
   {
@@ -46,10 +46,10 @@ export class CardViewPage {
   }
 
   public getPrettyStatusColor(value:number):string
-  { return StatusViewGuru.ARRAY[value].color; }
+  { return CardModel.LOOKUP_STATUS[value].color; }
 
   public getPrettyStatus(value:number):string
-  { return StatusViewGuru.ARRAY[value].text; }
+  { return CardModel.LOOKUP_STATUS[value].text; }
 
   public getColorClass()
   {
