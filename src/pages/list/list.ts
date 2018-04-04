@@ -6,7 +6,8 @@ import { FabContainer, ModalController } from 'ionic-angular';
 
 @Component({
   selector: 'page-list',
-  templateUrl: 'list.html'
+  templateUrl: 'list.html',
+  providers: [DataProvider]
 })
 export class ListPage 
 {
@@ -35,7 +36,7 @@ export class ListPage
   public mode:Mode = Mode.Edit;
   public selectedCardIDs:Array<number> = [];
 
-  constructor( private modalCtrl:ModalController, private data:DataProvider )
+  constructor( private modalCtrl:ModalController, public data:DataProvider )
   {
     this.cards = data.getCards();
 

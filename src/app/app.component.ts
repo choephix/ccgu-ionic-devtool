@@ -10,14 +10,16 @@ import { Page } from 'ionic-angular/navigation/nav-util';
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp {
+export class MyApp
+{
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = ListPage;
 
   pages: Array<{title: string, icon:string, component:Page }>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen)
+  {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -25,7 +27,6 @@ export class MyApp {
       { title: 'Home', component: HomePage, icon: "home" },
       { title: 'List', component: ListPage, icon: "cash" }
     ];
-
   }
 
   initializeApp() {

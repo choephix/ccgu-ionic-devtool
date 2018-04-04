@@ -12,6 +12,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AutosizeDirective } from '../directives/autosize/autosize';
 import { DataProvider } from '../providers/data/data';
+import { PdcListComponent } from '../components/pdc-list/pdc-list';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { DataProvider } from '../providers/data/data';
     HomePage,
     ListPage,
     CardViewPage,
-    AutosizeDirective
+    AutosizeDirective,
+    PdcListComponent
   ],
   imports: [
     BrowserModule,
