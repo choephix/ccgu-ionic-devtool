@@ -34,7 +34,8 @@
       <button ion-fab (click)="setMode(Mode.View);fabMode.close()"><ion-icon name="{{Mode.View.icon}}"></ion-icon></button>
     </ion-fab-list>
     <ion-fab-list side="top">
-      <button ion-fab (click)="showPDCList=!showPDCList;fabMode.close()"><ion-icon name="contacts"></ion-icon></button>
+      <button ion-fab (click)="showPrettyName=!showPrettyName;fabMode.close()"><ion-icon name="glasses"></ion-icon></button>
+      <button ion-fab (click)="showPrettyName=!showPrettyName;fabMode.close()"><ion-icon name="contacts"></ion-icon></button>
     </ion-fab-list>
   </ion-fab>
 
@@ -74,8 +75,8 @@
                 class="lecard {{getColorClass(card)}} {{hasData(card)?'non-empty':'empty'}}">
             <div *ngIf="hasData(card)">
               <ion-badge class="id" *ngIf="mode.show.indexOf('id')>=0" mode="ios" style="position:absolute; right:5px; top:-5px;" color="light">{{card.model.ID}}</ion-badge>
-              <!-- <div class="slug">{{card.model.prettyName}}</div> -->
-              <div class="slug">{{card.model.properties.slug}}</div>
+              <div class="name" *ngIf="showPrettyName">{{card.model.prettyName}}</div>
+              <div class="slug" *ngIf="!showPrettyName">{{card.model.properties.slug}}</div>
               <div class="description">{{card.model.prettyDescription}}</div>
               <div class="power"      *ngIf="!card.model.isTrap">{{card.model.prettyPower}}</div>
               <div class="priority"   *ngIf="mode.show.indexOf('priority')>=0">{{getPriority(card)}}</div>
