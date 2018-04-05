@@ -38,7 +38,7 @@ export class ListPage
   readonly cardColumnsCount:number;
   readonly cardRowsCount:number;
 
-  cards:CardMap = {};
+  private get cards():Map<number,CardModel> { return this.data.cards; }
   cardViews: Array<CardView> = [];
 
   selectedBundle : CardViewBundle = null;
@@ -55,8 +55,6 @@ export class ListPage
   
   constructor( private modalCtrl:ModalController, public data:DataProvider )
   {
-    this.cards = data.getCards();
-
     this.cardColumnsCount = 16;
     this.cardRowsCount = Math.ceil( ListPage.PAGE_CARDS_COUNT / this.cardColumnsCount );
 
@@ -75,6 +73,14 @@ export class ListPage
       this.cardViews.push( { index : i, model : null } );
 
     this.selectBundle(this.bundles[0]);
+
+    data.events.subscribe( "data:change", () => { this.refresh() } );
+  }
+
+  private refresh():void
+  {
+    console.log("<<refresh>>");
+    this.selectBundle(this.selectedBundle);
   }
 
   public onSelect(cv:CardView)
@@ -104,13 +110,13 @@ export class ListPage
         this.setCardID( this.cards[ seleID ], cvID );
 
         this.selectedCardIDs.length = 0;
-        this.selectBundle(this.selectedBundle);
+        this.refresh();
       }
     }
     else
     if ( this.mode == this.Mode.PDCs )
     {
-      if( this.pdcListView.selectedPDCs.length > 0 )
+      if( cv.model && this.pdcListView.selectedPDCs.length > 0 )
       {
         cv.model.setPDC( this.pdcListView.selectedPDCs[0] );
         this.pdcListView.selectedPDCs.length = 0;
@@ -139,7 +145,7 @@ export class ListPage
       else
         this.cards[id] = card;
       
-      this.selectBundle(this.selectedBundle);
+      this.refresh();
     });
 
     modal.present();

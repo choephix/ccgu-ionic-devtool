@@ -8,18 +8,24 @@ import { PDCharacterData } from '../../app/models';
 })
 export class PdcListComponent
 {
-  public chars:PDCharacterData[];
   public selectedPDCs:PDCharacterData[] = [];
   
+  private get chars():PDCharacterData[] { return this.data.characters; }
+
   constructor( private data:DataProvider )
   {
-    data.load();
-    this.chars = data.characters;
   }
 
-  public onSelect(pcd:PDCharacterData)
+  public onSelect(pdc:PDCharacterData)
   {
-    this.selectedPDCs.length = 0;
-    this.selectedPDCs.push( pcd );
+    if( this.selectedPDCs.indexOf( pdc ) < 0 )
+    {
+      this.selectedPDCs.length = 0;
+      this.selectedPDCs.push( pdc );
+    }
+    else
+    {
+      this.selectedPDCs.length = 0;
+    }
   }
 }
