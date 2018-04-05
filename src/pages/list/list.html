@@ -1,9 +1,9 @@
 <ion-header>
   <ion-navbar color="primary">
 
-    <button ion-button menuToggle end>
+    <!-- <button ion-button menuToggle end>
       <ion-icon name="menu"></ion-icon>
-    </button>
+    </button> -->
 
     <ion-grid grid-padding-width="1px">
       <ion-row class="filters">
@@ -25,64 +25,67 @@
 
 <ion-content no-scroll>
 
-    <ion-fab bottom right #fabMode>
-      <button ion-fab large><ion-icon [name]="getModeIcon(mode)"></ion-icon></button>
-      <ion-fab-list side="left">
-        <button ion-fab (click)="setMode(0);fabMode.close()"><ion-icon name="{{getModeIcon(0)}}"></ion-icon></button>
-        <button ion-fab (click)="setMode(1);fabMode.close()"><ion-icon name="{{getModeIcon(1)}}"></ion-icon></button>
-        <button ion-fab (click)="setMode(2);fabMode.close()"><ion-icon name="{{getModeIcon(2)}}"></ion-icon></button>
-      </ion-fab-list>
-    </ion-fab>
-  
-    <ion-fab bottom left #fabZoom>
-      <button ion-fab large><ion-icon name="search"></ion-icon></button>
-      <ion-fab-list side="right">
-        <button ion-fab (click)="zoom=1.00;fabZoom.close();">100%</button>
-        <button ion-fab (click)="zoom=0.75;fabZoom.close();">75%</button>
-        <button ion-fab (click)="zoom=0.50;fabZoom.close();">50%</button>
-        <button ion-fab (click)="zoom=0.25;fabZoom.close();">25%</button>
-      </ion-fab-list>
-    </ion-fab>
-  
-    <ion-scroll #lescroll id="lescroll" 
-                [class]="'mode-'+mode" 
-                [style.zoom]="zoom"
-                zooming="true" zoom="true"  
-                min-zoom="0.5" max-zoom="2" 
-                minZoom="0.5" maxZoom="2" 
-                direction="xy" 
-                scrollX="true" scrollY="true">
+  <ion-fab bottom right #fabMode>
+    <button ion-fab large><ion-icon [name]="mode.icon"></ion-icon></button>
+    <ion-fab-list side="left">
+      <button ion-fab (click)="setMode(Mode.Edit);fabMode.close()"><ion-icon name="{{Mode.Edit.icon}}"></ion-icon></button>
+      <button ion-fab (click)="setMode(Mode.Move);fabMode.close()"><ion-icon name="{{Mode.Move.icon}}"></ion-icon></button>
+      <button ion-fab (click)="setMode(Mode.PDCs);fabMode.close()"><ion-icon name="{{Mode.PDCs.icon}}"></ion-icon></button>
+      <button ion-fab (click)="setMode(Mode.View);fabMode.close()"><ion-icon name="{{Mode.View.icon}}"></ion-icon></button>
+    </ion-fab-list>
+    <ion-fab-list side="top">
+      <button ion-fab (click)="showPDCList=!showPDCList;fabMode.close()"><ion-icon name="contacts"></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
 
-        <div *ngFor="let card of cardViews" 
-              (click)="onSelect(card)"
-              style.width="{{cardWidth}}px"
-              style.height="{{cardHeight}}px"
-              style.left="{{getX(card.index)}}px"
-              style.top="{{getY(card.index)}}px"
-              [class.selected]="isSelected(card)"
-              class="lecard {{getColorClass(card)}} {{hasData(card)?'non-empty':'empty'}}">
-          <div *ngIf="hasData(card)">
-            <!-- <ion-input [(ngModel)]="card.model.slug" class="slug"></ion-input> -->
-            <!-- <ion-input [(ngModel)]="card.model.name" class="name"></ion-input> -->
-            <ion-badge mode="ios" style="position:absolute; right:5px; top:-5px;" color="light" *ngIf="mode==1">{{card.model.ID}}</ion-badge>
-            <!-- <div class="slug">{{card.model.prettyName}}</div> -->
-            <div class="slug">{{card.model.properties.slug}}</div>
-            <div class="description">{{card.model.prettyDescription}}</div>
-            <div class="power"      *ngIf="!card.model.isTrap">{{card.model.prettyPower}}</div>
-            <div class="priority"   *ngIf="mode!=2">{{getPriority(card)}}</div>
-            <div class="rarity"     *ngIf="mode==2">{{getRarity(card)}}</div>
-            <div class="dev-status" *ngIf="mode!=2" [style.background]="card.model.prettyStatusColor">{{card.model.prettyStatus}}</div>
+  <ion-fab bottom left #fabZoom>
+    <button ion-fab large><ion-icon name="search"></ion-icon></button>
+    <ion-fab-list side="top">
+      <button ion-fab (click)="zoom=1.00;fabZoom.close();">100%</button>
+      <button ion-fab (click)="zoom=0.75;fabZoom.close();">75%</button>
+      <button ion-fab (click)="zoom=0.50;fabZoom.close();">50%</button>
+      <button ion-fab (click)="zoom=0.25;fabZoom.close();">25%</button>
+    </ion-fab-list>
+  </ion-fab>
+
+  <div *ngIf="mode==Mode.PDCs" style="width:33%; height:100%; top:0; left:0; position:absolute; overflow:auto; margin:0; padding:0;">
+    <div style="max-height:100%; overflow:auto; margin:0; padding:0;">
+      <pdc-list #pdcList></pdc-list>
+    </div>
+  </div>
+
+  <div #lescroll id="lescroll" 
+        [style.width]="mode==Mode.PDCs?'67%':'100%'"
+        [style.zoom]="zoom"
+        [class]="'mode-'+mode.name" 
+        >
+
+    <div style.width="{{cardXFactor*cardColumnsCount+2}}px"
+          style.height="{{cardYFactor*cardRowsCount+40}}px"
+          style="overflow:hidden;">
+
+          <div *ngFor="let card of cardViews" 
+                (click)="onSelect(card)"
+                style.width="{{cardWidth}}px"
+                style.height="{{cardHeight}}px"
+                style.left="{{getX(card.index)}}px"
+                style.top="{{getY(card.index)}}px"
+                [class.selected]="isSelected(card)"
+                class="lecard {{getColorClass(card)}} {{hasData(card)?'non-empty':'empty'}}">
+            <div *ngIf="hasData(card)">
+              <ion-badge class="id" *ngIf="mode.show.indexOf('id')>=0" mode="ios" style="position:absolute; right:5px; top:-5px;" color="light">{{card.model.ID}}</ion-badge>
+              <!-- <div class="slug">{{card.model.prettyName}}</div> -->
+              <div class="slug">{{card.model.properties.slug}}</div>
+              <div class="description">{{card.model.prettyDescription}}</div>
+              <div class="power"      *ngIf="!card.model.isTrap">{{card.model.prettyPower}}</div>
+              <div class="priority"   *ngIf="mode.show.indexOf('priority')>=0">{{getPriority(card)}}</div>
+              <div class="rarity"     *ngIf="mode.show.indexOf('rarity')>=0">{{getRarity(card)}}</div>
+              <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" [style.background]="card.model.prettyStatusColor">{{card.model.prettyStatus}}</div>
+            </div>
           </div>
-        </div>
-
-        <div style.width="{{cardXFactor*cardColumnsCount+2}}px"
-             style.height="{{cardYFactor*cardRowsCount+200}}px">.</div>
-
-    </ion-scroll>
-
-    <pdc-list #pdcList
-    style="position:absolute; top:0px; left:0px; width:480px; max-height:480px; z-index:99; overflow:scroll;"
-    ></pdc-list>
+    </div>
+  
+  </div> 
 
 </ion-content>
 

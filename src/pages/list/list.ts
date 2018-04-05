@@ -4,6 +4,8 @@ import { DataProvider } from '../../providers/data/data';
 import { CardViewPage } from '../card-view/card-view';
 import { FabContainer, ModalController } from 'ionic-angular';
 
+export class Mode { icon:string; name:string; show:string[] }
+
 @Component({
   selector: 'page-list',
   templateUrl: 'list.html',
@@ -13,28 +15,38 @@ export class ListPage
 {
   private static readonly PAGE_CARDS_COUNT:number = 256;
 
+  readonly Mode : 
+  { Edit : Mode, Move : Mode, PDCs : Mode, View : Mode } =
+  {
+    Edit : { icon : "create", name : "edit", show : ["priority","status"] },
+    Move : { icon : "resize", name : "move", show : ["priority","status","id"] },
+    PDCs : { icon : "person", name : "pdcs", show : ["status"] },
+    View : { icon : "eye"   , name : "view", show : ["rarity"] },
+  };
+  
+  readonly minCardWidth:number = 157;
+  readonly minCardHeight:number = 120;
+  readonly cardMargin:number = 1;
+  readonly marginX:number = 8;
+  readonly marginY:number = 16;
+
+  readonly cardWidth:number;
+  readonly cardHeight:number;
+  readonly cardXFactor:number;
+  readonly cardYFactor:number;
+  readonly cardColumnsCount:number;
+  readonly cardRowsCount:number;
+
   cards:CardMap = {};
   cardViews: Array<CardView> = [];
 
   selectedBundle : CardViewBundle = null;
   bundles : Array<CardViewBundle> = [];
-
-  public minCardWidth:number = 157;
-  public minCardHeight:number = 120;
-  public cardMargin:number = 1;
-  public marginX:number = 8;
-  public marginY:number = 16;
-
-  public cardWidth:number;
-  public cardHeight:number;
-  public cardXFactor:number;
-  public cardYFactor:number;
-  public cardColumnsCount:number;
-  public cardRowsCount:number;
-
-  public zoom:number = 1.0;
-  public mode:Mode = Mode.Edit;
-  public selectedCardIDs:Array<number> = [];
+  
+  zoom:number = 1.0;
+  mode:Mode = this.Mode.PDCs;
+  // mode:Mode = this.Mode.Edit;
+  selectedCardIDs:Array<number> = [];
 
   constructor( private modalCtrl:ModalController, public data:DataProvider )
   {
@@ -62,12 +74,12 @@ export class ListPage
 
   public onSelect(cv:CardView)
   {
-    if ( this.mode == Mode.Edit )
+    if ( this.mode == this.Mode.Edit )
     {
       this.viewCard( this.getSupposedCardID(cv) );
     }
     else
-    if ( this.mode == Mode.Swap )
+    if ( this.mode == this.Mode.Move )
     {
       let cvID:number = this.getSupposedCardID( cv );
       let seleIndex:number = this.selectedCardIDs.indexOf( cvID );
@@ -173,15 +185,7 @@ export class ListPage
       this.cardViews[ i ].model = this.cards[ i + bundle.startIndex ];
   }
 
-  public setMode( mode:number, fab:FabContainer ):void { this.mode = mode; }
-
-  public getModeIcon( mode:number ):string
-  {
-    if ( mode == Mode.Edit ) return "create";
-    if ( mode == Mode.Swap ) return "resize";
-    if ( mode == Mode.Special ) return "star";
-    return "cog";
-  }
+  public setMode( mode:Mode, fab:FabContainer ):void { this.mode = mode; }
 
   public getPriority( cv:CardView ):string
   {
@@ -202,8 +206,6 @@ export class ListPage
     return s;
   }
 }
-
-const enum Mode { Edit, Swap, Special }
 
 export class CardView {
   model:CardModel;

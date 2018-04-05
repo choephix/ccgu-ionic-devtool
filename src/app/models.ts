@@ -14,7 +14,8 @@ export class CardModel
     public get ID():number { return this.properties.id  }
     public get prettyName():string { return this.hasName ? this.properties.name : this.properties.slug }
     public get prettyDescription():string { return this.properties.description }
-    public get prettyPower():string { return this.properties.power ? String(this.properties.power) : '?' }
+    public get prettyPower():string 
+    { return this.properties.power > -1 ? String(this.properties.power) : '?' }
 
     public get isUnit():boolean
     { return this.properties.type == CardType.Unit }
@@ -54,6 +55,12 @@ export class CardModel
     ]
 }
 
+export class StatusViewProperties { text:string; color:string }
+
+export enum CardType { Unit, Trap }
+
+/// -> JSON
+
 export class CardData
 {
     id: number = 0;
@@ -75,7 +82,3 @@ export class PDCharacterData
     origin: string;
     name: string = "";
 }
-
-export class StatusViewProperties { text:string; color:string }
-
-export enum CardType { Unit, Trap }

@@ -1,7 +1,7 @@
 <div style="background:white; overflow:hidden;" #pdcWrapper>
   <ion-list>
     <ion-item-group>
-      <ion-item-divider color="light" (dblclick)='pdcWrapper.style.height=0'>Public Domain Characters</ion-item-divider>
+      <!-- <ion-item-divider color="light">Public Domain Characters</ion-item-divider> -->
       <ion-item *ngFor="let c of chars" >{{c.origin}}//{{c.name}}</ion-item>
     </ion-item-group>
   </ion-list>

@@ -15,5 +15,4 @@ export class PdcListComponent
 
     this.chars = data.characters;
   }
-
 }
