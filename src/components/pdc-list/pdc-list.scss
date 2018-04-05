@@ -1,3 +1,7 @@
 pdc-list {
 
+    .selected {
+        color: rosybrown;
+        transition: color .1s;
+    }
 }

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import { CardModel } from '../../app/models';
+import { Component, ViewChild } from '@angular/core';
+import { CardModel, CardMap } from '../../app/models';
 import { DataProvider } from '../../providers/data/data';
 import { CardViewPage } from '../card-view/card-view';
 import { FabContainer, ModalController } from 'ionic-angular';
+import { PdcListComponent } from '../../components/pdc-list/pdc-list';
 
 export class Mode { icon:string; name:string; show:string[] }
 
@@ -48,6 +49,10 @@ export class ListPage
   // mode:Mode = this.Mode.Edit;
   selectedCardIDs:Array<number> = [];
 
+  showPrettyName:boolean = false;
+
+  @ViewChild('pdcList') pdcListView:PdcListComponent;
+  
   constructor( private modalCtrl:ModalController, public data:DataProvider )
   {
     this.cards = data.getCards();
@@ -103,11 +108,18 @@ export class ListPage
       }
     }
     else
+    if ( this.mode == this.Mode.PDCs )
+    {
+      if( this.pdcListView.selectedPDCs.length > 0 )
+      {
+        cv.model.setPDC( this.pdcListView.selectedPDCs[0] );
+        this.pdcListView.selectedPDCs.length = 0;
+      }
+    }
+    else
     {
       this.selectedCardIDs.length = 0;
     }
-
-    this.data.load();
   }
 
   private viewCard( id:number )
@@ -216,5 +228,3 @@ export class CardViewBundle {
   name: string;
   startIndex: number;
 }
-
-export class CardMap {[id:number]:CardModel}

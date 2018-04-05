@@ -1,14 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CardModel } from '../../app/models';
-import { CardMap } from '../../pages/list/list';
+import { CardModel, PDCharacterData, CardMap } from '../../app/models';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeout';
 
 @Injectable()
 export class DataProvider
 {
-  public characters:Array<{origin:string,name:string;id:number}> = [];
+  public characters:PDCharacterData[] = [];
 
   constructor(public http:HttpClient) 
   {
