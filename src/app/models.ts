@@ -63,8 +63,6 @@ export class CardModel
 
 export class StatusViewProperties { text:string; color:string }
 
-export class CardMap {[id:number]:CardModel}
-
 export enum CardType { Unit, Trap }
 
 /// -> JSON
@@ -77,7 +75,7 @@ export class CardData
     name: string = "";
     power: number = 0;
     description: string = "";
-    tags:Array<string> = ["grand","rush","noattack"];
+    // tags:Array<string> = ["grand","rush","noattack"];
     rarity: number = 0;
     
     c: string = '';
