@@ -83,7 +83,7 @@ export class ListPage
     this.selectBundle(this.selectedBundle);
   }
 
-  public onSelect(cv:CardView)
+  public onClick(cv:CardView)
   {
     if ( this.mode == this.Mode.Edit )
     {
@@ -125,6 +125,14 @@ export class ListPage
     else
     {
       this.selectedCardIDs.length = 0;
+    }
+  }
+
+  public onDoubleClick(cv:CardView)
+  {
+    if ( this.mode == this.Mode.PDCs )
+    {
+      cv.model.setPDC( null );
     }
   }
 

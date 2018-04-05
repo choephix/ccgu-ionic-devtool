@@ -68,7 +68,8 @@
           style="overflow:hidden;">
 
           <div *ngFor="let card of cardViews" 
-                (click)="onSelect(card)"
+                (click)="onClick(card)"
+                (dblclick)="onDoubleClick(card)"
                 style.width="{{cardWidth}}px"
                 style.height="{{cardHeight}}px"
                 style.left="{{getX(card.index)}}px"

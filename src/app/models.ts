@@ -9,8 +9,8 @@ export class CardModel
     public setPDC( pdc:PDCharacterData ):void
     {
         this.pdc = pdc; 
-        this.properties.pdc = pdc.id;
-        this.properties.name = pdc.name;
+        this.properties.pdc = pdc ? pdc.id : -1;
+        this.properties.name = pdc ? pdc.name : null;
     }
 
     public get hasPDC():boolean { return (Boolean)(this.pdc) }
