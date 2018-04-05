@@ -2,7 +2,7 @@
   <ion-list>
     <ion-item-group>
       <!-- <ion-item-divider color="light">Public Domain Characters</ion-item-divider> -->
-      <ion-item *ngFor="let pdc of chars" (click)="onSelect(pdc)" [class.selected]="selectedPDCs.indexOf(pdc)>-1">{{pdc.origin}}//{{pdc.name}}</ion-item>
+      <ion-item *ngFor="let pdc of chars" (click)="onSelect(pdc)" [class.selected]="selectedPDCs.indexOf(pdc)>-1">{{pdc.origin}}/<b>{{pdc.name}}</b></ion-item>
     </ion-item-group>
   </ion-list>
 </div>
