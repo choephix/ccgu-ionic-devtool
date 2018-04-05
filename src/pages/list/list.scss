@@ -1,14 +1,10 @@
 page-list {
-
-    .page-button.selected
-    {
+    .page-button.selected {
         color: #FFAA11;
     }
-
     .scroll-content { overflow: hidden; }
 
-    #lescroll
-    {
+    #lescroll {
         height:100%; 
         top:0; 
         right:0; 
@@ -20,38 +16,46 @@ page-list {
         transition: background-color .5s, 
                     width .2s ease-in-out;
         .scroll-content { overflow: scroll; }
+        
     }
-    .lecard
-    {
+    .lecard {
         padding: 0px;
         position: absolute;
         border: 1px solid rgba(0, 0, 0, 0.5);
         transition: border .25s, outline .25s, opacity .25s, background-color .25s;
         // transform: rotate(-90deg);
 
-        input, p, textarea
-        {
+        input, p, textarea {
             margin: 0px;
             padding: 2px;
             width: 100%;
         }
 
-        .id
-        {
+        .id {
             font-size: 9px;
             position: absolute;
             right: 0;
             top: 0;
         }
 
-        .slug, .name
-        {
+        .slug, .name {
             font-weight: bold;
             text-align: center;
         }
 
-        .description
-        {
+        .name {
+            background: rgba(56, 11, 78, 0.75);
+            border: 1px solid rgba(0,0,0,.5);
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            padding: 10px 0px;
+            color: #FFF;
+            text-shadow: 0 0 18px rgba(0,0,0,.5);
+            box-shadow: 0 0 20px rgba(0,0,0,.25);
+        }
+
+        .description {
             white-space: pre-wrap;
             background: rgba(255,255,255,.10);
             border: none;
@@ -62,10 +66,9 @@ page-list {
             overflow:hidden;
         }
 
-        .power
-        {
+        .power {
             position: absolute;
-            color: rgba(0,0,0,.250);
+            color: rgba(127,0,0,.40);
             font-weight: bold;
             font-size: 17px;
             top: -2px;
@@ -91,8 +94,7 @@ page-list {
             opacity: .67;
         }
 
-        .dev-status
-        {
+        .dev-status {
             position: absolute;
             border: 1px solid rgba(0,0,0,.2);
             font-weight: bold;
@@ -122,8 +124,7 @@ page-list {
      
     .lecard.empty  { opacity: .33; }
 
-    .lecard.selected
-    {
+    .lecard.selected {
         border: 1px solid yellow;
         outline: 1px solid aqua;
     }
@@ -134,25 +135,20 @@ page-list {
         opacity: 1;
     }
 
-    #lescroll.mode-edit
-    { 
+    #lescroll.mode-edit { 
         background-color: #789;
     }
-    #lescroll.mode-move
-    { 
+    #lescroll.mode-move { 
         background-color: rgb(93, 142, 242); 
     }
-    #lescroll.mode-pdcs
-    { 
+    #lescroll.mode-pdcs { 
         background-color: rosybrown;
         .lecard.empty { opacity: 0.05; }
     }
-    #lescroll.mode-view
-    { 
+    #lescroll.mode-view { 
         background-color:#581c1c; 
         .lecard.empty { opacity: 0.05; }
-        .lecard .power
-        {
+        .lecard .power {
             opacity: 1;
             color: white;
             font-weight: bolder;
@@ -168,8 +164,8 @@ page-list {
     }
 
     ::-webkit-scrollbar {
-        width:12px;
-        height:16px;
+        width:  8px;
+        height: 8px;
     }
     ::-webkit-scrollbar * {
         background:transparent;

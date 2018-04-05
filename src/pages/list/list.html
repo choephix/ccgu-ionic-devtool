@@ -78,13 +78,14 @@
                 class="lecard {{getColorClass(card)}} {{hasData(card)?'non-empty':'empty'}}">
             <div *ngIf="hasData(card)">
               <ion-badge class="id" *ngIf="mode.show.indexOf('id')>=0" mode="ios" style="position:absolute; right:5px; top:-5px;" color="light">{{card.model.ID}}</ion-badge>
-              <div class="name" *ngIf="showPrettyName">{{card.model.prettyName}}</div>
-              <div class="slug" *ngIf="!showPrettyName">{{card.model.properties.slug}}</div>
+              <div class="slug" *ngIf="mode!=Mode.View"><b>{{card.model.properties.slug}}</b></div>
+              <div class="slug" *ngIf="mode==Mode.View" [style.opacity]="card.model.PDC?1:.25">{{card.model.prettyName}}</div>
               <div class="description">{{card.model.prettyDescription}}</div>
               <div class="power"      *ngIf="!card.model.isTrap">{{card.model.prettyPower}}</div>
               <div class="priority"   *ngIf="mode.show.indexOf('priority')>=0">{{getPriority(card)}}</div>
               <div class="rarity"     *ngIf="mode.show.indexOf('rarity')>=0">{{getRarity(card)}}</div>
               <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" [style.background]="card.model.prettyStatusColor">{{card.model.prettyStatus}}</div>
+              <div class="name" *ngIf="mode==Mode.PDCs&&card.model.PDC">{{card.model.PDC.name}}</div>
             </div>
           </div>
     </div>
