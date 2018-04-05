@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { CardModel, CardMap } from '../../app/models';
+import { CardModel } from '../../app/models';
 import { DataProvider } from '../../providers/data/data';
 import { CardViewPage } from '../card-view/card-view';
 import { FabContainer, ModalController } from 'ionic-angular';
