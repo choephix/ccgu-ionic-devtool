@@ -17,6 +17,11 @@
             {{ bundle.name }}
           </button>
         </ion-col>
+        <ion-col no-padding>
+          <button color="light" class="page-button" (click)="data.save()" ion-button clear full round large>
+            <ion-icon name="cloud-circle"></ion-icon>
+          </button>
+        </ion-col>
       </ion-row>
     </ion-grid>
 
@@ -64,8 +69,8 @@
         [class]="'mode-'+mode.name" 
         >
 
-    <div style.width="{{cardXFactor*cardColumnsCount+2}}px"
-          style.height="{{cardYFactor*cardRowsCount+40}}px"
+    <div style.width="{{cardXFactor*cardColumnsCount+2*marginX}}px"
+          style.height="{{cardYFactor*cardRowsCount+marginY+minCardHeight}}px"
           style="overflow:hidden;">
 
           <div *ngFor="let card of cardViews" 

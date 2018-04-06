@@ -30,7 +30,7 @@ export class ListPage
   readonly minCardHeight:number = 120;
   readonly cardMargin:number = 1;
   readonly marginX:number = 8;
-  readonly marginY:number = 16;
+  readonly marginY:number = 8;
 
   readonly cardWidth:number;
   readonly cardHeight:number;
@@ -46,8 +46,7 @@ export class ListPage
   bundles : Array<CardViewBundle> = [];
   
   zoom:number = 1.0;
-  mode:Mode = this.Mode.PDCs;
-  // mode:Mode = this.Mode.Edit;
+  mode:Mode = this.Mode.Edit;
   selectedCardIDs:Array<number> = [];
 
   showPrettyName:boolean = false;
@@ -226,8 +225,14 @@ export class ListPage
   public isSelected( card:CardView )
   { return this.selectedCardIDs.indexOf( this.getSupposedCardID( card ) ) >= 0 }
 
-  public getX( i:number ):number { return this.marginX + Math.floor( i % this.cardColumnsCount ) * this.cardXFactor; }
-  public getY( i:number ):number { return this.marginY + Math.floor( i / this.cardColumnsCount ) * this.cardYFactor; }
+  public getX( i:number ):number 
+  { return this.marginX + Math.floor( i % this.cardColumnsCount ) * this.cardXFactor; }
+  public getY( i:number ):number
+  { 
+    return this.marginY 
+         + Math.floor( i / ( 4 * this.cardColumnsCount )  ) * 4 
+         + Math.floor( i / this.cardColumnsCount ) * this.cardYFactor; 
+  }
   public getColorClass( card:CardView )
   {
     if( card.model )

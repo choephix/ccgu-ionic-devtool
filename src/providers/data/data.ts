@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Events } from 'ionic-angular';
+import { Events, ToastController } from 'ionic-angular';
 import { CardModel, PDCharacterData, CardData } from '../../app/models';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeout';
@@ -18,7 +18,7 @@ export class DataProvider
 
   private get cacheBustSuffix():string { return '?' + ( new Date().valueOf() % 1000000 ) }
 
-  constructor( private http:HttpClient, public events:Events ) 
+  constructor( private http:HttpClient, public events:Events, private toast:ToastController ) 
   {
     this.load();
   }
@@ -48,6 +48,7 @@ export class DataProvider
     }
 
     this.events.publish( "data:change" );
+    // this.showToast( "Data Loaded" );
   }
   
   private onLoaded_PDCharacters( data:object[] )
@@ -64,9 +65,9 @@ export class DataProvider
     console.log( JSON.stringify( this.cardDatas ) );
 
     const url:string = this.URL_POST;
-    const headers = new HttpHeaders().set( "Authorization", "token 8cae25bee2eb5b59d118ba50454c61892da24618" );
+    const headers = new HttpHeaders().set( "Authorization", "token 92f64861cfd1d719939c0f16b617b77f849e13fd " );
     const data = {
-      description: null,
+      description: "ccgu devtool data",
       files: {
         "card-models.json": {
           content: JSON.stringify( this.cardDatas ) 
@@ -74,6 +75,12 @@ export class DataProvider
       }
     };
 
-    this.http.post(url,data,{headers:headers}).subscribe( console.log );
+    this.http.post(url,data,{headers:headers})
+      .subscribe( data => this.showToast( "Data Saved" ) );
+  }
+
+  private showToast( msg:string ):void
+  {
+    this.toast.create( { message:msg, duration : 1500, showCloseButton : true } ).present();
   }
 }
