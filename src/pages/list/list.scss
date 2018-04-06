@@ -41,6 +41,10 @@ page-list {
         .slug, .name {
             font-weight: bold;
             text-align: center;
+
+            input.text-input.text-input-md {
+                text-align: center;
+            }
         }
 
         .name {
@@ -62,8 +66,12 @@ page-list {
             height: 80px;
             // resize: vertical;
             resize: none;
+            overflow-x:hidden;
+            overflow-y:scroll;
             font-size: 11px;
-            overflow:hidden;
+            padding: 2px;
+            border-top:1px solid rgba(0,0,0,.075);
+            border-bottom:1px solid rgba(0,0,0,.075);
         }
 
         .power {
@@ -144,6 +152,9 @@ page-list {
     #lescroll.mode-pdcs { 
         background-color: rosybrown;
         .lecard.empty { opacity: 0.05; }
+    }
+    #lescroll.mode-quik { 
+        background-color: #7f6170;
     }
     #lescroll.mode-view { 
         background-color:#581c1c; 

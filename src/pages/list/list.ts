@@ -17,11 +17,12 @@ export class ListPage
   private static readonly PAGE_CARDS_COUNT:number = 256;
 
   readonly Mode : 
-  { Edit : Mode, Move : Mode, PDCs : Mode, View : Mode } =
+  { Edit : Mode, Move : Mode, PDCs : Mode, Quik : Mode, View : Mode } =
   {
     Edit : { icon : "create", name : "edit", show : ["priority","status"] },
     Move : { icon : "resize", name : "move", show : ["priority","status","id"] },
     PDCs : { icon : "person", name : "pdcs", show : ["status"] },
+    Quik : { icon : "flash",  name : "quik", show : ["priority","status"] },
     View : { icon : "eye"   , name : "view", show : ["rarity"] },
   };
   
@@ -114,6 +115,14 @@ export class ListPage
       }
     }
     else
+    if ( this.mode == this.Mode.Quik )
+    {
+      this.cleanupEmpty();
+
+      if ( !cv.model )
+        cv.model = this.makeCard( this.getSupposedCardID( cv ) );
+    }
+    else
     if ( this.mode == this.Mode.PDCs )
     {
       if( cv.model && this.pdcListView.selectedPDCs.length > 0 )
@@ -136,38 +145,15 @@ export class ListPage
     }
   }
 
-  private viewCard( id:number )
+  private cleanupEmpty():void
   {
-    let card:CardModel;
+    this.cardViews.forEach( cv => { if ( cv.model && cv.model.practicallyNull ) delete this.cards[cv.model.ID] } );
+    this.refresh();
+  }
 
-    if ( this.cards[id] )
-    {
-      card = this.cards[id];
-    }
-    else
-    {
-      card = CardModel.makeClean( id );
-      card.properties.power = 0;
-      card.properties.priority = 0;
-      card.properties.rarity = 0;
-      card.properties.status = 0;
-      card.properties.type = CardType.Unit;
-      var col:number = Math.floor( id % this.cardColumnsCount );
-
-      if ( col >= 12 )
-      {
-        card.properties.type = CardType.Trap;
-        card.properties.description = "";
-      }
-      else
-      if ( col >= 10 )
-      { card.properties.description = "#grand"; }
-      else
-      if ( col < 2 )
-      { card.properties.description = "#sneak"; }
-      else
-      { card.properties.description = ""; }
-    } 
+  private viewCard( id:number ):void
+  {
+    let card:CardModel = this.cards[id] ? this.cards[id] : this.makeCard( id );
     let params = { del : false };
     
     console.log( params );
@@ -179,13 +165,41 @@ export class ListPage
 
       if ( del )
         delete this.cards[card.ID];
-      else
-        this.cards[id] = card;
       
       this.refresh();
     });
 
     modal.present();
+  }
+
+  private makeCard( id:number ):CardModel
+  {
+    let card:CardModel;
+    card = CardModel.makeClean( id );
+    card.properties.power = 0;
+    card.properties.priority = 0;
+    card.properties.rarity = 0;
+    card.properties.status = 0;
+    card.properties.type = CardType.Unit;
+    var col:number = Math.floor( id % this.cardColumnsCount );
+
+    if ( col >= 12 )
+    {
+      card.properties.type = CardType.Trap;
+      card.properties.description = "";
+    }
+    else
+    if ( col >= 10 )
+    { card.properties.description = "#grand"; }
+    else
+    if ( col < 2 )
+    { card.properties.description = "#sneak"; }
+    else
+    { card.properties.description = ""; }
+
+    this.cards[id] = card;
+
+    return card;
   }
 
   private setCardID( card:CardModel, id:number )

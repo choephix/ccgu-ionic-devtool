@@ -31,6 +31,7 @@
       <button ion-fab (click)="setMode(Mode.Edit);fabMode.close()"><ion-icon name="{{Mode.Edit.icon}}"></ion-icon></button>
       <button ion-fab (click)="setMode(Mode.Move);fabMode.close()"><ion-icon name="{{Mode.Move.icon}}"></ion-icon></button>
       <button ion-fab (click)="setMode(Mode.PDCs);fabMode.close()"><ion-icon name="{{Mode.PDCs.icon}}"></ion-icon></button>
+      <button ion-fab (click)="setMode(Mode.Quik);fabMode.close()"><ion-icon name="{{Mode.Quik.icon}}"></ion-icon></button>
       <button ion-fab (click)="setMode(Mode.View);fabMode.close()"><ion-icon name="{{Mode.View.icon}}"></ion-icon></button>
     </ion-fab-list>
     <ion-fab-list side="top">
@@ -76,7 +77,7 @@
                 style.top="{{getY(card.index)}}px"
                 [class.selected]="isSelected(card)"
                 class="lecard {{getColorClass(card)}} {{hasData(card)?'non-empty':'empty'}}">
-            <div *ngIf="hasData(card)">
+            <div *ngIf="hasData(card) && mode != Mode.Quik">
               <ion-badge class="id" *ngIf="mode.show.indexOf('id')>=0" mode="ios" style="position:absolute; right:5px; top:-5px;" color="light">{{card.model.ID}}</ion-badge>
               <div class="slug" *ngIf="mode!=Mode.View"><b>{{card.model.properties.slug}}</b></div>
               <div class="slug" *ngIf="mode==Mode.View" [style.opacity]="card.model.PDC?1:.25">{{card.model.prettyName}}</div>
@@ -84,6 +85,13 @@
               <div class="power"      *ngIf="!card.model.isTrap">{{card.model.prettyPower}}</div>
               <div class="priority"   *ngIf="mode.show.indexOf('priority')>=0">{{getPriority(card)}}</div>
               <div class="rarity"     *ngIf="mode.show.indexOf('rarity')>=0">{{getRarity(card)}}</div>
+              <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" [style.background]="card.model.prettyStatusColor">{{card.model.prettyStatus}}</div>
+              <div class="name" *ngIf="mode==Mode.PDCs&&card.model.PDC">{{card.model.PDC.name}}</div>
+            </div>
+            <div *ngIf="hasData(card) && mode == Mode.Quik">
+              <ion-input type="text" [(ngModel)]="card.model.properties.slug" class="slug"></ion-input>
+              <textarea type="text" [(ngModel)]="card.model.properties.description" class="description"></textarea>
+              <div class="power"      *ngIf="!card.model.isTrap">{{card.model.prettyPower}}</div>
               <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" [style.background]="card.model.prettyStatusColor">{{card.model.prettyStatus}}</div>
               <div class="name" *ngIf="mode==Mode.PDCs&&card.model.PDC">{{card.model.PDC.name}}</div>
             </div>
