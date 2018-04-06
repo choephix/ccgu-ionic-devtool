@@ -7,12 +7,11 @@ import { CardModel, CardType } from '../../app/models';
   selector: 'page-card-view',
   templateUrl: 'card-view.html',
 })
-export class CardViewPage {
-
+export class CardViewPage 
+{
   card: CardModel;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-
     this.card = navParams.get("card");
   }
 

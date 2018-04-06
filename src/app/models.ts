@@ -1,9 +1,13 @@
-
 export class CardModel
 {
     public properties:CardData = new CardData();
     private pdc:PDCharacterData = null;
-    constructor( id:number ) { this.properties.id = id }
+    
+    private constructor( data:CardData ) { this.properties = data }
+    public static makeFromData( data:CardData ):CardModel
+    { return new CardModel( data ) }
+    public static makeClean( id:number ):CardModel
+    { return new CardModel( { id : id, slug : "", type : CardType.Unit } ) }
 
     public setID( value:number ):void { this.properties.id = value }
     public setPDC( pdc:PDCharacterData ):void
@@ -70,18 +74,18 @@ export enum CardType { Unit, Trap }
 export class CardData
 {
     id: number = 0;
-    type: CardType;
+    type: CardType = CardType.Unit;
     slug: string;
-    name: string = "";
-    power: number = 0;
-    description: string = "";
+    name?: string = "";
+    power?: number = 0;
+    description?: string = "";
     // tags:Array<string> = ["grand","rush","noattack"];
-    rarity: number = 0;
+    rarity?: number = 0;
     
-    c: string = '';
-    pdc:number = -1;
-    status: number = 0;
-    priority: number = 0;
+    c?: string = '';
+    pdc?:number = -1;
+    status?: number = 0;
+    priority?: number = 0;
 }
 
 export class PDCharacterData
