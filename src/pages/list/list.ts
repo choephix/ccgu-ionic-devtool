@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { CardModel } from '../../app/models';
+import { CardModel, CardType } from '../../app/models';
 import { DataProvider } from '../../providers/data/data';
 import { CardViewPage } from '../card-view/card-view';
 import { FabContainer, ModalController } from 'ionic-angular';
@@ -138,7 +138,36 @@ export class ListPage
 
   private viewCard( id:number )
   {
-    let card = this.cards[id] ? this.cards[id] : new CardModel( id );    
+    let card:CardModel;
+
+    if ( this.cards[id] )
+    {
+      card = this.cards[id];
+    }
+    else
+    {
+      card = CardModel.makeClean( id );
+      card.properties.power = 0;
+      card.properties.priority = 0;
+      card.properties.rarity = 0;
+      card.properties.status = 0;
+      card.properties.type = CardType.Unit;
+      var col:number = Math.floor( id % this.cardColumnsCount );
+
+      if ( col >= 12 )
+      {
+        card.properties.type = CardType.Trap;
+        card.properties.description = "";
+      }
+      else
+      if ( col >= 10 )
+      { card.properties.description = "#grand"; }
+      else
+      if ( col < 2 )
+      { card.properties.description = "#sneak"; }
+      else
+      { card.properties.description = ""; }
+    } 
     let params = { del : false };
     
     console.log( params );

@@ -46,7 +46,8 @@ export class CardModel
     { return CardModel.LOOKUP_STATUS[this.properties.status].color; }
 
     public get practicallyNull():boolean
-    { return !this.properties.slug && !this.properties.description }
+    { return !this.properties.slug && 
+    ( !this.properties.description || this.properties.description.length < 10 ) }
     
     public static readonly LOOKUP_STATUS:StatusViewProperties[] = [
         { text:"Draft", color:"#none" },
