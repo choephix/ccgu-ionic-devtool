@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Events, ToastController } from 'ionic-angular';
-import { CardModel, PDCharacterData, CardData } from '../../app/models';
+import { CardModel, PDCharacterData, CardData, CardType } from '../../app/models';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeout';
 
@@ -22,6 +22,24 @@ export class DataProvider
   {
     this.load();
   }
+  
+  public createCard( id:number ):CardModel
+  {
+    let card:CardModel = CardModel.makeClean( id );
+    card.properties.power = 0;
+    card.properties.priority = 0;
+    card.properties.rarity = 0;
+    card.properties.status = 0;
+    card.properties.type = CardType.Unit;
+    card.properties.slug = "";
+    card.properties.name = "";
+    card.properties.description = "";
+
+    this.cards[id] = card;
+    this.cardDatas.push( card.properties );
+
+    return card;
+  }
 
   private load():void
   {
@@ -32,6 +50,41 @@ export class DataProvider
     
     var url_pdc:string = this.URL_FILE + "pdc.json" + this.cacheBustSuffix;
     this.http.get(url_pdc).subscribe( data => { this.onLoaded_PDCharacters( <object[]>data ) } );
+
+    // var url_temp:string = this.URL_FILE + "old-cards-editor-data.json" + this.cacheBustSuffix;
+    // this.http.get(url_temp).subscribe( data => { this.onLoaded_Temp( <object>data ) } );
+  }
+
+  private onLoaded_Temp( data:object )
+  {
+    let cards = <object[]>data["cards"];
+
+    for (let i = 0; i < cards.length; i++) {
+      const o = cards[i];
+      let c = this.createCard( 3072 + i );
+      c.properties.power = o["pwr"];
+      c.properties.priority = 0;
+      c.properties.rarity = 0;
+      c.properties.status = 0;
+      c.properties.type = ( o["type"] == 5 || o['type'] == 4 ) ? 1 : 0;
+      c.properties.slug = "--" + (<string>o["slug"]).replace('_','-');
+      c.properties.name = o["name"] ? o["name"] : "";
+
+      let d:string = o["desc"] ? o["desc"] : "";
+
+      d = d.replace("\r","\n");
+
+      for (let j = 0; j < o["vars"].length; j++)
+        d = d.replace( "%%"+j.toString(), <string>(o["vars"][j]).replace("#","@") );
+
+      if ( o['type'] == 2 ) d = "#sneak\n" + d;
+      if ( o['type'] == 3 ) d = "#grand\n" + d;
+      if ( o['type'] == 5 ) d = "#persistent\n" + d;
+
+      c.properties.description = d;
+    }
+
+    this.events.publish( "data:change" );
   }
 
   private onLoaded_Cards( data:object[] )
@@ -62,8 +115,6 @@ export class DataProvider
 
   public save():void
   {
-    console.log( JSON.stringify( this.cardDatas ) );
-
     const url:string = this.URL_POST;
     const headers = new HttpHeaders().set( "Authorization", "token 92f64861cfd1d719939c0f16b617b77f849e13fd " );
     const data = {
@@ -76,7 +127,10 @@ export class DataProvider
     };
 
     this.http.post(url,data,{headers:headers})
-      .subscribe( data => this.showToast( "Data Saved" ) );
+      .subscribe( data => {
+        console.log( data );
+        this.showToast( "Data Saved" ) 
+      } );
   }
 
   private showToast( msg:string ):void

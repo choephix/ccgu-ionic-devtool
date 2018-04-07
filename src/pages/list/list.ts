@@ -72,9 +72,32 @@ export class ListPage
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
       this.cardViews.push( { index : i, model : null } );
 
-    this.selectBundle(this.bundles[0]);
+    this.selectBundle(this.bundles[2]);
 
     data.events.subscribe( "data:change", () => { this.refresh() } );
+  }
+
+  private onQuickChangeSlug(cv:CardView):void
+  {
+    let v:string = cv.model.properties.slug;
+
+    if ( v.indexOf(':') > -1 )
+    {
+      let a = v.split(':');
+      if ( a.length >= 2 )
+      {
+        v = a[0];
+        cv.model.properties.power = Number.parseInt( a[1] );
+      }
+    }
+
+    cv.model.properties.slug = v.replace(/[^0-9a-z-]/gi, '');
+  }
+
+  private onQuickChangeDescription(cv:CardView):void
+  {
+    // var v:string = cv.model.properties.description;
+
   }
 
   private refresh():void
@@ -97,7 +120,8 @@ export class ListPage
 
       if ( this.selectedCardIDs.length < 1 )
       {
-        this.selectedCardIDs.push( cvID );
+        if ( cv.model )
+          this.selectedCardIDs.push( cvID );
       }
       else
       if ( seleIndex >= 0 )
@@ -173,30 +197,18 @@ export class ListPage
 
   private makeCard( id:number ):CardModel
   {
-    let card:CardModel;
-    card = CardModel.makeClean( id );
-    card.properties.power = 0;
-    card.properties.priority = 0;
-    card.properties.rarity = 0;
-    card.properties.status = 0;
-    card.properties.type = CardType.Unit;
+    let card:CardModel = this.data.createCard( id );
+
     var col:number = Math.floor( id % this.cardColumnsCount );
 
     if ( col >= 12 )
-    {
       card.properties.type = CardType.Trap;
-      card.properties.description = "";
-    }
     else
     if ( col >= 10 )
-    { card.properties.description = "#grand"; }
+      card.properties.description += "#grand \n";
     else
     if ( col < 2 )
-    { card.properties.description = "#sneak"; }
-    else
-    { card.properties.description = ""; }
-
-    this.cards[id] = card;
+      card.properties.description += "#sneak \n";
 
     return card;
   }

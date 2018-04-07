@@ -1,6 +1,6 @@
 page-list {
     .page-button.selected {
-        color: #FFAA11;
+        // background-color: #FFAA11;
     }
     .scroll-content { overflow: hidden; }
 
@@ -139,6 +139,10 @@ page-list {
      
     .lecard.empty  { opacity: .33; }
 
+    .lecard.locked {
+        background:none;
+    }
+     
     .lecard.selected {
         border: 1px solid yellow;
         outline: 1px solid aqua;

@@ -50,8 +50,8 @@ export class CardModel
     ( !this.properties.description || this.properties.description.length < 10 ) }
     
     public static readonly LOOKUP_STATUS:StatusViewProperties[] = [
-        { text:"Draft", color:"#none" },
-        { text:"Concept", color:"#none" },
+        { text:"Draft", color:"none" },
+        { text:"Concept", color:"none" },
         { text:"Unimplemented", color:"#E33" },
         { text:"Unfinished", color:"#FF0" },
         { text:"Untested", color:"#AF0" },
@@ -60,8 +60,8 @@ export class CardModel
         { text:"NoArt", color:"#0BF" },
         { text:"Unpolished", color:"#2DF" },
         { text:"Ready", color:"#FFF" },
-        { text:"Published", color:"#none" },
-        { text:"Retired", color:"#none" },
+        { text:"Published", color:"none" },
+        { text:"Retired", color:"none" },
         { text:"Skip", color:"#333" },
     ]
 }
@@ -80,7 +80,7 @@ export class CardData
     name?: string = "";
     power?: number = 0;
     description?: string = "";
-    // tags:Array<string> = ["grand","rush","noattack"];
+    // tags:Array<string> = [];
     rarity?: number = 0;
     
     c?: string = '';

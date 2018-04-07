@@ -13,13 +13,13 @@
             class="page-button"
             [class.selected]="bundle==selectedBundle" 
             (click)="selectBundle(bundle)"
-            ion-button clear full round>
+            ion-button [clear]="bundle!=selectedBundle"  full round>
             {{ bundle.name }}
           </button>
         </ion-col>
         <ion-col no-padding>
-          <button color="light" class="page-button" (click)="data.save()" ion-button clear full round large>
-            <ion-icon name="cloud-circle"></ion-icon>
+          <button color="light" class="page-button" (click)="data.save()" ion-button clear full round>
+            <ion-icon name="cloud"></ion-icon>
           </button>
         </ion-col>
       </ion-row>
@@ -73,33 +73,34 @@
           style.height="{{cardYFactor*cardRowsCount+marginY+minCardHeight}}px"
           style="overflow:hidden;">
 
-          <div *ngFor="let card of cardViews" 
-                (click)="onClick(card)"
-                (dblclick)="onDoubleClick(card)"
+          <div *ngFor="let cv of cardViews" 
+                (click)="onClick(cv)"
+                (dblclick)="onDoubleClick(cv)"
                 style.width="{{cardWidth}}px"
                 style.height="{{cardHeight}}px"
-                style.left="{{getX(card.index)}}px"
-                style.top="{{getY(card.index)}}px"
-                [class.selected]="isSelected(card)"
-                class="lecard {{getColorClass(card)}} {{hasData(card)?'non-empty':'empty'}}">
-            <div *ngIf="hasData(card) && mode != Mode.Quik">
-              <ion-badge class="id" *ngIf="mode.show.indexOf('id')>=0" mode="ios" style="position:absolute; right:5px; top:-5px;" color="light">{{card.model.ID}}</ion-badge>
-              <div class="slug" *ngIf="mode!=Mode.View"><b>{{card.model.properties.slug}}</b></div>
-              <div class="slug" *ngIf="mode==Mode.View" [style.opacity]="card.model.PDC?1:.25">{{card.model.prettyName}}</div>
-              <div class="description">{{card.model.prettyDescription}}</div>
-              <div class="power"      *ngIf="!card.model.isTrap">{{card.model.prettyPower}}</div>
-              <div class="priority"   *ngIf="mode.show.indexOf('priority')>=0">{{getPriority(card)}}</div>
-              <div class="rarity"     *ngIf="mode.show.indexOf('rarity')>=0">{{getRarity(card)}}</div>
-              <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" [style.background]="card.model.prettyStatusColor">{{card.model.prettyStatus}}</div>
-              <div class="name" *ngIf="mode==Mode.PDCs&&card.model.PDC">{{card.model.PDC.name}}</div>
+                style.left="{{getX(cv.index)}}px"
+                style.top="{{getY(cv.index)}}px"
+                [class.selected]="isSelected(cv)"
+                class="lecard {{getColorClass(cv)}} {{hasData(cv)?'non-empty':'empty'}}">
+            <div *ngIf="hasData(cv) && mode != Mode.Quik">
+              <ion-badge class="id" *ngIf="mode.show.indexOf('id')>=0" mode="ios" style="position:absolute; right:5px; top:-5px;" color="light">{{cv.model.ID}}</ion-badge>
+              <div class="slug" *ngIf="mode!=Mode.View"><b>{{cv.model.properties.slug}}</b></div>
+              <div class="slug" *ngIf="mode==Mode.View" [style.opacity]="cv.model.PDC?1:.25">{{cv.model.prettyName}}</div>
+              <div class="description">{{cv.model.prettyDescription}}</div>
+              <div class="power"      *ngIf="!cv.model.isTrap">{{cv.model.prettyPower}}</div>
+              <div class="priority"   *ngIf="mode.show.indexOf('priority')>=0">{{getPriority(cv)}}</div>
+              <div class="rarity"     *ngIf="mode.show.indexOf('rarity')>=0">{{getRarity(cv)}}</div>
+              <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" [style.background]="cv.model.prettyStatusColor">{{cv.model.prettyStatus}}</div>
+              <div class="name" *ngIf="mode==Mode.PDCs&&cv.model.PDC">{{cv.model.PDC.name}}</div>
             </div>
-            <div *ngIf="hasData(card) && mode == Mode.Quik">
-              <ion-input type="text" [(ngModel)]="card.model.properties.slug" class="slug"></ion-input>
-              <textarea type="text" [(ngModel)]="card.model.properties.description" class="description"></textarea>
-              <div class="power"      *ngIf="!card.model.isTrap">{{card.model.prettyPower}}</div>
-              <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" [style.background]="card.model.prettyStatusColor">{{card.model.prettyStatus}}</div>
-              <div class="name" *ngIf="mode==Mode.PDCs&&card.model.PDC">{{card.model.PDC.name}}</div>
+            <div *ngIf="hasData(cv) && mode == Mode.Quik">
+              <ion-input type="text" [(ngModel)]="cv.model.properties.slug" class="slug" (change)="onQuickChangeSlug(cv)"></ion-input>
+              <textarea type="text"  [(ngModel)]="cv.model.properties.description" class="description" (change)="onQuickChangeDescription(cv)"></textarea>
+              <div class="power"      *ngIf="!cv.model.isTrap">{{cv.model.prettyPower}}</div>
+              <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" [style.background]="cv.model.prettyStatusColor">{{cv.model.prettyStatus}}</div>
+              <div class="name" *ngIf="mode==Mode.PDCs&&cv.model.PDC">{{cv.model.PDC.name}}</div>
             </div>
+            <div *ngIf="getSupposedCardID(cv)==0" style="width:100%;height:100%;text-align:center;"><b>N/A</b></div>
           </div>
     </div>
   
