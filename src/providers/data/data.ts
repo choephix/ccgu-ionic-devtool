@@ -16,11 +16,24 @@ export class DataProvider
 
   public cardDatas:CardData[] = [];
 
+  private tracker:DataTracker = new DataTracker();
+
   private get cacheBustSuffix():string { return '?' + ( new Date().valueOf() % 1000000 ) }
 
   constructor( private http:HttpClient, public events:Events, private toast:ToastController ) 
   {
     this.load();
+
+    setInterval( () => this.checkForChanges(), 1000 );
+    // setInterval( () => this.checkForChanges(), 5000 );
+  }
+
+  public anyChanges():boolean { return this.tracker.cardDatasChanged }
+
+  private checkForChanges():void
+  {
+    this.tracker.cardDatasChanged = 
+      this.tracker.cardDatasJson != JSON.stringify( this.cardDatas );
   }
   
   public createCard( id:number ):CardModel
@@ -37,8 +50,20 @@ export class DataProvider
 
     this.cards[id] = card;
     this.cardDatas.push( card.properties );
+    this.tracker.cardDatasChanged = true;
 
     return card;
+  }
+
+  public deleteCard( id:number ):void
+  {
+    delete this.cards[ id ];
+    
+    for ( let i = this.cardDatas.length - 1; i >= 0; i--)
+      if ( this.cardDatas[i].id == id )
+        this.cardDatas.splice( i, 1 );
+
+    this.tracker.cardDatasChanged = true;
   }
 
   private load():void
@@ -50,41 +75,6 @@ export class DataProvider
     
     var url_pdc:string = this.URL_FILE + "pdc.json" + this.cacheBustSuffix;
     this.http.get(url_pdc).subscribe( data => { this.onLoaded_PDCharacters( <object[]>data ) } );
-
-    // var url_temp:string = this.URL_FILE + "old-cards-editor-data.json" + this.cacheBustSuffix;
-    // this.http.get(url_temp).subscribe( data => { this.onLoaded_Temp( <object>data ) } );
-  }
-
-  private onLoaded_Temp( data:object )
-  {
-    let cards = <object[]>data["cards"];
-
-    for (let i = 0; i < cards.length; i++) {
-      const o = cards[i];
-      let c = this.createCard( 3072 + i );
-      c.properties.power = o["pwr"];
-      c.properties.priority = 0;
-      c.properties.rarity = 0;
-      c.properties.status = 0;
-      c.properties.type = ( o["type"] == 5 || o['type'] == 4 ) ? 1 : 0;
-      c.properties.slug = "--" + (<string>o["slug"]).replace('_','-');
-      c.properties.name = o["name"] ? o["name"] : "";
-
-      let d:string = o["desc"] ? o["desc"] : "";
-
-      d = d.replace("\r","\n");
-
-      for (let j = 0; j < o["vars"].length; j++)
-        d = d.replace( "%%"+j.toString(), <string>(o["vars"][j]).replace("#","@") );
-
-      if ( o['type'] == 2 ) d = "#sneak\n" + d;
-      if ( o['type'] == 3 ) d = "#grand\n" + d;
-      if ( o['type'] == 5 ) d = "#persistent\n" + d;
-
-      c.properties.description = d;
-    }
-
-    this.events.publish( "data:change" );
   }
 
   private onLoaded_Cards( data:object[] )
@@ -100,8 +90,10 @@ export class DataProvider
       this.cardDatas.push( c );
     }
 
-    this.events.publish( "data:change" );
-    // this.showToast( "Data Loaded" );
+    this.tracker.cardDatasJson = JSON.stringify( this.cardDatas );
+    this.tracker.cardDatasChanged = false;
+
+    this.events.publish( "data:reload" );
   }
   
   private onLoaded_PDCharacters( data:object[] )
@@ -119,22 +111,32 @@ export class DataProvider
     const headers = new HttpHeaders().set( "Authorization", "token 92f64861cfd1d719939c0f16b617b77f849e13fd " );
     const data = {
       description: "ccgu devtool data",
-      files: {
-        "card-models.json": {
-          content: JSON.stringify( this.cardDatas ) 
-        },
-      }
+      files: { "card-models.json": { content: JSON.stringify( this.cardDatas ) } }
     };
 
+    this.tracker.cardDatasChanged = false;
     this.http.post(url,data,{headers:headers})
       .subscribe( data => {
         console.log( data );
-        this.showToast( "Data Saved" ) 
+        this.showToast( "Data Saved" );
+        this.tracker.cardDatasJson = JSON.stringify( this.cardDatas );
+        this.tracker.cardDatasChanged = false;
       } );
   }
 
   private showToast( msg:string ):void
   {
-    this.toast.create( { message:msg, duration : 1500, showCloseButton : true } ).present();
+    this.toast.create( { message:msg, duration : 1500 } ).present();
   }
+
+  // private showToastError( msg:string ):void
+  // {
+  //   this.toast.create( { message:msg, showCloseButton : true } ).present();
+  // }
+}
+
+class DataTracker
+{
+  public cardDatasJson:string = "";
+  public cardDatasChanged:boolean = false;
 }

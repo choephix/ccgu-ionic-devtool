@@ -17,11 +17,6 @@
             {{ bundle.name }}
           </button>
         </ion-col>
-        <ion-col no-padding>
-          <button color="light" class="page-button" (click)="data.save()" ion-button clear full round>
-            <ion-icon name="cloud"></ion-icon>
-          </button>
-        </ion-col>
       </ion-row>
     </ion-grid>
 
@@ -57,6 +52,10 @@
     </ion-fab-list>
   </ion-fab>
 
+  <ion-fab top right #fabSave *ngIf="data.anyChanges()" (click)="data.save();fabMode.close()">
+    <button ion-fab large><ion-icon name="cloud"></ion-icon></button>
+  </ion-fab>
+
   <div *ngIf="mode==Mode.PDCs" style="width:33%; height:100%; top:0; left:0; position:absolute; overflow:auto; margin:0; padding:0;">
     <div style="max-height:100%; overflow:auto; margin:0; padding:0;">
       <pdc-list #pdcList></pdc-list>
@@ -69,9 +68,7 @@
         [class]="'mode-'+mode.name" 
         >
 
-    <div style.width="{{cardXFactor*cardColumnsCount+2*marginX}}px"
-          style.height="{{cardYFactor*cardRowsCount+marginY+minCardHeight}}px"
-          style="overflow:hidden;">
+    <div style.width="{{pageWidth}}px" style.height="{{pageHeight}}px" style="overflow:hidden;">
 
           <div *ngFor="let cv of cardViews" 
                 (click)="onClick(cv)"

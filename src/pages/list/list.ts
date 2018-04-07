@@ -14,7 +14,9 @@ export class Mode { icon:string; name:string; show:string[] }
 })
 export class ListPage 
 {
-  private static readonly PAGE_CARDS_COUNT:number = 256;
+  public static readonly PAGE_CARDS_COUNT:number = 256;
+  public static readonly PAGE_COLUMNS:number = 16;
+  public static readonly PAGE_ROWS:number = Math.ceil( ListPage.PAGE_CARDS_COUNT / ListPage.PAGE_COLUMNS );
 
   readonly Mode : 
   { Edit : Mode, Move : Mode, PDCs : Mode, Quik : Mode, View : Mode } =
@@ -36,8 +38,11 @@ export class ListPage
   readonly cardHeight:number;
   readonly cardXFactor:number;
   readonly cardYFactor:number;
-  readonly cardColumnsCount:number;
-  readonly cardRowsCount:number;
+
+  get pageWidth():number
+  { return this.cardXFactor * ListPage.PAGE_COLUMNS + 2 * this.marginX }
+  get pageHeight():number
+  { return this.cardYFactor * ListPage.PAGE_ROWS + this.marginY + this.minCardHeight }
 
   private get cards():Map<number,CardModel> { return this.data.cards; }
   cardViews: Array<CardView> = [];
@@ -55,29 +60,32 @@ export class ListPage
   
   constructor( private modalCtrl:ModalController, public data:DataProvider )
   {
-    this.cardColumnsCount = 16;
-    this.cardRowsCount = Math.ceil( ListPage.PAGE_CARDS_COUNT / this.cardColumnsCount );
-
     this.cardWidth = this.minCardWidth;
     this.cardHeight = this.minCardHeight;
 
     this.cardXFactor = this.cardWidth + this.cardMargin;
     this.cardYFactor = this.cardHeight + this.cardMargin;
-
-    for ( let i = 0; i < 16; i++ )
-      this.bundles.push( { 
-           startIndex : i * ListPage.PAGE_CARDS_COUNT, 
-           name : i.toString(16) } );
+    
+    this.initializeBundles();
 
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
       this.cardViews.push( { index : i, model : null } );
 
     this.selectBundle(this.bundles[2]);
 
-    data.events.subscribe( "data:change", () => { this.refresh() } );
+    data.events.subscribe( "data:reload", () => { this.refresh() } );
   }
 
-  private onQuickChangeSlug(cv:CardView):void
+  private initializeBundles()
+  {
+    for ( let i = 0; i < 16; i++ )
+      this.bundles.push( { 
+           startIndex : i * ListPage.PAGE_CARDS_COUNT, 
+           name : i.toString(16) } );
+
+  }
+
+  onQuickChangeSlug(cv:CardView):void
   {
     let v:string = cv.model.properties.slug;
 
@@ -94,17 +102,13 @@ export class ListPage
     cv.model.properties.slug = v.replace(/[^0-9a-z-]/gi, '');
   }
 
-  private onQuickChangeDescription(cv:CardView):void
+  onQuickChangeDescription(cv:CardView):void
   {
     // var v:string = cv.model.properties.description;
 
   }
 
-  private refresh():void
-  {
-    console.log("<<refresh>>");
-    this.selectBundle(this.selectedBundle);
-  }
+  private refresh():void { this.selectBundle(this.selectedBundle); }
 
   public onClick(cv:CardView)
   {
@@ -170,7 +174,10 @@ export class ListPage
 
   private cleanupEmpty():void
   {
-    this.cardViews.forEach( cv => { if ( cv.model && cv.model.practicallyNull ) delete this.cards[cv.model.ID] } );
+    this.cardViews.forEach( cv => { 
+      if ( cv.model && cv.model.practicallyNull ) 
+        this.data.deleteCard( cv.model.ID ); 
+    } );
     this.refresh();
   }
 
@@ -184,11 +191,8 @@ export class ListPage
 
     modal.onDidDismiss(()=>
     {
-      let del:boolean = params.del || card.practicallyNull;
-
-      if ( del )
-        delete this.cards[card.ID];
-      
+      if ( params.del || card.practicallyNull )
+        this.data.deleteCard( card.ID );
       this.refresh();
     });
 
@@ -199,7 +203,7 @@ export class ListPage
   {
     let card:CardModel = this.data.createCard( id );
 
-    var col:number = Math.floor( id % this.cardColumnsCount );
+    var col:number = Math.floor( id % ListPage.PAGE_COLUMNS );
 
     if ( col >= 12 )
       card.properties.type = CardType.Trap;
@@ -233,17 +237,18 @@ export class ListPage
   public getSupposedCardID( cv:CardView )
   { return this.selectedBundle.startIndex + cv.index; }
 
-  public hasData( card:CardView ):boolean { return card.model != null && card.model != undefined }
+  public hasData( card:CardView ):boolean 
+  { return card.model != null && card.model != undefined }
   public isSelected( card:CardView )
   { return this.selectedCardIDs.indexOf( this.getSupposedCardID( card ) ) >= 0 }
 
   public getX( i:number ):number 
-  { return this.marginX + Math.floor( i % this.cardColumnsCount ) * this.cardXFactor; }
+  { return this.marginX + Math.floor( i % ListPage.PAGE_COLUMNS ) * this.cardXFactor; }
   public getY( i:number ):number
   { 
     return this.marginY 
-         + Math.floor( i / ( 4 * this.cardColumnsCount )  ) * 4 
-         + Math.floor( i / this.cardColumnsCount ) * this.cardYFactor; 
+         + Math.floor( i / ( 4 * ListPage.PAGE_COLUMNS )  ) * 4 
+         + Math.floor( i / ListPage.PAGE_COLUMNS ) * this.cardYFactor; 
   }
   public getColorClass( card:CardView )
   {
@@ -256,7 +261,7 @@ export class ListPage
     }
     else
     {
-      var col:number = Math.floor( card.index % this.cardColumnsCount );
+      var col:number = Math.floor( card.index % ListPage.PAGE_COLUMNS );
       if ( col < 2 ) return "sneak";
       if ( col < 10 ) return "normal";
       if ( col < 12 ) return "grand";
