@@ -13,9 +13,10 @@ export class DataProvider
   
   public characters:PDCharacterData[] = [];
   public cards = new Map<number,CardModel>();
-
+  
   public cardDatas:CardData[] = [];
-
+  
+  private currentJobs: number = 0;
   private tracker:DataTracker = new DataTracker();
 
   private get cacheBustSuffix():string { return '?' + ( new Date().valueOf() % 1000000 ) }
@@ -28,6 +29,7 @@ export class DataProvider
     // setInterval( () => this.checkForChanges(), 5000 );
   }
 
+  public isBusy():boolean { return this.currentJobs > 0 }
   public anyChanges():boolean { return this.tracker.cardDatasChanged }
 
   private checkForChanges():void
@@ -72,9 +74,11 @@ export class DataProvider
     
     var url_cards:string = this.URL_FILE + "card-models.json" + this.cacheBustSuffix;
     this.http.get(url_cards).subscribe( data => { this.onLoaded_Cards( <object[]>data ) } );
+    this.currentJobs++;
     
     var url_pdc:string = this.URL_FILE + "pdc.json" + this.cacheBustSuffix;
     this.http.get(url_pdc).subscribe( data => { this.onLoaded_PDCharacters( <object[]>data ) } );
+    this.currentJobs++;
   }
 
   private onLoaded_Cards( data:object[] )
@@ -93,6 +97,7 @@ export class DataProvider
     this.tracker.cardDatasJson = JSON.stringify( this.cardDatas );
     this.tracker.cardDatasChanged = false;
 
+    this.currentJobs--;
     this.events.publish( "data:reload" );
   }
   
@@ -102,7 +107,7 @@ export class DataProvider
     this.characters = <PDCharacterData[]>data;
     this.characters.sort( (a,b) => a.origin < b.origin ? -1 : 1 );
 
-    this.events.publish( "data:change" );
+    this.currentJobs--;
   }
 
   public save():void
@@ -114,13 +119,14 @@ export class DataProvider
       files: { "card-models.json": { content: JSON.stringify( this.cardDatas ) } }
     };
 
-    this.tracker.cardDatasChanged = false;
+    this.currentJobs++;
     this.http.post(url,data,{headers:headers})
       .subscribe( data => {
         console.log( data );
         this.showToast( "Data Saved" );
         this.tracker.cardDatasJson = JSON.stringify( this.cardDatas );
         this.tracker.cardDatasChanged = false;
+        this.currentJobs--;
       } );
   }
 

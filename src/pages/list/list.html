@@ -52,8 +52,8 @@
     </ion-fab-list>
   </ion-fab>
 
-  <ion-fab top right #fabSave *ngIf="data.anyChanges()" (click)="data.save();fabMode.close()">
-    <button ion-fab large><ion-icon name="cloud"></ion-icon></button>
+  <ion-fab top center #fabSave *ngIf="data.anyChanges()" (click)="data.save();fabMode.close()">
+    <button ion-fab large [color]="data.isBusy()?'dark':'secondary'"><ion-icon name="cloud"></ion-icon></button>
   </ion-fab>
 
   <div *ngIf="mode==Mode.PDCs" style="width:33%; height:100%; top:0; left:0; position:absolute; overflow:auto; margin:0; padding:0;">

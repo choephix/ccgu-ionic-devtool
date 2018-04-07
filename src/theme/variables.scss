@@ -25,9 +25,12 @@ $app-direction: ltr;
 $button-round-padding-end: 0.2rem;
 $button-round-padding-start: 0.2rem;
 $menu-width: 80px;
-$toolbar-ios-height: 32px;	
-$toolbar-md-height:	 32px;
-$toolbar-wp-height:  32px;
+$toolbar-ios-height: 20px;	
+$toolbar-md-height:	 20px;
+$toolbar-wp-height:  20px;
+$picker-ios-toolbar-height: 20px;
+$picker-md-toolbar-height:  20px;
+$picker-wp-toolbar-height:  20px;
 
 // Named Color Variables
 // --------------------------------------------------
@@ -39,7 +42,7 @@ $toolbar-wp-height:  32px;
 
 $colors: (
   primary:    #b0565c,
-  secondary:  #6432db,
+  secondary:  #00c6fc,
   danger:     #f53d3d,
   light:      #f4f4f4,
   dark:       #222,
