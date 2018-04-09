@@ -1,42 +1,43 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Events, ToastController } from 'ionic-angular';
-import { CardModel, PDCharacterData, CardData, CardType } from '../../app/models';
+import { CardModel, PDCharacterData, CardData, CardType, CardSectionData } from '../../app/models';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeout';
 
 @Injectable()
 export class DataProvider
 {
-  private readonly URL_FILE:string = "https://gist.githubusercontent.com/choephix/4c390b3e5502811d196233104c89f755/raw/";
-  private readonly URL_POST:string = "https://api.github.com/gists/4c390b3e5502811d196233104c89f755";
-  
-  public characters:PDCharacterData[] = [];
-  public cards = new Map<number,CardModel>();
-  
-  public cardDatas:CardData[] = [];
-  
-  private currentJobs: number = 0;
-  private tracker:DataTracker = new DataTracker();
+  private readonly FILE_CARDS:string = "card-models.json";
+  private readonly FILE_CONFIG:string = "editor-stuff.json";
+  private readonly FILE_PDC:string = "pdc.json";
 
-  private get cacheBustSuffix():string { return '?' + ( new Date().valueOf() % 1000000 ) }
+  public cardsMap = new Map<number,CardModel>();
 
+  public config:DataFile<ConfigurationData>;
+  public cards:DataFile<CardData[]>;
+  public pdc:DataFile<PDCharacterData[]>;
+
+  public datafiles:IDataFile[];
+  
   constructor( private http:HttpClient, public events:Events, private toast:ToastController ) 
   {
-    this.load();
+    this.config = new DataFile<ConfigurationData>( this.FILE_CONFIG, http );
+    this.cards = new DataFile<CardData[]>( this.FILE_CARDS, http );
+    this.pdc = new DataFile<PDCharacterData[]>( this.FILE_PDC, http );
+
+    this.config.data = new ConfigurationData();
+
+    this.datafiles = [ this.config, this.cards, this.pdc ];
+
+    this.loadAll();
 
     setInterval( () => this.checkForChanges(), 1000 );
-    // setInterval( () => this.checkForChanges(), 5000 );
   }
 
-  public isBusy():boolean { return this.currentJobs > 0 }
-  public anyChanges():boolean { return this.tracker.cardDatasChanged }
-
-  private checkForChanges():void
-  {
-    this.tracker.cardDatasChanged = 
-      this.tracker.cardDatasJson != JSON.stringify( this.cardDatas );
-  }
+  public isBusy():boolean { return !this.datafiles.every( (v,i,a) => { return !v.busy } ) }
+  public anyChanges():boolean { return !this.datafiles.every( (v,i,a) => { return !v.dataHasChanged } ) }
+  private checkForChanges():void { this.datafiles.forEach( v => { v.checkForChanges() } ); }
   
   public createCard( id:number ):CardModel
   {
@@ -50,9 +51,9 @@ export class DataProvider
     card.properties.name = "";
     card.properties.description = "";
 
-    this.cards[id] = card;
-    this.cardDatas.push( card.properties );
-    this.tracker.cardDatasChanged = true;
+    this.cardsMap[id] = card;
+    this.cards.data.push( card.properties );
+    this.cards.dataHasChanged = true;
 
     return card;
   }
@@ -60,73 +61,64 @@ export class DataProvider
   public deleteCard( id:number ):void
   {
     delete this.cards[ id ];
-    
-    for ( let i = this.cardDatas.length - 1; i >= 0; i--)
-      if ( this.cardDatas[i].id == id )
-        this.cardDatas.splice( i, 1 );
-
-    this.tracker.cardDatasChanged = true;
+    for ( let i = this.cards.data.length - 1; i >= 0; i--)
+      if ( this.cards.data[i].id == id )
+        this.cards.data.splice( i, 1 );
+    this.cards.dataHasChanged = true;
   }
 
-  private load():void
+  public getCardSectionData(index:number):CardSectionData
+  { return this.config.data.cardSections[index%this.config.data.cardSections.length] }
+
+  ///
+
+  private loadAll():void
   {
     console.log( "loading data from github gist" );
-    
-    var url_cards:string = this.URL_FILE + "card-models.json" + this.cacheBustSuffix;
-    this.http.get(url_cards).subscribe( data => { this.onLoaded_Cards( <object[]>data ) } );
-    this.currentJobs++;
-    
-    var url_pdc:string = this.URL_FILE + "pdc.json" + this.cacheBustSuffix;
-    this.http.get(url_pdc).subscribe( data => { this.onLoaded_PDCharacters( <object[]>data ) } );
-    this.currentJobs++;
+
+    this.config.load( data => this.onLoaded_Configuration( data ) );
+    this.cards.load( data => this.onLoaded_Cards( data ) );
+    this.pdc.load( data => this.onLoaded_PDCharacters( data ) );
   }
 
-  private onLoaded_Cards( data:object[] )
+  private onLoaded_Configuration( data:ConfigurationData )
   {
-    this.cards.clear();
-    this.cardDatas.length = 0;
+    this.events.publish( "data:reload" );
+  }
 
-    for (let i = 0; i < data.length; i++)
-    {
-      var c:CardData = <CardData>data[i];
-      var id:number = c.id;
-      this.cards[ id ] = CardModel.makeFromData(c);
-      this.cardDatas.push( c );
-    }
-
-    this.tracker.cardDatasJson = JSON.stringify( this.cardDatas );
-    this.tracker.cardDatasChanged = false;
-
-    this.currentJobs--;
+  private onLoaded_Cards( data:CardData[] )
+  {
+    this.cardsMap.clear();
+    for ( let i = 0; i < data.length; i++ )
+      this.cardsMap[ data[i].id ] = CardModel.makeFromData( data[i] );
     this.events.publish( "data:reload" );
   }
   
-  private onLoaded_PDCharacters( data:object[] )
+  private onLoaded_PDCharacters( data:PDCharacterData[] )
   {
-    this.characters.length = 0;
-    this.characters = <PDCharacterData[]>data;
-    this.characters.sort( (a,b) => a.origin < b.origin ? -1 : 1 );
-
-    this.currentJobs--;
+    this.events.publish( "data:reload" );
+    // this.characters = <PDCharacterData[]>data;
+    // this.characters.sort( (a,b) => a.origin < b.origin ? -1 : 1 );
   }
 
-  public save():void
+  public saveAll():void
   {
-    const url:string = this.URL_POST;
-    const headers = new HttpHeaders().set( "Authorization", "token 92f64861cfd1d719939c0f16b617b77f849e13fd " );
-    const data = {
-      description: "ccgu devtool data",
-      files: { "card-models.json": { content: JSON.stringify( this.cardDatas ) } }
-    };
+    const url:string = "https://api.github.com/gists/4c390b3e5502811d196233104c89f755";
+    const headers = new HttpHeaders().set( "Authorization", "token 92f64861cfd1d719939c0f16b617b77f849e13fd" );
 
-    this.currentJobs++;
-    this.http.post(url,data,{headers:headers})
+    const files = {};
+    this.datafiles.forEach( datafile => { files[datafile.filename] = { content : JSON.stringify( datafile.data ) } } );
+
+    // this.http.post( url, { 
+    //   files : [ 
+    //     "card-models.json" : JSON.stringify( this.cards.data ) 
+    //   ] 
+    // }, { headers : headers } )
+    this.http.post( url, { files : files }, { headers : headers } )
       .subscribe( data => {
         console.log( data );
         this.showToast( "Data Saved" );
-        this.tracker.cardDatasJson = JSON.stringify( this.cardDatas );
-        this.tracker.cardDatasChanged = false;
-        this.currentJobs--;
+        this.datafiles.forEach( datafile => datafile.updateOriginalState() );
       } );
   }
 
@@ -141,8 +133,67 @@ export class DataProvider
   // }
 }
 
-class DataTracker
+interface IDataFile
+{ filename:string; data; busy:boolean; dataHasChanged:boolean; updateOriginalState():void;  checkForChanges():void }
+
+class DataFile<T> implements IDataFile
 {
-  public cardDatasJson:string = "";
-  public cardDatasChanged:boolean = false;
+  private readonly URL_FILE:string = "https://gist.githubusercontent.com/choephix/4c390b3e5502811d196233104c89f755/raw/";
+  public data:T;
+  public busy:boolean;
+
+  public dataOriginalJson:string;
+  public dataHasChanged:boolean;
+  
+  constructor( public filename:string, private http:HttpClient ) { }
+  
+  public load( callbackLoaded : (data:T) => void ):void
+  {
+    console.log( "loading data from github gist" );
+    
+    this.busy = true;
+    var url_cards:string = this.URL_FILE + this.filename + this.cacheBustSuffix();
+    this.http.get(url_cards).subscribe( data => {
+      console.log( data );
+      this.busy = false;
+      this.data = <T>data;
+      this.updateOriginalState();
+      callbackLoaded( this.data );
+    } );
+  }
+
+  public updateOriginalState():void
+  {
+    this.dataOriginalJson = JSON.stringify( this.data );
+    this.dataHasChanged = false;
+  }
+  
+  public checkForChanges():void
+  {
+    this.dataHasChanged = this.dataOriginalJson != JSON.stringify( this.data );
+  }
+  
+  private cacheBustSuffix():string { return '?' + ( new Date().valueOf() % 1000000 ) }
+}
+
+class ConfigurationData
+{
+  public cardSections:CardSectionData[] = [
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+    {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
+  ];
 }

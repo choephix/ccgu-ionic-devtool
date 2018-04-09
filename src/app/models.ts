@@ -95,3 +95,15 @@ export class PDCharacterData
     origin: string;
     name: string = "";
 }
+
+export class CardSectionData 
+{
+  public subsections:CardSubSectionData[] = [
+      { funcIndex : 0, header : "Le Section One" },
+      { funcIndex : 0, header : "Le Section Two" },
+      { funcIndex : 0, header : "Le Section Three" },
+      { funcIndex : 0, header : "Le Section Four" },
+  ]
+}
+
+export class CardSubSectionData { public funcIndex:number; public header:string; }

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { CardModel, CardType } from '../../app/models';
+import { CardModel, CardType, CardSectionData } from '../../app/models';
 import { DataProvider } from '../../providers/data/data';
 import { CardViewPage } from '../card-view/card-view';
 import { FabContainer, ModalController } from 'ionic-angular';
@@ -28,6 +28,7 @@ export class ListPage
     View : { icon : "eye"   , name : "view", show : ["rarity"] },
   };
   
+  readonly subheaderHeight:number = 24;
   readonly minCardWidth:number = 157;
   readonly minCardHeight:number = 120;
   readonly cardMargin:number = 1;
@@ -44,7 +45,7 @@ export class ListPage
   get pageHeight():number
   { return this.cardYFactor * ListPage.PAGE_ROWS + this.marginY + this.minCardHeight }
 
-  private get cards():Map<number,CardModel> { return this.data.cards; }
+  private get cards():Map<number,CardModel> { return this.data.cardsMap; }
   cardViews: Array<CardView> = [];
 
   selectedBundle : CardViewBundle = null;
@@ -71,7 +72,11 @@ export class ListPage
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
       this.cardViews.push( { index : i, model : null } );
 
-    this.selectBundle(this.bundles[2]);
+    var bundleIndex:number = parseInt( localStorage.getItem( "bundle-index" ) );
+    if ( isNaN( bundleIndex ) )
+      bundleIndex = 1;
+    this.selectBundle(this.bundles[bundleIndex]);
+    this.refresh();
 
     data.events.subscribe( "data:reload", () => { this.refresh() } );
   }
@@ -79,10 +84,21 @@ export class ListPage
   private initializeBundles()
   {
     for ( let i = 0; i < 16; i++ )
+    {
       this.bundles.push( { 
+           name : i.toString(16),
            startIndex : i * ListPage.PAGE_CARDS_COUNT, 
-           name : i.toString(16) } );
+           config : this.data.getCardSectionData( i )
+      } );
+    }
+  }
 
+  private refresh():void 
+  { 
+    for (let i = 0; i < this.bundles.length; i++)
+      this.bundles[ i ].config = this.data.getCardSectionData( i );
+
+    this.selectBundle(this.selectedBundle); 
   }
 
   onQuickChangeSlug(cv:CardView):void
@@ -107,8 +123,6 @@ export class ListPage
     // var v:string = cv.model.properties.description;
 
   }
-
-  private refresh():void { this.selectBundle(this.selectedBundle); }
 
   public onClick(cv:CardView)
   {
@@ -208,10 +222,10 @@ export class ListPage
     if ( col >= 12 )
       card.properties.type = CardType.Trap;
     else
-    if ( col >= 10 )
+    if ( col >= 9 )
       card.properties.description += "#grand \n";
     else
-    if ( col < 2 )
+    if ( col < 3 )
       card.properties.description += "#sneak \n";
 
     return card;
@@ -247,7 +261,7 @@ export class ListPage
   public getY( i:number ):number
   { 
     return this.marginY 
-         + Math.floor( i / ( 4 * ListPage.PAGE_COLUMNS )  ) * 4 
+         + Math.floor( i / ( 4 * ListPage.PAGE_COLUMNS ) + 1  ) * this.subheaderHeight
          + Math.floor( i / ListPage.PAGE_COLUMNS ) * this.cardYFactor; 
   }
   public getColorClass( card:CardView )
@@ -262,8 +276,8 @@ export class ListPage
     else
     {
       var col:number = Math.floor( card.index % ListPage.PAGE_COLUMNS );
-      if ( col < 2 ) return "sneak";
-      if ( col < 10 ) return "normal";
+      if ( col < 3 ) return "sneak";
+      if ( col < 9 ) return "normal";
       if ( col < 12 ) return "grand";
       return "trap";
     }
@@ -272,8 +286,13 @@ export class ListPage
   public selectBundle( bundle:CardViewBundle ): void 
   {
     this.selectedBundle = bundle;
+
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
       this.cardViews[ i ].model = this.cards[ i + bundle.startIndex ];
+
+    for (let i = 0; i < this.bundles.length; i++)
+      if ( this.bundles[i] == bundle )
+        localStorage.setItem( "bundle-index", i.toString() );
   }
 
   public setMode( mode:Mode, fab:FabContainer ):void { this.mode = mode; }
@@ -306,4 +325,30 @@ export class CardView {
 export class CardViewBundle {
   name: string;
   startIndex: number;
+  config: CardSectionData;
+
+  public static readonly PropsFunctions:((col:number,row:number)=>object)[] = [
+    (col,row)=> { return DefProps.NORMAL },
+    (col,row)=> { return DefProps.SNEAK },
+    (col,row)=> { return DefProps.GRAND },
+    (col,row)=> { return DefProps.TRAP },
+    (col,row)=> { return col < 2 ? DefProps.SNEAK : col < 10 ? DefProps.NORMAL : col < 12 ? DefProps.GRAND : DefProps.TRAP },
+    (col,row)=> { return col < 3 ? DefProps.SNEAK : col < 9 ? DefProps.NORMAL : col < 12 ? DefProps.GRAND : DefProps.TRAP },
+    (col,row)=> { return col < 4 ? DefProps.SNEAK : col < 12 ? DefProps.NORMAL : DefProps.GRAND },
+    (col,row)=> { return [DefProps.NORMAL,DefProps.SNEAK,DefProps.GRAND,DefProps.TRAP][row%4] },
+    (col,row)=> { return [DefProps.SNEAK,DefProps.GRAND][Math.floor(row/2)%2] },
+    (col,row)=> { return [DefProps.NORMAL,DefProps.TRAP][row%2] },
+    (col,row)=> { return [DefProps.NORMAL,DefProps.TRAP][col%2] },
+    (col,row)=> { return [DefProps.NORMAL,DefProps.GRAND][row%2] },
+    (col,row)=> { return [DefProps.NORMAL,DefProps.GRAND][col%2] },
+    (col,row)=> { return [DefProps.NORMAL,DefProps.GRAND][(row+col)%2] },
+  ];
+}
+
+class DefProps
+{
+  public static readonly TRAP   = { type : CardType.Trap };
+  public static readonly NORMAL = { type : CardType.Unit };
+  public static readonly SNEAK  = { type : CardType.Unit, description : "#sneak\n" };
+  public static readonly GRAND  = { type : CardType.Unit, description : "#grand\n" };
 }

@@ -14,7 +14,8 @@ page-list {
         padding:0;
         background-color: #333;
         transition: background-color .5s, 
-                    width .2s ease-in-out;
+                    width .2s ease-in-out, 
+                    zoom .2s ease-in-out;
         .scroll-content { overflow: scroll; }
         
     }
@@ -182,6 +183,19 @@ page-list {
             right: 0;
             text-shadow: 0 0 7px rgba(0,0,0,.3);
             -webkit-text-stroke: 1px black;
+        }
+    }
+
+    .subsection-header
+    {
+        width:100%; 
+        left:24px;
+        position:absolute;
+        font-weight: 400;
+        color: #DDD;
+        input {
+            margin:0px;
+            padding:0px;
         }
     }
 
