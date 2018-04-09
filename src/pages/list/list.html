@@ -36,7 +36,6 @@
     </ion-fab-list>
     <ion-fab-list side="top">
       <button ion-fab (click)="showPrettyName=!showPrettyName;fabMode.close()"><ion-icon name="glasses"></ion-icon></button>
-      <button ion-fab (click)="showPrettyName=!showPrettyName;fabMode.close()"><ion-icon name="contacts"></ion-icon></button>
       <button ion-fab (click)="data.saveAll();fabMode.close()"><ion-icon name="cloud-upload"></ion-icon></button>
       <button ion-fab (click)="data.loadAll();fabMode.close()"><ion-icon name="cloud-download"></ion-icon></button>
     </ion-fab-list>
@@ -67,7 +66,6 @@
         [style.width]="mode==Mode.PDCs?'67%':'100%'"
         [style.zoom]="zoom"
         [class]="'mode-'+mode.name" 
-        (blur)="onBlur()" (focus)="onFocus()"
         >
 
     <div style.width="{{pageWidth}}px" style.height="{{pageHeight}}px" style="overflow:hidden;">
@@ -75,7 +73,7 @@
           <div *ngFor="let cv of cardViews" 
                 (click)="onClick(cv)"
                 (dblclick)="onDoubleClick(cv)"
-                (auxclick)="onAuxClick(cv)"
+                (auxclick)="onAuxClick(cv,$event)"
                 style.width="{{cardWidth}}px"
                 style.height="{{cardHeight}}px"
                 style.left="{{getX(cv.index)}}px"
@@ -85,7 +83,8 @@
                 class="lecard {{getColorClass(cv)}} {{hasData(cv)?'non-empty':'empty'}}">
             <div *ngIf="hasData(cv) && mode != Mode.Quik">
               <ion-badge class="id" *ngIf="mode.show.indexOf('id')>=0" mode="ios" style="position:absolute; right:5px; top:-5px;" color="light">{{cv.model.ID}}</ion-badge>
-              <div class="slug" *ngIf="mode!=Mode.View"><b>{{cv.model.properties.slug}}</b></div>
+              <div class="slug" *ngIf="mode!=Mode.View" [style.opacity]="!showPrettyName||cv.model.hasName?1:.25">
+                <b>{{showPrettyName?cv.model.prettyName:cv.model.properties.slug}}</b></div>
               <div class="slug" *ngIf="mode==Mode.View" [style.opacity]="cv.model.PDC?1:.25">{{cv.model.prettyName}}</div>
               <div class="description">{{cv.model.prettyDescription}}</div>
               <div class="power"      *ngIf="!cv.model.isTrap">{{cv.model.prettyPower}}</div>
@@ -103,7 +102,8 @@
                   [style.background]="cv.model.prettyStatusColor">{{cv.model.prettyStatus}}</div>
               <div class="name" *ngIf="mode==Mode.PDCs&&cv.model.PDC">{{cv.model.PDC.name}}</div>
             </div>
-            <div *ngIf="getSupposedCardID(cv)==0" style="width:100%;height:100%;text-align:center;"><b>N/A</b></div>
+            <div *ngIf="cv.model&&cv.model.properties.status==12" 
+                  style="width:100%;height:100%;background:black;opacity:.35;position:absolute;top:0;"></div>
           </div>
 
           <!-- <div style="width:100%" style.left="0px" style.top="10px"> Gaaliba </div> -->

@@ -80,6 +80,7 @@ export class ListPage
     this.refresh();
 
     document.body.addEventListener("keydown",e=>this.onKey(e));
+    document.body.addEventListener("contextmenu",e=>e.preventDefault());
     data.events.subscribe( "data:reload", () => { this.refresh() } );
   }
 
@@ -196,14 +197,19 @@ export class ListPage
     }
   }
 
-  public onAuxClick(cv:CardView)
+  public onAuxClick(cv:CardView,e:MouseEvent)
   {
-    console.log("aux",cv);
+    if ( this.mode == this.Mode.PDCs )
+    {
+      cv.model.setPDC( null );
+    }
   }
 
   public onClickStatus(cv:CardView)
   {
-    console.log("status",cv);
+    const A = [0,1,2,3,12];
+    const i = (A.indexOf(cv.model.properties.status)+1)%A.length;
+    cv.model.properties.status = A[i];
   }
 
   public onKey(e:KeyboardEvent) 
@@ -273,17 +279,13 @@ export class ListPage
   private makeCard( id:number ):CardModel
   {
     let card:CardModel = this.data.createCard( id );
-
-    var col:number = Math.floor( id % ListPage.PAGE_COLUMNS );
-
-    if ( col >= 12 )
-      card.properties.type = CardType.Trap;
-    else
-    if ( col >= 9 )
-      card.properties.description += "#grand \n";
-    else
-    if ( col < 3 )
-      card.properties.description += "#sneak \n";
+    
+    id = id % ListPage.PAGE_CARDS_COUNT;
+    let col:number = Math.floor( id % ListPage.PAGE_COLUMNS );
+    let row:number = Math.floor( id / ListPage.PAGE_ROWS );
+    let props = this.getDefaultPropsFor( col, row );
+    for ( let key in props )
+      card.properties[key] = props[key];
 
     return card;
   }
@@ -332,8 +334,8 @@ export class ListPage
     }
     else
     {
-      var col:number = Math.floor( card.index % ListPage.PAGE_COLUMNS );
-      var row:number = Math.floor( card.index / ListPage.PAGE_COLUMNS );
+      let col:number = Math.floor( card.index % ListPage.PAGE_COLUMNS );
+      let row:number = Math.floor( card.index / ListPage.PAGE_ROWS );
       let props = this.getDefaultPropsFor( col, row );
       if ( props["type"] == CardType.Trap ) return "trap";
       if ( props["description"] == "#grand\n" ) return "grand";
