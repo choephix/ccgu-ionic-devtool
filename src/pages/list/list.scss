@@ -193,9 +193,14 @@ page-list {
         position:absolute;
         font-weight: 400;
         color: #DDD;
+        ion-input {
+            display: inline;
+            width: auto;
+        }
         input {
             margin:0px;
             padding:0px;
+            width: 1000px;
         }
     }
 

@@ -60,7 +60,7 @@ export class DataProvider
 
   public deleteCard( id:number ):void
   {
-    delete this.cards[ id ];
+    delete this.cardsMap[ id ];
     for ( let i = this.cards.data.length - 1; i >= 0; i--)
       if ( this.cards.data[i].id == id )
         this.cards.data.splice( i, 1 );
@@ -107,7 +107,10 @@ export class DataProvider
     const headers = new HttpHeaders().set( "Authorization", "token 92f64861cfd1d719939c0f16b617b77f849e13fd" );
 
     const files = {};
-    this.datafiles.forEach( datafile => { files[datafile.filename] = { content : JSON.stringify( datafile.data ) } } );
+    this.datafiles.forEach( datafile => {
+      if ( datafile.dataHasChanged )
+        files[datafile.filename] = { content : JSON.stringify( datafile.data ) } 
+    } );
 
     // this.http.post( url, { 
     //   files : [ 

@@ -276,10 +276,12 @@ export class ListPage
     else
     {
       var col:number = Math.floor( card.index % ListPage.PAGE_COLUMNS );
-      if ( col < 3 ) return "sneak";
-      if ( col < 9 ) return "normal";
-      if ( col < 12 ) return "grand";
-      return "trap";
+      var row:number = Math.floor( card.index / ListPage.PAGE_COLUMNS );
+      let props = this.getDefaultPropsFor( col, row );
+      if ( props["type"] == CardType.Trap ) return "trap";
+      if ( props["description"] == "#grand\n" ) return "grand";
+      if ( props["description"] == "#sneak\n" ) return "sneak";
+      return "normal";
     }
   }
 
@@ -294,8 +296,24 @@ export class ListPage
       if ( this.bundles[i] == bundle )
         localStorage.setItem( "bundle-index", i.toString() );
   }
+  
+  public getDefaultPropsFor( col:number, row:number )
+  {
+    let funcIndex = this.selectedBundle.config.subsections[Math.floor(row/4)].funcIndex;
+    return CardViewBundle.PropsFunctions[ funcIndex ]( col, row );
+  }
 
-  public setMode( mode:Mode, fab:FabContainer ):void { this.mode = mode; }
+  public cycleBundlePropsFunction( subsectionIndex:number, offset:number ):void
+  {
+    let section = this.selectedBundle.config.subsections[subsectionIndex];
+    section.funcIndex += offset;
+    while( section.funcIndex >= CardViewBundle.PropsFunctions.length )
+      section.funcIndex -= CardViewBundle.PropsFunctions.length;
+    while( section.funcIndex < 0 )
+      section.funcIndex += CardViewBundle.PropsFunctions.length;
+  }
+
+  public setMode( mode:Mode, fab:FabContainer ):void { this.mode = mode }
 
   public getPriority( cv:CardView ):string
   {
@@ -328,27 +346,29 @@ export class CardViewBundle {
   config: CardSectionData;
 
   public static readonly PropsFunctions:((col:number,row:number)=>object)[] = [
-    (col,row)=> { return DefProps.NORMAL },
-    (col,row)=> { return DefProps.SNEAK },
-    (col,row)=> { return DefProps.GRAND },
-    (col,row)=> { return DefProps.TRAP },
-    (col,row)=> { return col < 2 ? DefProps.SNEAK : col < 10 ? DefProps.NORMAL : col < 12 ? DefProps.GRAND : DefProps.TRAP },
-    (col,row)=> { return col < 3 ? DefProps.SNEAK : col < 9 ? DefProps.NORMAL : col < 12 ? DefProps.GRAND : DefProps.TRAP },
-    (col,row)=> { return col < 4 ? DefProps.SNEAK : col < 12 ? DefProps.NORMAL : DefProps.GRAND },
-    (col,row)=> { return [DefProps.NORMAL,DefProps.SNEAK,DefProps.GRAND,DefProps.TRAP][row%4] },
-    (col,row)=> { return [DefProps.SNEAK,DefProps.GRAND][Math.floor(row/2)%2] },
-    (col,row)=> { return [DefProps.NORMAL,DefProps.TRAP][row%2] },
-    (col,row)=> { return [DefProps.NORMAL,DefProps.TRAP][col%2] },
-    (col,row)=> { return [DefProps.NORMAL,DefProps.GRAND][row%2] },
-    (col,row)=> { return [DefProps.NORMAL,DefProps.GRAND][col%2] },
-    (col,row)=> { return [DefProps.NORMAL,DefProps.GRAND][(row+col)%2] },
+    (col,row)=> { return DP.NRML },
+    (col,row)=> { return DP.SNEK },
+    (col,row)=> { return DP.GRND },
+    (col,row)=> { return DP.TRAP },
+    (col,row)=> { return col < 2 ? DP.SNEK : col < 10 ? DP.NRML : col < 12 ? DP.GRND : DP.TRAP },
+    (col,row)=> { return col < 3 ? DP.SNEK : col < 9 ? DP.NRML : col < 12 ? DP.GRND : DP.TRAP },
+    (col,row)=> { return col < 4 ? DP.SNEK : col < 12 ? DP.NRML : DP.GRND },
+    (col,row)=> { return [DP.SNEK,DP.NRML,DP.NRML,DP.GRND][col%4] },
+    (col,row)=> { return ( col % 4 > 3 ) ? DP.TRAP : [DP.SNEK,DP.SNEK,DP.NRML,DP.NRML,DP.NRML,DP.NRML,DP.GRND,DP.GRND][col%8] },
+    (col,row)=> { return [DP.SNEK,DP.NRML,DP.GRND,DP.TRAP][row%4] },
+    (col,row)=> { return [DP.SNEK,DP.GRND][Math.floor(row/2)%2] },
+    (col,row)=> { return [DP.NRML,DP.TRAP][row%2] },
+    (col,row)=> { return [DP.NRML,DP.TRAP][col%2] },
+    (col,row)=> { return [DP.NRML,DP.GRND][row%2] },
+    (col,row)=> { return [DP.NRML,DP.GRND][col%2] },
+    (col,row)=> { return [DP.NRML,DP.GRND][(row+col)%2] },
   ];
 }
 
-class DefProps
+class DP
 {
-  public static readonly TRAP   = { type : CardType.Trap };
-  public static readonly NORMAL = { type : CardType.Unit };
-  public static readonly SNEAK  = { type : CardType.Unit, description : "#sneak\n" };
-  public static readonly GRAND  = { type : CardType.Unit, description : "#grand\n" };
+  public static readonly TRAP = { type : CardType.Trap };
+  public static readonly NRML = { type : CardType.Unit };
+  public static readonly SNEK = { type : CardType.Unit, description : "#sneak\n" };
+  public static readonly GRND = { type : CardType.Unit, description : "#grand\n" };
 }
