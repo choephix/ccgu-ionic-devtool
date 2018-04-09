@@ -41,7 +41,6 @@
       <button ion-fab (click)="data.loadAll();fabMode.close()"><ion-icon name="cloud-download"></ion-icon></button>
     </ion-fab-list>
   </ion-fab>
-
   <ion-fab bottom left #fabZoom>
     <button ion-fab large><ion-icon name="search"></ion-icon></button>
     <ion-fab-list side="top">
@@ -50,9 +49,11 @@
       <button ion-fab (click)="zoom=0.50;fabZoom.close();">50%</button>
       <button ion-fab (click)="zoom=0.25;fabZoom.close();">25%</button>
     </ion-fab-list>
+    <ion-fab-list side="right">
+      <button ion-fab >{{data.cards.data?data.cards.data.length:'n/a'}}</button>
+    </ion-fab-list>
   </ion-fab>
-
-  <ion-fab top center #fabSave *ngIf="data.anyChanges()" (click)="data.saveAll();fabMode.close()">
+  <ion-fab bottom center #fabSave *ngIf="data.anyChanges()" (click)="data.saveAll();fabMode.close()">
     <button ion-fab large [color]="data.isBusy()?'dark':'secondary'"><ion-icon name="cloud"></ion-icon></button>
   </ion-fab>
 
@@ -66,6 +67,7 @@
         [style.width]="mode==Mode.PDCs?'67%':'100%'"
         [style.zoom]="zoom"
         [class]="'mode-'+mode.name" 
+        (blur)="onBlur()" (focus)="onFocus()"
         >
 
     <div style.width="{{pageWidth}}px" style.height="{{pageHeight}}px" style="overflow:hidden;">
@@ -73,6 +75,7 @@
           <div *ngFor="let cv of cardViews" 
                 (click)="onClick(cv)"
                 (dblclick)="onDoubleClick(cv)"
+                (auxclick)="onAuxClick(cv)"
                 style.width="{{cardWidth}}px"
                 style.height="{{cardHeight}}px"
                 style.left="{{getX(cv.index)}}px"
@@ -95,7 +98,9 @@
               <ion-input type="text" [(ngModel)]="cv.model.properties.slug" class="slug" (change)="onQuickChangeSlug(cv)"></ion-input>
               <textarea type="text"  [(ngModel)]="cv.model.properties.description" class="description" (change)="onQuickChangeDescription(cv)"></textarea>
               <div class="power"      *ngIf="!cv.model.isTrap">{{cv.model.prettyPower}}</div>
-              <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" [style.background]="cv.model.prettyStatusColor">{{cv.model.prettyStatus}}</div>
+              <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" 
+                  (click)="onClickStatus(cv)"
+                  [style.background]="cv.model.prettyStatusColor">{{cv.model.prettyStatus}}</div>
               <div class="name" *ngIf="mode==Mode.PDCs&&cv.model.PDC">{{cv.model.PDC.name}}</div>
             </div>
             <div *ngIf="getSupposedCardID(cv)==0" style="width:100%;height:100%;text-align:center;"><b>N/A</b></div>

@@ -88,9 +88,36 @@ export class DataProvider
 
   private onLoaded_Cards( data:CardData[] )
   {
+    // for ( let i = data.length - 1; i >= 0; i-- )
+    // {
+    //   for ( let j = data.length - 1; j > i; j-- )
+    //   {
+    //     let a = data[i], b = data[j];
+    //     if ( a.slug == b.slug && a.description == b.description )
+    //     {
+    //       console.log( "duplicate cards: " + a.id + " = " + b.id + " " + a.slug );
+    //       this.cards.data.splice( a.id > b.id ? i : j, 1 );
+    //     }
+    //   }
+    // }
+
+    // for ( let i = data.length - 1; i >= 0; i-- )
+    // {
+    //   for ( let j = data.length - 1; j > i; j-- )
+    //   {
+    //     let a = data[i], b = data[j];
+    //     if ( a.id == b.id )
+    //     {
+    //       console.log( "id collision: " + a.slug + " vs " + b.slug );
+    //       a.id += 256;
+    //     }
+    //   }
+    // }
+
     this.cardsMap.clear();
     for ( let i = 0; i < data.length; i++ )
       this.cardsMap[ data[i].id ] = CardModel.makeFromData( data[i] );
+
     this.events.publish( "data:reload" );
   }
   
@@ -104,7 +131,7 @@ export class DataProvider
   public saveAll():void
   {
     const url:string = "https://api.github.com/gists/4c390b3e5502811d196233104c89f755";
-    const headers = new HttpHeaders().set( "Authorization", "token 92f64861cfd1d719939c0f16b617b77f849e13fd" );
+    const headers = new HttpHeaders().set( "Authorization", "token 622ea0b0a403449bb24687163d59ee2f6565eb74" );
 
     const files = {};
     this.datafiles.forEach( datafile => {

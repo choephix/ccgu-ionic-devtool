@@ -192,7 +192,9 @@ page-list {
         left:24px;
         position:absolute;
         font-weight: 400;
-        color: #DDD;
+        color: white;
+        opacity: .50;
+
         ion-input {
             display: inline;
             width: auto;

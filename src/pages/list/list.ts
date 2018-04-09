@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { CardModel, CardType, CardSectionData } from '../../app/models';
 import { DataProvider } from '../../providers/data/data';
 import { CardViewPage } from '../card-view/card-view';
-import { FabContainer, ModalController } from 'ionic-angular';
+import { FabContainer, ModalController, Keyboard } from 'ionic-angular';
 import { PdcListComponent } from '../../components/pdc-list/pdc-list';
 
 export class Mode { icon:string; name:string; show:string[] }
@@ -58,6 +58,7 @@ export class ListPage
   showPrettyName:boolean = false;
 
   @ViewChild('pdcList') pdcListView:PdcListComponent;
+  @ViewChild('lescroll') lescroll:HTMLDivElement;
   
   constructor( private modalCtrl:ModalController, public data:DataProvider )
   {
@@ -72,13 +73,22 @@ export class ListPage
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
       this.cardViews.push( { index : i, model : null } );
 
-    var bundleIndex:number = parseInt( localStorage.getItem( "bundle-index" ) );
-    if ( isNaN( bundleIndex ) )
+    var bundleIndex = parseInt( localStorage.getItem( "bundle-index" ) );
+    if ( isNaN( bundleIndex ) || bundleIndex >= this.bundles.length )
       bundleIndex = 1;
     this.selectBundle(this.bundles[bundleIndex]);
     this.refresh();
 
+    document.body.addEventListener("keydown",e=>this.onKey(e));
     data.events.subscribe( "data:reload", () => { this.refresh() } );
+  }
+
+  private onBlur() { console.log("blugrggr") }
+  private onFocus() { console.log("foxusxs") }
+
+  private ionViewDidLoad():void
+  {
+    // this.lescroll.addEventListener("keypress",e=>console.log(e));
   }
 
   private initializeBundles()
@@ -183,6 +193,53 @@ export class ListPage
     if ( this.mode == this.Mode.PDCs )
     {
       cv.model.setPDC( null );
+    }
+  }
+
+  public onAuxClick(cv:CardView)
+  {
+    console.log("aux",cv);
+  }
+
+  public onClickStatus(cv:CardView)
+  {
+    console.log("status",cv);
+  }
+
+  public onKey(e:KeyboardEvent) 
+  {
+    // console.log(e);
+    if ( e.ctrlKey && e.key.toUpperCase() == "S" )
+    {
+      this.data.saveAll();
+      e.preventDefault();
+    }
+    else
+    if ( !e.ctrlKey && e.altKey && !e.shiftKey )
+    {
+      e.preventDefault();
+
+      if ( e.keyCode >= 48 && e.keyCode <= 57 )
+      {
+        this.selectBundle(this.bundles[e.keyCode-48]);
+      }
+      else
+      {
+        switch ( e.key.toUpperCase() )
+        {
+          case "A": this.selectBundle(this.bundles[10]); break;
+          case "B": this.selectBundle(this.bundles[11]); break;
+          case "C": this.selectBundle(this.bundles[12]); break;
+          case "D": this.selectBundle(this.bundles[13]); break;
+          case "E": this.selectBundle(this.bundles[14]); break;
+          case "F": this.selectBundle(this.bundles[15]); break;
+          case "M": this.setMode(this.Mode.Move); break;
+          case "V": this.setMode(this.Mode.View); break;
+          case "P": this.setMode(this.Mode.PDCs); break;
+          case "Q": this.setMode(this.Mode.Quik); break;
+          case "Z": this.setMode(this.Mode.Edit); break;
+        }
+      }
     }
   }
 
@@ -313,7 +370,7 @@ export class ListPage
       section.funcIndex += CardViewBundle.PropsFunctions.length;
   }
 
-  public setMode( mode:Mode, fab:FabContainer ):void { this.mode = mode }
+  public setMode( mode:Mode ):void { this.mode = mode }
 
   public getPriority( cv:CardView ):string
   {

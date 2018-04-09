@@ -10,7 +10,7 @@ export class PdcListComponent
 {
   public selectedPDCs:PDCharacterData[] = [];
   
-  private get chars():PDCharacterData[] { return this.data.characters; }
+  private get chars():PDCharacterData[] { return this.data.pdc.data; }
 
   constructor( private data:DataProvider )
   {
