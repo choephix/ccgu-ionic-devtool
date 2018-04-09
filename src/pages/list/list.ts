@@ -203,6 +203,22 @@ export class ListPage
     {
       cv.model.setPDC( null );
     }
+    else
+    if ( this.mode == this.Mode.Quik && cv.model )
+    {
+      this.duplicate( cv );
+    }
+  }
+
+  public duplicate(cv:CardView)
+  {
+    let id = cv.model.ID;
+    while ( this.cards[id] )
+      id++;
+    let c = this.makeCard( id );
+    for ( let key in cv.model.properties )
+      c.properties[key] = cv.model.properties[key];
+    this.refresh();
   }
 
   public onClickStatus(cv:CardView)

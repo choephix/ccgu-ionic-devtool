@@ -20,6 +20,8 @@ export class DataProvider
 
   public datafiles:IDataFile[];
   
+  private saving:boolean;
+  
   constructor( private http:HttpClient, public events:Events, private toast:ToastController ) 
   {
     this.config = new DataFile<ConfigurationData>( this.FILE_CONFIG, http );
@@ -35,7 +37,7 @@ export class DataProvider
     setInterval( () => this.checkForChanges(), 1000 );
   }
 
-  public isBusy():boolean { return !this.datafiles.every( (v,i,a) => { return !v.busy } ) }
+  public isBusy():boolean { return this.saving || !this.datafiles.every( (v,i,a) => { return !v.busy } ) }
   public anyChanges():boolean { return !this.datafiles.every( (v,i,a) => { return !v.dataHasChanged } ) }
   private checkForChanges():void { this.datafiles.forEach( v => { v.checkForChanges() } ); }
   
@@ -139,16 +141,13 @@ export class DataProvider
         files[datafile.filename] = { content : JSON.stringify( datafile.data ) } 
     } );
 
-    // this.http.post( url, { 
-    //   files : [ 
-    //     "card-models.json" : JSON.stringify( this.cards.data ) 
-    //   ] 
-    // }, { headers : headers } )
+    this.saving = true;
     this.http.post( url, { files : files }, { headers : headers } )
       .subscribe( data => {
-        console.log( data );
-        this.showToast( "Data Saved" );
+        console.log( "saved", data );
+        this.saving = false;
         this.datafiles.forEach( datafile => datafile.updateOriginalState() );
+        this.showToast( "Data Saved" );
       } );
   }
 
