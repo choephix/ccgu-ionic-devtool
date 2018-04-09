@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { CardModel, CardType, CardSectionData } from '../../app/models';
 import { DataProvider } from '../../providers/data/data';
 import { CardViewPage } from '../card-view/card-view';
-import { FabContainer, ModalController, Keyboard } from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
 import { PdcListComponent } from '../../components/pdc-list/pdc-list';
 
 export class Mode { icon:string; name:string; show:string[] }
@@ -80,16 +80,8 @@ export class ListPage
     this.refresh();
 
     document.body.addEventListener("keydown",e=>this.onKey(e));
-    document.body.addEventListener("contextmenu",e=>e.preventDefault());
-    data.events.subscribe( "data:reload", () => { this.refresh() } );
-  }
-
-  private onBlur() { console.log("blugrggr") }
-  private onFocus() { console.log("foxusxs") }
-
-  private ionViewDidLoad():void
-  {
-    // this.lescroll.addEventListener("keypress",e=>console.log(e));
+    document.body.addEventListener("contextmenu",e=>{if(!e.altKey)e.preventDefault()});
+    data.events.subscribe( "data:reload", (s:string) => this.refresh() );
   }
 
   private initializeBundles()
@@ -106,6 +98,8 @@ export class ListPage
 
   private refresh():void 
   { 
+    console.log("refresh");
+
     for (let i = 0; i < this.bundles.length; i++)
       this.bundles[ i ].config = this.data.getCardSectionData( i );
 
@@ -431,12 +425,17 @@ export class CardViewBundle {
     (col,row)=> { return [DP.SNEK,DP.NRML,DP.NRML,DP.GRND][col%4] },
     (col,row)=> { return ( col % 4 > 3 ) ? DP.TRAP : [DP.SNEK,DP.SNEK,DP.NRML,DP.NRML,DP.NRML,DP.NRML,DP.GRND,DP.GRND][col%8] },
     (col,row)=> { return [DP.SNEK,DP.NRML,DP.GRND,DP.TRAP][row%4] },
+    (col,row)=> { return [DP.NRML,DP.SNEK,DP.GRND,DP.TRAP][row%4] },
     (col,row)=> { return [DP.SNEK,DP.GRND][Math.floor(row/2)%2] },
+    (col,row)=> { return [DP.SNEK,DP.TRAP][Math.floor(row/2)%2] },
+    (col,row)=> { return [DP.NRML,DP.TRAP][Math.floor(row/2)%2] },
     (col,row)=> { return [DP.NRML,DP.TRAP][row%2] },
     (col,row)=> { return [DP.NRML,DP.TRAP][col%2] },
     (col,row)=> { return [DP.NRML,DP.GRND][row%2] },
     (col,row)=> { return [DP.NRML,DP.GRND][col%2] },
     (col,row)=> { return [DP.NRML,DP.GRND][(row+col)%2] },
+    (col,row)=> { return [DP.NRML,DP.SNEK,DP.TRAP,DP.TRAP][row%4] },
+    (col,row)=> { return [DP.SNEK,DP.GRND,DP.TRAP,DP.TRAP][row%4] },
   ];
 }
 

@@ -54,7 +54,7 @@ export class DataProvider
     card.properties.description = "";
 
     this.cardsMap[id] = card;
-    this.cards.data.push( card.properties );
+    this.cards.data.unshift( card.properties );
     this.cards.dataHasChanged = true;
 
     return card;
@@ -80,7 +80,7 @@ export class DataProvider
 
     this.config.load( data => this.onLoaded_Configuration( data ) );
     this.cards.load( data => this.onLoaded_Cards( data ) );
-    this.pdc.load( data => this.onLoaded_PDCharacters( data ) );
+    // this.pdc.load( data => this.onLoaded_PDCharacters( data ) );
   }
 
   private onLoaded_Configuration( data:ConfigurationData )
@@ -116,7 +116,8 @@ export class DataProvider
     //   }
     // }
 
-    this.cardsMap.clear();
+    // this.cardsMap.clear();
+    this.cardsMap = new Map<number,CardModel>();
     for ( let i = 0; i < data.length; i++ )
       this.cardsMap[ data[i].id ] = CardModel.makeFromData( data[i] );
 
@@ -126,7 +127,6 @@ export class DataProvider
   private onLoaded_PDCharacters( data:PDCharacterData[] )
   {
     this.events.publish( "data:reload" );
-    // this.characters = <PDCharacterData[]>data;
     // this.characters.sort( (a,b) => a.origin < b.origin ? -1 : 1 );
   }
 
@@ -138,7 +138,7 @@ export class DataProvider
     const files = {};
     this.datafiles.forEach( datafile => {
       if ( datafile.dataHasChanged )
-        files[datafile.filename] = { content : JSON.stringify( datafile.data ) } 
+        files[datafile.filename] = { content : JSON.stringify( datafile.data, null, 2 ) } 
     } );
 
     this.saving = true;
@@ -178,12 +178,17 @@ class DataFile<T> implements IDataFile
   
   public load( callbackLoaded : (data:T) => void ):void
   {
-    console.log( "loading data from github gist" );
+    console.log( "loading " + this.filename );
+    
+    const headers = new HttpHeaders();
+    headers.set( "content-type", "application/json" );
+    headers.set( 'cache-control', 'no-cache' );
+    // headers.set( 'x-apikey', '5acb82b08f64a5337173a18a' );
     
     this.busy = true;
     var url_cards:string = this.URL_FILE + this.filename + this.cacheBustSuffix();
-    this.http.get(url_cards).subscribe( data => {
-      console.log( data );
+    this.http.get(url_cards,{headers:headers}).subscribe( data => {
+      console.log( "loaded "+this.filename, data );
       this.busy = false;
       this.data = <T>data;
       this.updateOriginalState();
