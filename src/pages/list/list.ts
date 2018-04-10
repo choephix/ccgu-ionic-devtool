@@ -224,7 +224,6 @@ export class ListPage
 
   public onKey(e:KeyboardEvent) 
   {
-    // console.log(e);
     if ( e.ctrlKey && e.key.toUpperCase() == "S" )
     {
       this.data.saveAll();

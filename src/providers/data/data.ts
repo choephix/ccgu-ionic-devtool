@@ -52,6 +52,7 @@ export class DataProvider
     card.properties.slug = "";
     card.properties.name = "";
     card.properties.description = "";
+    card.properties.tags = [];
 
     this.cardsMap[id] = card;
     this.cards.data.unshift( card.properties );
@@ -124,11 +125,11 @@ export class DataProvider
     this.events.publish( "data:reload" );
   }
   
-  private onLoaded_PDCharacters( data:PDCharacterData[] )
-  {
-    this.events.publish( "data:reload" );
-    // this.characters.sort( (a,b) => a.origin < b.origin ? -1 : 1 );
-  }
+  // private onLoaded_PDCharacters( data:PDCharacterData[] )
+  // {
+  //   this.events.publish( "data:reload" );
+  //   // this.characters.sort( (a,b) => a.origin < b.origin ? -1 : 1 );
+  // }
 
   public saveAll():void
   {

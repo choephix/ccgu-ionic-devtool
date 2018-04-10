@@ -35,6 +35,16 @@
     
   <ion-textarea [(ngModel)]="card.properties.description"></ion-textarea>
 
+  <ion-grid no-padding grid-padding-width="1px" class="tags">
+      <ion-row>
+        <ion-col no-padding *ngFor="let tag of tags">
+          <button ion-button mini class="tag-button" 
+                  [outline]="card.properties.tags.indexOf(tag)<0"
+                  (click)="card.toggleTag(tag)">{{tag}}</button>
+        </ion-col>
+      </ion-row>
+  </ion-grid>
+
   <div ion-item full #buttonStatus
           color="devstatus-{{card.properties.status}}"
           class="status-button status-label hidable" 
@@ -65,16 +75,16 @@
   <ion-grid no-padding #hidablePriority class="priority-options hidable" [class.hidden]="false">
     <ion-row>
       <ion-col col-1><button ion-button clear large full [class.faded]=" 0 > card.properties.priority" (click)="setPriority(0);" >➖</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]=" 1 > card.properties.priority" (click)="setPriority(1);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]=" 2 > card.properties.priority" (click)="setPriority(2);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]=" 3 > card.properties.priority" (click)="setPriority(3);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]=" 4 > card.properties.priority" (click)="setPriority(4);" >💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 1 > card.properties.priority" (click)="setPriority(1);" >🖤</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 2 > card.properties.priority" (click)="setPriority(2);" >🖤</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 3 > card.properties.priority" (click)="setPriority(3);" >💚</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 4 > card.properties.priority" (click)="setPriority(4);" >💚</button></ion-col>
       <ion-col col-1><button ion-button clear large full [class.faded]=" 5 > card.properties.priority" (click)="setPriority(5);" >💙</button></ion-col>
       <ion-col col-1><button ion-button clear large full [class.faded]=" 6 > card.properties.priority" (click)="setPriority(6);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]=" 7 > card.properties.priority" (click)="setPriority(7);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]=" 8 > card.properties.priority" (click)="setPriority(8);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]=" 9 > card.properties.priority" (click)="setPriority(9);" >💙</button></ion-col>
-      <ion-col col-1><button ion-button clear large full [class.faded]="10 > card.properties.priority" (click)="setPriority(10);">💙</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 7 > card.properties.priority" (click)="setPriority(7);" >💜</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 8 > card.properties.priority" (click)="setPriority(8);" >💜</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]=" 9 > card.properties.priority" (click)="setPriority(9);" >🧡</button></ion-col>
+      <ion-col col-1><button ion-button clear large full [class.faded]="10 > card.properties.priority" (click)="setPriority(10);">🧡</button></ion-col>
       <ion-col col-1><button ion-button clear large full (click)="setPriority(-1);">✖</button></ion-col>
     </ion-row>
   </ion-grid>

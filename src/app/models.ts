@@ -16,6 +16,14 @@ export class CardModel
         this.properties.pdc = pdc ? pdc.id : -1;
         this.properties.name = pdc ? pdc.name : null;
     }
+    public toggleTag(tag:string):void
+    {
+        let i = this.properties.tags.indexOf(tag);
+        if ( i < 0 )
+            this.properties.tags.unshift(tag);
+        else
+            this.properties.tags.splice(i,1);
+    }
 
     public get hasPDC():boolean { return (Boolean)(this.pdc) }
     public get hasName():boolean { return (Boolean)(this.properties.name) }
@@ -36,9 +44,9 @@ export class CardModel
     public get isTrap():boolean
     { return this.properties.type == CardType.Trap }
     public get isGrand():boolean
-    { return this.properties.description.toLowerCase().indexOf("#grand") > -1 }
+    { return this.properties.tags.indexOf("grand") > -1 }
     public get isSneak():boolean
-    { return this.properties.description.toLowerCase().indexOf("#sneak") > -1 }
+    { return this.properties.tags.indexOf("sneak") > -1 }
 
     public get prettyStatus():string
     { return CardModel.LOOKUP_STATUS[this.properties.status].text; }
@@ -80,7 +88,7 @@ export class CardData
     name?: string = "";
     power?: number = 0;
     description?: string = "";
-    // tags:Array<string> = [];
+    tags?:Array<string> = [];
     rarity?: number = 0;
     
     c?: string = '';

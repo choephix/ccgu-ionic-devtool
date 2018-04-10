@@ -64,6 +64,16 @@ page-card-view {
         padding: 6px !important;
     }
 
+    .tags {
+        ion-col {
+            margin: 1px;
+        }
+        .tag-button {
+            width: 100%;
+            margin: 0px;
+        }
+    }
+
     .status-button
     {
         text-transform: uppercase;

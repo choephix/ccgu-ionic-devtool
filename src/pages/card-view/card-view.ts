@@ -11,6 +11,8 @@ export class CardViewPage
 {
   card: CardModel;
 
+  tags:string[] = ["sneak","grand","global","persistent","noattack","norelocate","nomove","rush","piercing","swift","swapper","notribute","invulnerable","incorporeal","dev","token"];
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.card = navParams.get("card");
   }
