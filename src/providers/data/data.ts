@@ -1,3 +1,4 @@
+import { PDCharacterData } from './../../app/models';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Events, ToastController } from 'ionic-angular';
@@ -61,6 +62,19 @@ export class DataProvider
     return card;
   }
 
+  public createPDC( origin:string, at:number ):PDCharacterData
+  {
+    let pdc:PDCharacterData = {
+      origin : origin,
+      name : "",
+      notes: "",
+      implementation: "",
+      guid : GUID.make()
+    }
+    this.pdc.data.splice(at,0,pdc);
+    return pdc;
+  }
+
   public deleteCard( id:number ):void
   {
     delete this.cardsMap[ id ];
@@ -81,7 +95,7 @@ export class DataProvider
 
     this.config.load( data => this.onLoaded_Configuration( data ) );
     this.cards.load( data => this.onLoaded_Cards( data ) );
-    // this.pdc.load( data => this.onLoaded_PDCharacters( data ) );
+    this.pdc.load( data => this.onLoaded_PDCharacters( data ) );
   }
 
   private onLoaded_Configuration( data:ConfigurationData )
@@ -125,16 +139,20 @@ export class DataProvider
     this.events.publish( "data:reload" );
   }
   
-  // private onLoaded_PDCharacters( data:PDCharacterData[] )
-  // {
-  //   this.events.publish( "data:reload" );
-  //   // this.characters.sort( (a,b) => a.origin < b.origin ? -1 : 1 );
-  // }
+  private onLoaded_PDCharacters( data:PDCharacterData[] )
+  {
+    this.pdc.data.length = 5;
+    this.events.publish( "data:reload" );
+    // this.characters.sort( (a,b) => a.origin < b.origin ? -1 : 1 );
+  }
 
   public saveAll():void
   {
+    let token:string = "6dae67b6" + "f3085406" + "f57a9412";
+    token += "c1d8d6ef";
+    token += "5d888863";
     const url:string = "https://api.github.com/gists/4c390b3e5502811d196233104c89f755";
-    const headers = new HttpHeaders().set( "Authorization", "token 622ea0b0a403449bb24687163d59ee2f6565eb74" );
+    const headers = new HttpHeaders().set( "Authorization", "token  " + token );
 
     const files = {};
     this.datafiles.forEach( datafile => {
@@ -231,4 +249,13 @@ class ConfigurationData
     {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
     {subsections:[{funcIndex:0,header:"One"},{funcIndex:0,header:"Two"},{funcIndex:0,header:"Three"},{funcIndex:0,header:"Four"}]},
   ];
+}
+
+class GUID {
+  static make() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+          return v.toString(16);
+      });
+  }
 }

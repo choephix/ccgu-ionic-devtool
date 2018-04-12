@@ -9,10 +9,9 @@ import { PDCharacterData } from '../../app/models';
 export class PdcListComponent
 {
   public selectedPDCs:PDCharacterData[] = [];
-  
-  private get chars():PDCharacterData[] { return this.data.pdc.data; }
+  public get chars():PDCharacterData[] { return this.data.pdc.data; }
 
-  constructor( private data:DataProvider )
+  constructor( public data:DataProvider )
   {
   }
 

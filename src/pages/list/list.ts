@@ -52,7 +52,7 @@ export class ListPage
   bundles : Array<CardViewBundle> = [];
   
   zoom:number = 1.0;
-  mode:Mode = this.Mode.Edit;
+  mode:Mode = this.Mode.PDCs;
   selectedCardIDs:Array<number> = [];
 
   showPrettyName:boolean = false;

@@ -99,9 +99,11 @@ export class CardData
 
 export class PDCharacterData
 {
-    id:number;
-    origin: string;
-    name: string = "";
+    origin:string;
+    name:string;
+    notes:string;
+    implementation:string;
+    guid:string;
 }
 
 export class CardSectionData 
