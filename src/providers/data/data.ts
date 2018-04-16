@@ -1,4 +1,4 @@
-import { PDCharacterData } from './../../app/models';
+import { PdcListComponent } from './../../components/pdc-list/pdc-list';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Events, ToastController } from 'ionic-angular';
@@ -67,8 +67,10 @@ export class DataProvider
     let pdc:PDCharacterData = {
       origin : origin,
       name : "",
-      notes: "",
-      implementation: "",
+      notes_character : "",
+      notes_cardstats : "",
+      tags : [],
+      faction : "",
       guid : GUID.make()
     }
     this.pdc.data.splice(at,0,pdc);
@@ -141,9 +143,19 @@ export class DataProvider
   
   private onLoaded_PDCharacters( data:PDCharacterData[] )
   {
-    this.pdc.data.length = 5;
+    data.sort( sortFunction );
+
+    function sortFunction(aa:PDCharacterData,bb:PDCharacterData):number
+    {
+      let a:string = aa.origin.toUpperCase();
+      let b:string = bb.origin.toUpperCase();
+      return a < b ? -1 : a > b ? 1 : 0;
+    }
+
+    for ( let i = data.length - 1; i >= 0; i--)
+      data[i].guid = GUID.make();
+
     this.events.publish( "data:reload" );
-    // this.characters.sort( (a,b) => a.origin < b.origin ? -1 : 1 );
   }
 
   public saveAll():void

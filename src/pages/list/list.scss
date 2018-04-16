@@ -196,7 +196,6 @@ page-list {
 
     .subsection-header
     {
-        width:100%; 
         margin-left:8px;
         margin-top:-19px;
         position:absolute;
@@ -204,14 +203,44 @@ page-list {
         color: white;
         opacity: .50;
 
+        .item-block {
+            min-height: inherit;
+        }
+
+        input, .text-input,
+        .icon, .item-icon,
+        .label,
+        .item-md [item-left], .item-md [item-right], .item-md [item-start], .item-md [item-end] {
+            margin:0px;
+            padding: 0px;
+        }
+
         ion-input {
             display: inline;
-            width: auto;
         }
         input {
-            margin:0px;
+            margin:0px 4px !important;
             padding:0px;
-            width: 1000px;
+            width: 90%;
+        }
+
+        ion-item {
+            background: none;
+            border: none !important;
+            box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            color: white;
+        }
+
+        .item-inner, .item {
+            border: none !important;
+            box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+        }
+
+        button {
+            background:none; 
+            color: white;
         }
     }
 

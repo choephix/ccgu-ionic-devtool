@@ -113,9 +113,11 @@
       <div *ngFor="let subsection of selectedBundle.config.subsections; let i = index" 
             class="subsection-header"
             style.top="{{getY(i*16*4)}}px">
-          <span clear (click)="cycleBundlePropsFunction(i,-1)"> ⏪</span>
-          <span clear (click)="cycleBundlePropsFunction(i,1)"> ⏩ </span>
+        <ion-item>
+          <button mini clear item-start (click)="cycleBundlePropsFunction(i,-1)">◀</button>
+          <button mini clear item-start (click)="cycleBundlePropsFunction(i,1)">▶</button>
           <ion-input [(ngModel)]="subsection.header" ></ion-input>
+        </ion-item>
       </div>
     </div>
   </div> 

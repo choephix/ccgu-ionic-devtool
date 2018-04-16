@@ -13,7 +13,7 @@ export class CardModel
     public setPDC( pdc:PDCharacterData ):void
     {
         this.pdc = pdc; 
-        this.properties.pdc = pdc ? pdc.id : -1;
+        this.properties.pdc = pdc ? pdc.guid : null;
         this.properties.name = pdc ? pdc.name : null;
     }
     public toggleTag(tag:string):void
@@ -92,7 +92,7 @@ export class CardData
     rarity?: number = 0;
     
     c?: string = '';
-    pdc?:number = -1;
+    pdc?: string = null;
     status?: number = 0;
     priority?: number = 0;
 }
@@ -101,8 +101,10 @@ export class PDCharacterData
 {
     origin:string;
     name:string;
-    notes:string;
-    implementation:string;
+    notes_character:string;
+    notes_cardstats:string;
+    tags:string[];
+    faction:string;
     guid:string;
 }
 

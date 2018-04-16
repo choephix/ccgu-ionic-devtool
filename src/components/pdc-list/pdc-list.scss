@@ -1,7 +1,63 @@
 pdc-list {
 
+    input, .text-input,
+    .icon, .item-icon,
+    .label {
+        margin:0px;
+        padding:1px;
+    }
+
+    .icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    // .text-input, .label {
+    //     font-size: 12px;
+    // }
+
+    .item-md [item-left], .item-md [item-right], .item-md [item-start], .item-md [item-end] {
+        margin: 0px;
+    }
+
+    .item-inner, .item {
+        border: none !important;
+        box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+    }
+
+    .item {
+        min-height: inherit;
+    }
+
+    .pdc-list-item {
+        border-bottom: 1px solid #DDD !important;
+    }
+
+    .origin {
+        opacity: .4;
+    }
+
+    .guid {
+        text-align: center;
+        opacity: .25;
+        font-size: 10px;
+    }
+    
+    ion-textarea textarea {
+        min-height: 100px;
+        margin-left: 4px !important;
+    }
+
+
+
     .selected {
         color: rosybrown;
-        transition: color .1s;
+        background: #DEF;
+        // transition: color .1s, background-color .1s;
+    }
+
+    .hidden {
+        opacity:0;
     }
 }
