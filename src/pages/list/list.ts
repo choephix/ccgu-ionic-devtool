@@ -53,7 +53,7 @@ export class ListPage
   bundles : Array<CardViewBundle> = [];
   
   zoom:number = 1.0;
-  mode:Mode = this.Mode.PDCs;
+  mode:Mode = this.Mode.Edit;
   selectedCardIDs:Array<number> = [];
 
   showPrettyName:boolean = false;
@@ -348,8 +348,8 @@ export class ListPage
       let row:number = Math.floor( card.index / ListPage.PAGE_ROWS );
       let props = this.getDefaultPropsFor( col, row );
       if ( props["type"] == CardType.Trap ) return "trap";
-      if ( props["description"] == "#grand\n" ) return "grand";
-      if ( props["description"] == "#sneak\n" ) return "sneak";
+      if ( props["tags"] && props["tags"].indexOf( "grand" ) >= 0 ) return "grand";
+      if ( props["tags"] && props["tags"].indexOf( "sneak" ) >= 0 ) return "sneak";
       return "normal";
     }
   }
@@ -450,6 +450,6 @@ class DP
 {
   public static readonly TRAP = { type : CardType.Trap };
   public static readonly NRML = { type : CardType.Unit };
-  public static readonly SNEK = { type : CardType.Unit, description : "#sneak\n" };
-  public static readonly GRND = { type : CardType.Unit, description : "#grand\n" };
+  public static readonly SNEK = { type : CardType.Unit, tags : ["sneak"] };
+  public static readonly GRND = { type : CardType.Unit, tags : ["grand"] };
 }

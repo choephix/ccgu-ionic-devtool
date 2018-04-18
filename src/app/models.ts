@@ -22,6 +22,8 @@ export class CardModel
         else
             this.properties.tags.splice(i,1);
     }
+    public setIsTrapType(value:boolean):void
+    { this.properties.type = value ? CardType.Trap : CardType.Unit }
 
     public get hasPDC():boolean { return (Boolean)(this.properties.pdc) }
     public get hasName():boolean { return (Boolean)(this.properties.name) }

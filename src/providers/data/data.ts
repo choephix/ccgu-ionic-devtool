@@ -89,6 +89,16 @@ export class DataProvider
   public getCardSectionData(index:number):CardSectionData
   { return this.config.data.cardSections[index%this.config.data.cardSections.length] }
 
+  public anyCardHasPDC( pdc:PDCharacterData ):boolean
+  {
+    if( !this.cards.data )
+      return false;
+    for (let i = 0; i < this.cards.data.length; i++)
+      if ( this.cards.data[i].pdc == pdc.guid )
+        return true;
+    return false;
+  }
+
   ///
 
   private loadAll():void

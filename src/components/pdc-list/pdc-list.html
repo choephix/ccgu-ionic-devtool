@@ -4,7 +4,7 @@
       <!-- <ion-item-divider color="light">Public Domain Characters</ion-item-divider> -->
       <!-- <div class="pdc-list-item" *ngFor="let pdc of chars; let i = index"> -->
       <div class="pdc-list-item" *ngFor="let pdc of chars; let i = index" (click)="select(pdc)">
-        <ion-item [class.selected]="isSelected(pdc)" text-wrap>
+        <ion-item [class.gray]="data.anyCardHasPDC(pdc)" [class.selected]="isSelected(pdc)" text-wrap>
           <ion-icon name="arrow-up" (click)="data.createPDC(pdc.origin,i); stop($event)" color="faded" item-start></ion-icon>
           <ion-icon name="arrow-down" (click)="data.createPDC(pdc.origin,i+1); stop($event)" color="faded" item-start></ion-icon>
           <ion-input type="text"[(ngModel)]="pdc.origin" class="origin"></ion-input>

@@ -4,7 +4,7 @@
 
   <ion-grid no-padding #hidablePower class="power-options hidable" [class.hidden]="true">
     <ion-row>
-      <ion-col col-2><button ion-button clear large full (click)="toggle(hidablePower);card.isTrap=true" >Trap</button></ion-col>
+      <ion-col col-2><button ion-button clear large full (click)="toggle(hidablePower);card.setIsTrapType(true)">Trap</button></ion-col>
       <ion-col col-1><button ion-button clear large full (click)="setPower( 1);toggle(hidablePower)"> 1</button></ion-col>
       <ion-col col-1><button ion-button clear large full (click)="setPower( 2);toggle(hidablePower)"> 2</button></ion-col>
       <ion-col col-1><button ion-button clear large full (click)="setPower( 3);toggle(hidablePower)"> 3</button></ion-col>

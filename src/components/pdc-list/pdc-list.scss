@@ -32,6 +32,7 @@ pdc-list {
 
     .pdc-list-item {
         border-bottom: 1px solid #DDD !important;
+        // transition: color .1s, background-color .1s;
     }
 
     .origin {
@@ -49,12 +50,17 @@ pdc-list {
         margin-left: 4px !important;
     }
 
-
+    .gray {
+        background: linear-gradient(to right, Moccasin , white);
+    }
 
     .selected {
         color: rosybrown;
-        background: #DEF;
-        // transition: color .1s, background-color .1s;
+        background: linear-gradient(to left, #def , white);
+    }
+
+    .selected.gray {
+        background: linear-gradient(to left, #def , Moccasin);
     }
 
     .hidden {
