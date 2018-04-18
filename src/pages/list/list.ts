@@ -1,3 +1,4 @@
+import { PDCharacterData } from './../../app/models';
 import { Component, ViewChild } from '@angular/core';
 import { CardModel, CardType, CardSectionData } from '../../app/models';
 import { DataProvider } from '../../providers/data/data';
@@ -400,6 +401,13 @@ export class ListPage
     let s:string = '';
     for (let i = 0; i < cv.model.properties.rarity; i++) s += '⭐';
     return s;
+  }
+
+  public getPDC( cv:CardView ):PDCharacterData
+  {
+    if ( !cv.model ) return null;
+    if ( !cv.model.hasPDC ) return null;
+    return this.data.pdcMap[cv.model.properties.pdc];
   }
 }
 

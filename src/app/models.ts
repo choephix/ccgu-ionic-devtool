@@ -1,7 +1,6 @@
 export class CardModel
 {
     public properties:CardData = new CardData();
-    private pdc:PDCharacterData = null;
     
     private constructor( data:CardData ) { this.properties = data }
     public static makeFromData( data:CardData ):CardModel
@@ -12,7 +11,6 @@ export class CardModel
     public setID( value:number ):void { this.properties.id = value }
     public setPDC( pdc:PDCharacterData ):void
     {
-        this.pdc = pdc; 
         this.properties.pdc = pdc ? pdc.guid : null;
         this.properties.name = pdc ? pdc.name : null;
     }
@@ -25,15 +23,13 @@ export class CardModel
             this.properties.tags.splice(i,1);
     }
 
-    public get hasPDC():boolean { return (Boolean)(this.pdc) }
+    public get hasPDC():boolean { return (Boolean)(this.properties.pdc) }
     public get hasName():boolean { return (Boolean)(this.properties.name) }
 
     public get ID():number 
     { return this.properties.id  }
-    public get PDC():PDCharacterData 
-    { return this.pdc  }
     public get prettyName():string
-    { return this.hasPDC ? this.pdc.name : this.hasName ? this.properties.name : this.properties.slug }
+    { return this.hasName ? this.properties.name : this.properties.slug }
     public get prettyDescription():string 
     { return this.properties.description }
     public get prettyPower():string 

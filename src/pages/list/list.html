@@ -84,7 +84,7 @@
           <ion-badge class="id" *ngIf="mode.show.indexOf('id')>=0" mode="ios" style="position:absolute; right:5px; top:-5px;" color="light">{{cv.model.ID}}</ion-badge>
           <div class="slug" *ngIf="mode!=Mode.View" [style.opacity]="!showPrettyName||cv.model.hasName?1:.25">
             <b>{{showPrettyName?cv.model.prettyName:cv.model.properties.slug}}</b></div>
-          <div class="slug" *ngIf="mode==Mode.View" [style.opacity]="cv.model.PDC?1:.25">{{cv.model.prettyName}}</div>
+          <div class="slug" *ngIf="mode==Mode.View" [style.opacity]="cv.model.hasName?1:.25">{{cv.model.prettyName}}</div>
           <div class="description">
             <div *ngIf="cv.model.properties.tags.length>0" class="tags">{{cv.model.properties.tags.join(' ')}}</div>
             <div>{{cv.model.prettyDescription}}</div>
@@ -93,7 +93,7 @@
           <div class="priority"   *ngIf="mode.show.indexOf('priority')>=0">{{getPriority(cv)}}</div>
           <div class="rarity"     *ngIf="mode.show.indexOf('rarity')>=0">{{getRarity(cv)}}</div>
           <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" [style.background]="cv.model.prettyStatusColor">{{cv.model.prettyStatus}}</div>
-          <div class="name" *ngIf="mode==Mode.PDCs&&cv.model.PDC">{{cv.model.PDC.name}}</div>
+          <div class="name" *ngIf="mode==Mode.PDCs&&getPDC(cv)">{{getPDC(cv).name}}</div>
         </div>
         <div *ngIf="hasData(cv) && mode == Mode.Quik">
           <ion-input type="text" [(ngModel)]="cv.model.properties.slug" class="slug" (change)="onQuickChangeSlug(cv)"></ion-input>
@@ -102,7 +102,7 @@
           <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" 
               (click)="onClickStatus(cv)"
               [style.background]="cv.model.prettyStatusColor">{{cv.model.prettyStatus}}</div>
-          <div class="name" *ngIf="mode==Mode.PDCs&&cv.model.PDC">{{cv.model.PDC.name}}</div>
+          <div class="name" *ngIf="mode==Mode.PDCs&&getPDC(cv)">{{getPDC(cv).name}}</div>
         </div>
         <div *ngIf="cv.model&&cv.model.properties.status==12" 
               style="width:100%;height:100%;background:black;opacity:.35;position:absolute;top:0;"></div>

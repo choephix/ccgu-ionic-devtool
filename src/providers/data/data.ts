@@ -1,4 +1,3 @@
-import { PdcListComponent } from './../../components/pdc-list/pdc-list';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Events, ToastController } from 'ionic-angular';
@@ -14,6 +13,7 @@ export class DataProvider
   private readonly FILE_PDC:string = "pdc.json";
 
   public cardsMap = new Map<number,CardModel>();
+  public pdcMap = new Map<string,PDCharacterData>();
 
   public config:DataFile<ConfigurationData>;
   public cards:DataFile<CardData[]>;
@@ -143,7 +143,7 @@ export class DataProvider
   
   private onLoaded_PDCharacters( data:PDCharacterData[] )
   {
-    data.sort( sortFunction );
+    // data.sort( sortFunction );
 
     function sortFunction(aa:PDCharacterData,bb:PDCharacterData):number
     {
@@ -153,7 +153,7 @@ export class DataProvider
     }
 
     for ( let i = data.length - 1; i >= 0; i--)
-      data[i].guid = GUID.make();
+      this.pdcMap[data[i].guid] = data[i];
 
     this.events.publish( "data:reload" );
   }
