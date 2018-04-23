@@ -108,6 +108,12 @@ export class PDCharacterData
     guid:string;
 }
 
+export class DeckData
+{
+    name:string;
+    slugs:string[];
+}
+
 export class CardSectionData 
 {
   public subsections:CardSubSectionData[] = [

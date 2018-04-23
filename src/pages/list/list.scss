@@ -166,11 +166,13 @@ page-list {
     #lescroll.mode-edit { 
         background-color: #789;
     }
-    #lescroll.mode-move { 
-        background-color: rgb(93, 142, 242); 
-    }
     #lescroll.mode-pdcs { 
+        // background-color: rgb(93, 142, 242); 
         background-color: rosybrown;
+        .lecard.empty { opacity: 0.05; }
+    }
+    #lescroll.mode-deck { 
+        background-color: rgb(93, 142, 242); 
         .lecard.empty { opacity: 0.05; }
     }
     #lescroll.mode-quik { 

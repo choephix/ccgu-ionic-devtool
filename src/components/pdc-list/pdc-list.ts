@@ -12,9 +12,7 @@ export class PdcListComponent
   public expandedPDCs:PDCharacterData[] = [];
   public get chars():PDCharacterData[] { return this.data.pdc.data; }
 
-  constructor( public data:DataProvider )
-  {
-  }
+  constructor( public data:DataProvider ) {}
 
   public expand(pdc:PDCharacterData)
   {

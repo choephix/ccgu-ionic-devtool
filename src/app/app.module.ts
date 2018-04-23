@@ -13,6 +13,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { AutosizeDirective } from '../directives/autosize/autosize';
 import { DataProvider } from '../providers/data/data';
 import { PdcListComponent } from '../components/pdc-list/pdc-list';
+import { DeckListComponent } from '../components/deck-list/deck-list';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { PdcListComponent } from '../components/pdc-list/pdc-list';
     ListPage,
     CardViewPage,
     AutosizeDirective,
-    PdcListComponent
+    PdcListComponent,
+    DeckListComponent
   ],
   imports: [
     BrowserModule,

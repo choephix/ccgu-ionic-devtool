@@ -5,6 +5,7 @@ import { DataProvider } from '../../providers/data/data';
 import { CardViewPage } from '../card-view/card-view';
 import { ModalController } from 'ionic-angular';
 import { PdcListComponent } from '../../components/pdc-list/pdc-list';
+import { DeckListComponent } from '../../components/deck-list/deck-list';
 
 export class Mode { icon:string; name:string; show:string[] }
 
@@ -20,12 +21,13 @@ export class ListPage
   public static readonly PAGE_ROWS:number = Math.ceil( ListPage.PAGE_CARDS_COUNT / ListPage.PAGE_COLUMNS );
 
   readonly Mode : 
-  { Edit : Mode, PDCs : Mode, Quik : Mode, View : Mode } =
+  { Edit : Mode, PDCs : Mode, Quik : Mode, View : Mode, Deck : Mode } =
   {
-    Edit : { icon : "create", name : "edit", show : ["priority","status"] },
-    PDCs : { icon : "person", name : "pdcs", show : ["status"] },
-    Quik : { icon : "flash",  name : "quik", show : ["priority","status"] },
     View : { icon : "eye"   , name : "view", show : ["rarity"] },
+    Edit : { icon : "create", name : "edit", show : ["priority","status"] },
+    Quik : { icon : "flash",  name : "quik", show : ["priority","status"] },
+    PDCs : { icon : "person", name : "pdcs", show : ["status"] },
+    Deck : { icon : "albums", name : "deck", show : ["priority","status"] },
   };
   
   readonly subheaderHeight:number = 24;
@@ -59,6 +61,7 @@ export class ListPage
   showID:boolean = false;
 
   @ViewChild('pdcList') pdcListView:PdcListComponent;
+  @ViewChild('deckList') deckListView:DeckListComponent;
   @ViewChild('lescroll') lescroll:HTMLDivElement;
   
   constructor( private modalCtrl:ModalController, public data:DataProvider )
@@ -182,6 +185,12 @@ export class ListPage
         cv.model.setPDC( this.pdcListView.selectedPDCs[0] );
         this.pdcListView.selectedPDCs.length = 0;
       }
+    }
+    else
+    if ( this.mode == this.Mode.Deck )
+    {
+      if ( cv.model )
+        this.deckListView.add( cv.model.properties.slug );
     }
     else
     {

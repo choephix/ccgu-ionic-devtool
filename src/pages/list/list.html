@@ -27,13 +27,14 @@
 
   <ion-fab bottom right #fabMode>
     <button ion-fab large><ion-icon [name]="mode.icon"></ion-icon></button>
-    <ion-fab-list side="left">
+    <ion-fab-list side="top">
       <button ion-fab (click)="setMode(Mode.View);fabMode.close()"><ion-icon name="{{Mode.View.icon}}"></ion-icon></button>
       <button ion-fab (click)="setMode(Mode.Edit);fabMode.close()"><ion-icon name="{{Mode.Edit.icon}}"></ion-icon></button>
       <button ion-fab (click)="setMode(Mode.Quik);fabMode.close()"><ion-icon name="{{Mode.Quik.icon}}"></ion-icon></button>
+      <button ion-fab (click)="setMode(Mode.Deck);fabMode.close()"><ion-icon name="{{Mode.Deck.icon}}"></ion-icon></button>
       <button ion-fab (click)="setMode(Mode.PDCs);fabMode.close()"><ion-icon name="{{Mode.PDCs.icon}}"></ion-icon></button>
     </ion-fab-list>
-    <ion-fab-list side="top">
+    <ion-fab-list side="left">
       <button ion-fab (click)="showID=!showID;fabMode.close()">ID</button>
       <button ion-fab (click)="showPrettyName=!showPrettyName;fabMode.close()"><ion-icon name="glasses"></ion-icon></button>
       <button ion-fab (click)="data.saveAll();fabMode.close()"><ion-icon name="cloud-upload"></ion-icon></button>
@@ -62,8 +63,14 @@
     </div>
   </div>
 
+  <div *ngIf="mode==Mode.Deck" style="width:33%; height:100%; top:0; left:0; position:absolute; overflow:auto; margin:0; padding:0;">
+    <div style="max-height:100%; overflow:auto; margin:0; padding:0;">
+      <deck-list #deckList></deck-list>
+    </div>
+  </div>
+
   <div #lescroll id="lescroll" 
-        [style.width]="mode==Mode.PDCs?'67%':'100%'"
+        [style.width]="mode==Mode.PDCs||mode==Mode.Deck?'67%':'100%'"
         [style.zoom]="zoom"
         [class]="'mode-'+mode.name" 
         >
@@ -105,8 +112,6 @@
               (click)="onClickStatus(cv)"
               [style.background]="cv.model.prettyStatusColor">{{cv.model.prettyStatus}}</div>
           <div class="name" *ngIf="mode==Mode.PDCs&&getPDC(cv)">{{getPDC(cv).name}}</div>
-          <div *ngIf="cv.model&&cv.model.properties.status==12" 
-                style="width:100%;height:100%;background:black;opacity:.10;position:absolute;top:0;"></div>
         </div>
       </div>
 

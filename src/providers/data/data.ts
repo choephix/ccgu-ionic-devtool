@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Events, ToastController } from 'ionic-angular';
-import { CardModel, PDCharacterData, CardData, CardType, CardSectionData } from '../../app/models';
+import { CardModel, PDCharacterData, CardData, CardType, CardSectionData, DeckData } from '../../app/models';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeout';
 
@@ -11,6 +11,7 @@ export class DataProvider
   private readonly FILE_CARDS:string = "card-models.json";
   private readonly FILE_CONFIG:string = "editor-stuff.json";
   private readonly FILE_PDC:string = "pdc.json";
+  private readonly FILE_DECKS:string = "decks.json";
 
   public cardsMap = new Map<number,CardModel>();
   public pdcMap = new Map<string,PDCharacterData>();
@@ -18,6 +19,7 @@ export class DataProvider
   public config:DataFile<ConfigurationData>;
   public cards:DataFile<CardData[]>;
   public pdc:DataFile<PDCharacterData[]>;
+  public decks:DataFile<DeckData[]>;
 
   public datafiles:IDataFile[];
   
@@ -28,14 +30,15 @@ export class DataProvider
     this.config = new DataFile<ConfigurationData>( this.FILE_CONFIG, http );
     this.cards = new DataFile<CardData[]>( this.FILE_CARDS, http );
     this.pdc = new DataFile<PDCharacterData[]>( this.FILE_PDC, http );
+    this.decks = new DataFile<DeckData[]>( this.FILE_DECKS, http );
 
     this.config.data = new ConfigurationData();
 
-    this.datafiles = [ this.config, this.cards, this.pdc ];
+    this.datafiles = [ this.config, this.cards, this.pdc, this.decks ];
 
     this.loadAll();
 
-    setInterval( () => this.checkForChanges(), 1000 );
+    setInterval( () => this.checkForChanges(), 2000 );
   }
 
   public isBusy():boolean { return this.saving || !this.datafiles.every( (v,i,a) => { return !v.busy } ) }
@@ -99,6 +102,14 @@ export class DataProvider
     return false;
   }
 
+  public findCardBySlug(slug:string):CardData
+  {
+    for (let i = 0; i < this.cards.data.length; i++)
+      if ( this.cards.data[i].slug == slug )
+        return this.cards.data[i];
+    return null;
+  }
+
   ///
 
   private loadAll():void
@@ -108,6 +119,7 @@ export class DataProvider
     this.config.load( data => this.onLoaded_Configuration( data ) );
     this.cards.load( data => this.onLoaded_Cards( data ) );
     this.pdc.load( data => this.onLoaded_PDCharacters( data ) );
+    this.decks.load( data => this.onLoaded_Decks( data ) );
   }
 
   private onLoaded_Configuration( data:ConfigurationData )
@@ -153,9 +165,16 @@ export class DataProvider
   
   private onLoaded_PDCharacters( data:PDCharacterData[] )
   {
-
     for ( let i = data.length - 1; i >= 0; i--)
       this.pdcMap[data[i].guid] = data[i];
+
+    this.events.publish( "data:reload" );
+  }
+
+  private onLoaded_Decks( data:DeckData[] )
+  {
+    // for ( let i = 4; i < 64; i++ )
+    //   this.decks.data.push({name:"("+i+")",slugs:[]})
 
     this.events.publish( "data:reload" );
   }
