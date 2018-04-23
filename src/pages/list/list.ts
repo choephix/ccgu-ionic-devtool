@@ -88,14 +88,20 @@ export class ListPage
       for ( let key in this.Mode )
         if ( <Mode>this.Mode[key] )
           if ( this.Mode[key].name == mode )
-            this.mode = this.Mode[key];
+            this.setMode( this.Mode[key] );
 
       this.refresh();
     }
 
     document.body.addEventListener("keydown",e=>this.onKey(e));
     document.body.addEventListener("contextmenu",e=>{if(!e.altKey)e.preventDefault()});
-    data.events.subscribe( "data:reload", (s:string) => this.refresh() );
+    
+    this.data.events.subscribe( "list:resetmode", () => this.setMode(this.Mode.Edit) );
+    this.data.events.subscribe( "data:reload", (s:string) => this.refresh() );
+  }
+
+  onViewDidLoad():void
+  {
   }
 
   private initializeBundles()

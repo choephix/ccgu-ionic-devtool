@@ -9,7 +9,7 @@ import { DataProvider } from '../../providers/data/data';
 export class DeckListComponent
 {
   public get decks():DeckData[] { return this.data.decks.data; }
-
+  
   public selectedDeck:DeckData;
 
   constructor( public data:DataProvider ) {}
@@ -45,6 +45,11 @@ export class DeckListComponent
       this.decks.splice( index, 1 );
       this.decks.splice( index + offset, 0, deck );
     }
+  }
+
+  public finish():void
+  {
+    this.data.events.publish( "list:resetmode" );
   }
 
   public stop(event) { event.stopPropagation() }

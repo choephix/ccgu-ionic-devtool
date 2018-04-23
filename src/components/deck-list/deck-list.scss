@@ -3,4 +3,33 @@ deck-list {
     {
         font-weight: bolder;
     }
+
+    .item-md ion-icon[item-left] + .item-inner, .item-md ion-icon[item-left] + .item-input, .item-md ion-icon[item-start] + .item-inner, .item-md ion-icon[item-start] + .item-input {
+        margin-left: 0;
+    }
+
+    .list-md .item-input.ng-valid.item-input-has-value:not(.input-has-focus):not(.item-input-has-focus):last-child, .list-md .item-input.ng-valid.input-has-value:not(.input-has-focus):not(.item-input-has-focus):last-child {
+        border-bottom: #e4e4e4 1px solid;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    .item-md {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .item-block {
+        min-height: 0px;
+    }
+
+    .item-md ion-icon[item-left], .item-md ion-icon[item-right], .item-md ion-icon[item-start], .item-md ion-icon[item-end] {
+        margin: 0;
+        margin-right: 6px;
+    }
+    .text-input-md, .label-md {
+        margin: 4px 0px;
+        padding: 1px;
+    }
+    .item-divider .input-wrapper {
+        margin: 8px 0px;
+    }
 }
