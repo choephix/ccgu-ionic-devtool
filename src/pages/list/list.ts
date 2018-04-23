@@ -20,10 +20,9 @@ export class ListPage
   public static readonly PAGE_ROWS:number = Math.ceil( ListPage.PAGE_CARDS_COUNT / ListPage.PAGE_COLUMNS );
 
   readonly Mode : 
-  { Edit : Mode, Move : Mode, PDCs : Mode, Quik : Mode, View : Mode } =
+  { Edit : Mode, PDCs : Mode, Quik : Mode, View : Mode } =
   {
     Edit : { icon : "create", name : "edit", show : ["priority","status"] },
-    Move : { icon : "resize", name : "move", show : ["priority","status","id"] },
     PDCs : { icon : "person", name : "pdcs", show : ["status"] },
     Quik : { icon : "flash",  name : "quik", show : ["priority","status"] },
     View : { icon : "eye"   , name : "view", show : ["rarity"] },
@@ -57,6 +56,7 @@ export class ListPage
   selectedCardIDs:Array<number> = [];
 
   showPrettyName:boolean = false;
+  showID:boolean = false;
 
   @ViewChild('pdcList') pdcListView:PdcListComponent;
   @ViewChild('lescroll') lescroll:HTMLDivElement;
@@ -140,14 +140,9 @@ export class ListPage
 
   }
 
-  public onClick(cv:CardView)
+  onClick(cv:CardView)
   {
     if ( this.mode == this.Mode.Edit )
-    {
-      this.viewCard( this.getSupposedCardID(cv) );
-    }
-    else
-    if ( this.mode == this.Mode.Move )
     {
       let cvID:number = this.getSupposedCardID( cv );
       let seleIndex:number = this.selectedCardIDs.indexOf( cvID );
@@ -194,24 +189,30 @@ export class ListPage
     }
   }
 
-  public onDoubleClick(cv:CardView)
+  onDoubleClick(cv:CardView)
+  {
+    if ( this.mode == this.Mode.PDCs )
+    {
+      // cv.model.setPDC( null );
+      this.viewCard( this.getSupposedCardID(cv) );
+    }
+    else
+    if ( this.mode == this.Mode.Edit )
+    {
+      this.viewCard( this.getSupposedCardID(cv) );
+    }
+  }
+
+  onAuxClick(cv:CardView,e:MouseEvent)
   {
     if ( this.mode == this.Mode.PDCs )
     {
       cv.model.setPDC( null );
     }
     else
-    if ( this.mode == this.Mode.Move )
+    if ( this.mode == this.Mode.Edit )
     {
       this.viewCard( this.getSupposedCardID(cv) );
-    }
-  }
-
-  public onAuxClick(cv:CardView,e:MouseEvent)
-  {
-    if ( this.mode == this.Mode.PDCs )
-    {
-      cv.model.setPDC( null );
     }
     else
     if ( this.mode == this.Mode.Quik && cv.model )
@@ -220,7 +221,7 @@ export class ListPage
     }
   }
 
-  public duplicate(cv:CardView)
+  duplicate(cv:CardView)
   {
     let id = cv.model.ID;
     while ( this.cards[id] )
@@ -231,14 +232,14 @@ export class ListPage
     this.refresh();
   }
 
-  public onClickStatus(cv:CardView)
+  onClickStatus(cv:CardView)
   {
     const A = [0,1,2,3,12];
     const i = (A.indexOf(cv.model.properties.status)+1)%A.length;
     cv.model.properties.status = A[i];
   }
 
-  public onKey(e:KeyboardEvent) 
+  onKey(e:KeyboardEvent) 
   {
     if ( e.ctrlKey && e.key.toUpperCase() == "S" )
     {
@@ -264,7 +265,6 @@ export class ListPage
           case "D": this.selectBundle(this.bundles[13]); break;
           case "E": this.selectBundle(this.bundles[14]); break;
           case "F": this.selectBundle(this.bundles[15]); break;
-          case "M": this.setMode(this.Mode.Move); break;
           case "V": this.setMode(this.Mode.View); break;
           case "P": this.setMode(this.Mode.PDCs); break;
           case "Q": this.setMode(this.Mode.Quik); break;

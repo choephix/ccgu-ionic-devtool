@@ -28,13 +28,13 @@
   <ion-fab bottom right #fabMode>
     <button ion-fab large><ion-icon [name]="mode.icon"></ion-icon></button>
     <ion-fab-list side="left">
-      <button ion-fab (click)="setMode(Mode.Edit);fabMode.close()"><ion-icon name="{{Mode.Edit.icon}}"></ion-icon></button>
-      <button ion-fab (click)="setMode(Mode.Move);fabMode.close()"><ion-icon name="{{Mode.Move.icon}}"></ion-icon></button>
-      <button ion-fab (click)="setMode(Mode.PDCs);fabMode.close()"><ion-icon name="{{Mode.PDCs.icon}}"></ion-icon></button>
-      <button ion-fab (click)="setMode(Mode.Quik);fabMode.close()"><ion-icon name="{{Mode.Quik.icon}}"></ion-icon></button>
       <button ion-fab (click)="setMode(Mode.View);fabMode.close()"><ion-icon name="{{Mode.View.icon}}"></ion-icon></button>
+      <button ion-fab (click)="setMode(Mode.Edit);fabMode.close()"><ion-icon name="{{Mode.Edit.icon}}"></ion-icon></button>
+      <button ion-fab (click)="setMode(Mode.Quik);fabMode.close()"><ion-icon name="{{Mode.Quik.icon}}"></ion-icon></button>
+      <button ion-fab (click)="setMode(Mode.PDCs);fabMode.close()"><ion-icon name="{{Mode.PDCs.icon}}"></ion-icon></button>
     </ion-fab-list>
     <ion-fab-list side="top">
+      <button ion-fab (click)="showID=!showID;fabMode.close()">ID</button>
       <button ion-fab (click)="showPrettyName=!showPrettyName;fabMode.close()"><ion-icon name="glasses"></ion-icon></button>
       <button ion-fab (click)="data.saveAll();fabMode.close()"><ion-icon name="cloud-upload"></ion-icon></button>
       <button ion-fab (click)="data.loadAll();fabMode.close()"><ion-icon name="cloud-download"></ion-icon></button>
@@ -81,7 +81,6 @@
             [class.selected]="isSelected(cv)"
             class="lecard {{getColorClass(cv)}} {{hasData(cv)?'non-empty':'empty'}}">
         <div *ngIf="hasData(cv) && mode != Mode.Quik">
-          <ion-badge class="id" *ngIf="mode.show.indexOf('id')>=0" mode="ios" style="position:absolute; right:5px; top:-5px;" color="light">{{cv.model.ID}}</ion-badge>
           <div class="slug" *ngIf="mode!=Mode.View" [style.opacity]="!showPrettyName||cv.model.hasName?1:.25">
             <b>{{showPrettyName?cv.model.prettyName:cv.model.prettySlug}}</b></div>
           <div class="slug" *ngIf="mode==Mode.View" [style.opacity]="cv.model.hasName?1:.25">{{cv.model.prettyName}}</div>
@@ -90,10 +89,13 @@
             <div>{{cv.model.prettyDescription}}</div>
           </div>
           <div class="power"      *ngIf="!cv.model.isTrap">{{cv.model.prettyPower}}</div>
-          <div class="priority"   *ngIf="mode.show.indexOf('priority')>=0">{{getPriority(cv)}}</div>
+          <!-- <div class="priority"   *ngIf="mode.show.indexOf('priority')>=0">{{getPriority(cv)}}</div> -->
           <div class="rarity"     *ngIf="mode.show.indexOf('rarity')>=0">{{getRarity(cv)}}</div>
           <div class="dev-status" *ngIf="mode.show.indexOf('status')>=0" [style.background]="cv.model.prettyStatusColor">{{cv.model.prettyStatus}}</div>
           <div class="name" *ngIf="mode==Mode.PDCs&&getPDC(cv)">{{getPDC(cv).name}}</div>
+          <div *ngIf="cv.model&&cv.model.properties.status==12" 
+                style="width:100%;height:100%;background:black;opacity:.35;position:absolute;top:0;"></div>
+          <ion-badge class="id" *ngIf="showID" mode="ios" style="position:absolute; right:5px; top:-5px;" color="light">{{cv.model.ID}}</ion-badge>
         </div>
         <div *ngIf="hasData(cv) && mode == Mode.Quik">
           <ion-input type="text" [(ngModel)]="cv.model.properties.slug" class="slug" (change)="onQuickChangeSlug(cv)"></ion-input>
@@ -103,12 +105,10 @@
               (click)="onClickStatus(cv)"
               [style.background]="cv.model.prettyStatusColor">{{cv.model.prettyStatus}}</div>
           <div class="name" *ngIf="mode==Mode.PDCs&&getPDC(cv)">{{getPDC(cv).name}}</div>
+          <div *ngIf="cv.model&&cv.model.properties.status==12" 
+                style="width:100%;height:100%;background:black;opacity:.10;position:absolute;top:0;"></div>
         </div>
-        <div *ngIf="cv.model&&cv.model.properties.status==12" 
-              style="width:100%;height:100%;background:black;opacity:.35;position:absolute;top:0;"></div>
       </div>
-
-      <!-- <div style="width:100%" style.left="0px" style.top="10px"> Gaaliba </div> -->
 
       <div *ngFor="let subsection of selectedBundle.config.subsections; let i = index" 
             class="subsection-header"
