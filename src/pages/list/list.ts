@@ -74,11 +74,21 @@ export class ListPage
     for (let i = 0; i < ListPage.PAGE_CARDS_COUNT; i++)
       this.cardViews.push( { index : i, model : null } );
 
-    var bundleIndex = parseInt( localStorage.getItem( "bundle-index" ) );
-    if ( isNaN( bundleIndex ) || bundleIndex >= this.bundles.length )
-      bundleIndex = 1;
-    this.selectBundle(this.bundles[bundleIndex]);
-    this.refresh();
+    /// INIT FROM LOCAL
+    {
+      let bundleIndex = parseInt( localStorage.getItem( "bundle-index" ) );
+      if ( isNaN( bundleIndex ) || bundleIndex >= this.bundles.length )
+        bundleIndex = 1;
+      this.selectBundle(this.bundles[bundleIndex]);
+
+      let mode = localStorage.getItem( "mode" );
+      for ( let key in this.Mode )
+        if ( <Mode>this.Mode[key] )
+          if ( this.Mode[key].name == mode )
+            this.mode = this.Mode[key];
+
+      this.refresh();
+    }
 
     document.body.addEventListener("keydown",e=>this.onKey(e));
     document.body.addEventListener("contextmenu",e=>{if(!e.altKey)e.preventDefault()});
@@ -189,6 +199,11 @@ export class ListPage
     if ( this.mode == this.Mode.PDCs )
     {
       cv.model.setPDC( null );
+    }
+    else
+    if ( this.mode == this.Mode.Move )
+    {
+      this.viewCard( this.getSupposedCardID(cv) );
     }
   }
 
@@ -382,7 +397,11 @@ export class ListPage
       section.funcIndex += CardViewBundle.PropsFunctions.length;
   }
 
-  public setMode( mode:Mode ):void { this.mode = mode }
+  public setMode( mode:Mode ):void
+  { 
+    this.mode = mode;
+    localStorage.setItem( "mode", mode.name );
+  }
 
   public getPriority( cv:CardView ):string
   {

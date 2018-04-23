@@ -153,14 +153,6 @@ export class DataProvider
   
   private onLoaded_PDCharacters( data:PDCharacterData[] )
   {
-    // data.sort( sortFunction );
-
-    function sortFunction(aa:PDCharacterData,bb:PDCharacterData):number
-    {
-      let a:string = aa.origin.toUpperCase();
-      let b:string = bb.origin.toUpperCase();
-      return a < b ? -1 : a > b ? 1 : 0;
-    }
 
     for ( let i = data.length - 1; i >= 0; i--)
       this.pdcMap[data[i].guid] = data[i];
@@ -168,8 +160,21 @@ export class DataProvider
     this.events.publish( "data:reload" );
   }
 
+  public sortPDCs():void
+  {
+    this.pdc.data.sort( sortFunction );
+    function sortFunction(aa:PDCharacterData,bb:PDCharacterData):number
+    {
+      let a:string = aa.origin.toUpperCase();
+      let b:string = bb.origin.toUpperCase();
+      return a < b ? -1 : a > b ? 1 : 0;
+    }
+  }
+
   public saveAll():void
   {
+    this.sortPDCs();
+
     let token:string = "6dae67b6" + "f3085406" + "f57a9412";
     token += "c1d8d6ef";
     token += "5d888863";

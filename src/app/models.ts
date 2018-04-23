@@ -31,7 +31,9 @@ export class CardModel
     public get ID():number 
     { return this.properties.id  }
     public get prettyName():string
-    { return this.hasName ? this.properties.name : this.properties.slug }
+    { return this.hasName ? this.properties.name : this.prettySlug }
+    public get prettySlug():string
+    { return this.properties.slug ? this.properties.slug : "-" }
     public get prettyDescription():string 
     { return this.properties.description }
     public get prettyPower():string 
@@ -68,7 +70,7 @@ export class CardModel
         { text:"Ready", color:"#FFF" },
         { text:"Published", color:"none" },
         { text:"Retired", color:"none" },
-        { text:"Skip", color:"#333" },
+        { text:"Skip", color:"#888" },
     ]
 }
 

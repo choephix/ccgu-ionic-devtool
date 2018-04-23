@@ -83,7 +83,7 @@
         <div *ngIf="hasData(cv) && mode != Mode.Quik">
           <ion-badge class="id" *ngIf="mode.show.indexOf('id')>=0" mode="ios" style="position:absolute; right:5px; top:-5px;" color="light">{{cv.model.ID}}</ion-badge>
           <div class="slug" *ngIf="mode!=Mode.View" [style.opacity]="!showPrettyName||cv.model.hasName?1:.25">
-            <b>{{showPrettyName?cv.model.prettyName:cv.model.properties.slug}}</b></div>
+            <b>{{showPrettyName?cv.model.prettyName:cv.model.prettySlug}}</b></div>
           <div class="slug" *ngIf="mode==Mode.View" [style.opacity]="cv.model.hasName?1:.25">{{cv.model.prettyName}}</div>
           <div class="description">
             <div *ngIf="cv.model.properties.tags.length>0" class="tags">{{cv.model.properties.tags.join(' ')}}</div>
