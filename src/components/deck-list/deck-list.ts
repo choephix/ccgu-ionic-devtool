@@ -47,10 +47,6 @@ export class DeckListComponent
     }
   }
 
-  public finish():void
-  {
-    this.data.events.publish( "list:resetmode" );
-  }
-
+  public finish():void { this.data.events.publish( "list:resetmode" ) }
   public stop(event) { event.stopPropagation() }
 }

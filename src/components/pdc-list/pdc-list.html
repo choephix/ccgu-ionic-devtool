@@ -1,6 +1,11 @@
 <div style="background:white; overflow:hidden;" #pdcWrapper>
   <ion-list>
     <ion-item-group>
+      <ion-item-divider color="light" (auxclick)="select(null)">
+        <ion-icon name="list" item-start></ion-icon>
+        Public Domain Characters (+)
+        <ion-icon name="close-circle" (click)="finish()" color="faded" item-end></ion-icon>
+      </ion-item-divider>
       <!-- <ion-item-divider color="light">Public Domain Characters</ion-item-divider> -->
       <!-- <div class="pdc-list-item" *ngFor="let pdc of chars; let i = index"> -->
       <div class="pdc-list-item" *ngFor="let pdc of chars; let i = index" (click)="select(pdc)">

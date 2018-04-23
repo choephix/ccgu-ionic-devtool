@@ -49,6 +49,13 @@ pdc-list {
         min-height: 100px;
         margin-left: 4px !important;
     }
+    
+    .item-divider {
+        padding: 0px 0px;
+        .icon {
+            margin: 8px 8px;
+        }
+    }
 
     .gray {
         background: linear-gradient(to right, Moccasin , white);

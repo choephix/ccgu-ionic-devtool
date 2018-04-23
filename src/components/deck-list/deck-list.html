@@ -2,7 +2,7 @@
     <ion-list no-lines>
       <ion-item-group *ngIf="!selectedDeck" no-lines>
         <ion-item-divider color="light" (auxclick)="select(null)">
-          <ion-icon name="checkbox-outline" color="faded" item-start></ion-icon>
+          <ion-icon name="list" item-start></ion-icon>
           Dev-Decks
           <ion-icon name="close-circle" (click)="finish()" color="faded" item-end></ion-icon>
         </ion-item-divider>
@@ -18,7 +18,7 @@
       </ion-item-group>
       <ion-item-group *ngIf="selectedDeck" class="cards">
         <ion-item-divider color="light" (auxclick)="select(null)" (dblclick)="select(null)">
-          <ion-icon name="checkbox" color="faded" item-start></ion-icon>
+          <ion-icon name="list" item-start></ion-icon>
           Dev-Decks \\ {{selectedDeck.name}}
           <ion-icon name="return-left" (click)="select(null); stop($event)" color="faded" item-end></ion-icon>
         </ion-item-divider>

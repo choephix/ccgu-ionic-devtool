@@ -56,5 +56,6 @@ export class PdcListComponent
   public hasStuff(pdc:PDCharacterData):boolean
   { return (Boolean)( pdc.notes_cardstats || pdc.notes_character ) }
 
+  public finish():void { this.data.events.publish( "list:resetmode" ) }
   public stop(event) { event.stopPropagation() }
 }
