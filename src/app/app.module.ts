@@ -14,6 +14,7 @@ import { AutosizeDirective } from '../directives/autosize/autosize';
 import { DataProvider } from '../providers/data/data';
 import { PdcListComponent } from '../components/pdc-list/pdc-list';
 import { DeckListComponent } from '../components/deck-list/deck-list';
+import { PrettyProvider } from '../providers/pretty/pretty';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { DeckListComponent } from '../components/deck-list/deck-list';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    DataProvider
+    DataProvider,
+    PrettyProvider
   ]
 })
 export class AppModule {}

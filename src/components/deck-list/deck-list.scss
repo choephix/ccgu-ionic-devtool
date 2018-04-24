@@ -32,4 +32,17 @@ deck-list {
     .item-divider .input-wrapper {
         margin: 8px 0px;
     }
+
+    
+
+    .card-list-item {
+        border-bottom: rgba(0,0,0,.33) 1px solid;
+        .label {
+            font-weight: bold;
+        }
+    }
+    .card-list-item.sneak  .item { background : linear-gradient(to left, #FFF, #EA4 ) }
+    .card-list-item.normal .item { background : linear-gradient(to left, #FFF, #EC8 ) }
+    .card-list-item.grand  .item { background : linear-gradient(to left, #FFF, #EED ) }
+    .card-list-item.trap   .item { background : linear-gradient(to left, #FFF, #ECE ) }
 }
