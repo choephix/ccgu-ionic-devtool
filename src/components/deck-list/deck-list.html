@@ -1,6 +1,6 @@
 <div style="background:white; overflow:hidden;" #pdcWrapper>
     <ion-list no-lines>
-      <ion-item-group *ngIf="!selectedDeck" no-lines>
+      <ion-item-group *ngIf="!selectedDeck" reorder="true" no-lines>
         <ion-item-divider color="light" (auxclick)="select(null)">
           Dev-Decks
           <ion-icon name="list" item-start></ion-icon>
