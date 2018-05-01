@@ -12,12 +12,14 @@ export class DeckListComponent
   public get decks():DeckData[] { return this.data.decks.data; }
   
   public selectedDeck:DeckData;
+  public reorderMode:boolean;
 
   constructor( public data:DataProvider, public pretty:PrettyProvider ) {}
 
   public selectDeck(deck:DeckData):void
   {
     this.selectedDeck = deck;
+    this.reorderMode = false;
   }
 
   public add( slug:string ):void
