@@ -105,11 +105,10 @@ export class DataProvider
   public findCardBySlug(slug:string):CardModel
   {
     return this.cardsMap[this.findCardDataBySlug(slug).id];
-
-    for( let card of Array.from( this.cardsMap.values() ) )
-      if ( card.properties.slug == slug )
-        return card;
-    return null;
+    // for( let card of Array.from( this.cardsMap.values() ) )
+    //   if ( card.properties.slug == slug )
+    //     return card;
+    // return null;
   }
 
   public findCardDataBySlug(slug:string):CardData
