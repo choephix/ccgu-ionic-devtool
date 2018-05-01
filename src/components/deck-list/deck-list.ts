@@ -15,7 +15,7 @@ export class DeckListComponent
 
   constructor( public data:DataProvider, public pretty:PrettyProvider ) {}
 
-  public select(deck:DeckData):void
+  public selectDeck(deck:DeckData):void
   {
     this.selectedDeck = deck;
   }
@@ -52,6 +52,18 @@ export class DeckListComponent
       this.decks.splice( index, 1 );
       this.decks.splice( index + offset, 0, deck );
     }
+  }
+
+  public reorderDecks( indexes ) {
+    let deck = this.decks[indexes.from];
+    this.decks.splice(indexes.from, 1);
+    this.decks.splice(indexes.to, 0, deck);
+  }
+
+  public reorderCards( indexes ) {
+    let slug = this.selectedDeck.slugs[indexes.from];
+    this.selectedDeck.slugs.splice(indexes.from, 1);
+    this.selectedDeck.slugs.splice(indexes.to, 0, slug);
   }
 
   public finish():void { this.data.events.publish( "list:resetmode" ) }
