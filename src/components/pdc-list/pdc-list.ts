@@ -8,6 +8,8 @@ import { PDCharacterData } from '../../app/models';
 })
 export class PdcListComponent
 {
+  public reorderMode:boolean;
+  public editMode:boolean;
   public selectedPDCs:PDCharacterData[] = [];
   public expandedPDCs:PDCharacterData[] = [];
   public get chars():PDCharacterData[] { return this.data.pdc.data; }
