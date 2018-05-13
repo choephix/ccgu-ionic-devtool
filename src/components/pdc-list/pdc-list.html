@@ -4,6 +4,7 @@
     <ion-item-divider color="light" (auxclick)="select(null)">
       Public Domain Characters (+)
       <ion-icon name="close-circle" (click)="finish()" color="faded" item-start></ion-icon>
+      <ion-icon name="git-compare" (click)="data.sortPDCs()" color="faded" item-end></ion-icon>
       <ion-icon name="add" (click)="editMode=!editMode" color="faded" item-end></ion-icon>
       <ion-icon name="reorder" (click)="reorderMode=!reorderMode" color="faded" item-end></ion-icon>
     </ion-item-divider>

@@ -27,7 +27,7 @@ export class ListPage
     Edit : { icon : "create", name : "edit", show : ["priority","status"] },
     Quik : { icon : "flash",  name : "quik", show : ["priority","status"] },
     PDCs : { icon : "person", name : "pdcs", show : ["status"] },
-    Deck : { icon : "albums", name : "deck", show : ["priority","status"] },
+    Deck : { icon : "logo-buffer", name : "deck", show : ["priority","status"] },
   };
   
   readonly subheaderHeight:number = 24;
