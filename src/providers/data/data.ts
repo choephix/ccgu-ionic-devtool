@@ -205,32 +205,6 @@ export class DataProvider
     this.datafiles.forEach( datafile => datafile.save( console.log ) );
   }
 
-  public saveAll_OLD():void
-  {
-    this.sortPDCs();
-
-    let token:string = "6dae67b6" + "f3085406" + "f57a9412";
-    token += "c1d8d6ef";
-    token += "5d888863";
-    const url:string = "https://api.github.com/gists/4c390b3e5502811d196233104c89f755";
-    const headers = new HttpHeaders().set( "Authorization", "token  " + token );
-
-    const files = {};
-    this.datafiles.forEach( datafile => {
-      if ( datafile.dataHasChanged )
-        files[datafile.filename] = { content : JSON.stringify( datafile.data, null, 2 ) } 
-    } );
-
-    this.saving = true;
-    this.http.post( url, { files : files }, { headers : headers } )
-      .subscribe( data => {
-        console.log( "saved", data );
-        this.saving = false;
-        this.datafiles.forEach( datafile => datafile.updateOriginalState() );
-        this.showToast( "Data Saved" );
-      } );
-  }
-
   private showToast( msg:string ):void
   {
     this.toast.create( { message:msg, duration : 1500 } ).present();
@@ -396,14 +370,6 @@ class GUID {
 }
 
 class B64UTF8 {
-  /*
-  * Function to convert from UTF8 to Base64 solving the Unicode Problem
-  * Requires: window.btoa and window.encodeURIComponent functions
-  * More info: http://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
-  * Samples:
-  *      b64EncodeUnicode('✓ à la mode'); // "4pyTIMOgIGxhIG1vZGU="
-  *      b64EncodeUnicode('\n'); // "Cg=="
-  */
   public static Encode(str: string): string {
     if (window
         && "btoa" in window
@@ -417,15 +383,6 @@ class B64UTF8 {
     }
 
   }
-
-  /*
-  * Function to convert from Base64 to UTF8 solving the Unicode Problem
-  * Requires window.atob and window.decodeURIComponent functions
-  * More info: http://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
-  * Samples:
-  *      b64DecodeUnicode('4pyTIMOgIGxhIG1vZGU='); // "✓ à la mode"
-  *      b64DecodeUnicode('Cg=='); // "\n"
-  */
   public static Decode(str: string): string {
     if (window
         && "atob" in window
