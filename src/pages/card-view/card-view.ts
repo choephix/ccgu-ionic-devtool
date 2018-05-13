@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { CardModel, CardType } from '../../app/models';
 
-@IonicPage()
 @Component({
   selector: 'page-card-view',
   templateUrl: 'card-view.html',

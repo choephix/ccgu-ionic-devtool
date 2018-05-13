@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { AutosizeDirective } from './autosize/autosize';
+// import { AutosizeDirective } from './autosize/autosize';
 @NgModule({
-	declarations: [AutosizeDirective],
+	// declarations: [AutosizeDirective],
 	imports: [],
-	exports: [AutosizeDirective]
+	// exports: [AutosizeDirective]
 })
 export class DirectivesModule {}
