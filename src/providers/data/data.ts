@@ -38,7 +38,7 @@ export class DataProvider
 
     this.loadAll();
 
-    setInterval( () => this.checkForChanges(), 2000 );
+    setInterval( () => this.checkForChanges(), 2500 );
   }
 
   public isBusy():boolean { return this.saving || !this.datafiles.every( (v,i,a) => { return !v.busy } ) }
@@ -193,13 +193,19 @@ export class DataProvider
     this.pdc.data.sort( sortFunction );
     function sortFunction(aa:PDCharacterData,bb:PDCharacterData):number
     {
-      let a:string = aa.origin.toUpperCase();
-      let b:string = bb.origin.toUpperCase();
+      let a:string = aa.origin.toUpperCase() + aa.name.toUpperCase();
+      let b:string = bb.origin.toUpperCase() + bb.name.toUpperCase();
       return a < b ? -1 : a > b ? 1 : 0;
     }
   }
 
   public saveAll():void
+  {
+    // this.sortPDCs();
+    this.datafiles.forEach( datafile => datafile.save( console.log ) );
+  }
+
+  public saveAll_OLD():void
   {
     this.sortPDCs();
 
@@ -237,13 +243,23 @@ export class DataProvider
 }
 
 interface IDataFile
-{ filename:string; data; busy:boolean; dataHasChanged:boolean; updateOriginalState():void;  checkForChanges():void }
+{ 
+  data; 
+  filename:string; 
+  busy:boolean; 
+  dataHasChanged:boolean; 
+  save( callbackSaved : () => void ):void;  
+  updateOriginalState():void;  
+  checkForChanges():void 
+}
 
 class DataFile<T> implements IDataFile
 {
-  private readonly URL_FILE:string = "https://gist.githubusercontent.com/choephix/4c390b3e5502811d196233104c89f755/raw/";
+  // private readonly URL_FILE:string = "https://raw.githubusercontent.com/choephix/ccgu-loadable-data/master/";
   public data:T;
   public busy:boolean;
+
+  public sha:string;
 
   public dataOriginalJson:string;
   public dataHasChanged:boolean;
@@ -253,21 +269,68 @@ class DataFile<T> implements IDataFile
   public load( callbackLoaded : (data:T) => void ):void
   {
     console.log( "loading " + this.filename );
-    
-    const headers = new HttpHeaders();
-    headers.set( "content-type", "application/json" );
-    headers.set( 'cache-control', 'no-cache' );
-    // headers.set( 'x-apikey', '5acb82b08f64a5337173a18a' );
-    
+
+    let url:string = "https://api.github.com/repos/choephix/ccgu-loadable-data/contents/" 
+                   + this.filename + this.cacheBustSuffix();
+                  //  + this.filename;
+
     this.busy = true;
-    var url_cards:string = this.URL_FILE + this.filename + this.cacheBustSuffix();
-    this.http.get(url_cards,{headers:headers}).subscribe( data => {
-      console.log( "loaded "+this.filename, data );
-      this.busy = false;
-      this.data = <T>data;
-      this.updateOriginalState();
+    this.http.get( url ).subscribe( data => {
+      this.onLoadResponse( <GithubGetContentsResponse>data );
       callbackLoaded( this.data );
     } );
+    
+    // const headers = new HttpHeaders();
+    // headers.set( "content-type", "application/json" );
+    // headers.set( 'cache-control', 'no-cache' );
+    // headers.set( 'x-apikey', '5acb82b08f64a5337173a18a' );
+  }
+
+  private onLoadResponse( data:GithubGetContentsResponse ):void
+  {
+    console.log( "loaded "+this.filename, data );
+    this.busy = false;
+    this.sha = data.sha;
+    this.data = <T>JSON.parse(B64UTF8.Decode(data.content));
+    this.updateOriginalState();
+  }
+
+  public save( callbackSaved : () => void ):void
+  {
+    if ( !this.dataHasChanged )
+    {
+      console.log( this.filename + " - nothng changed to save" );
+      return;
+    }
+
+    let url:string = "https://api.github.com/repos/choephix/ccgu-loadable-data/contents/" + this.filename;
+    let body = {
+      message : "update from online tool",
+      content : B64UTF8.Encode(JSON.stringify( this.data, null, 2 )),
+      sha : this.sha
+    };
+
+    let token:string = "";
+    token += "5180f8d9";
+    token += "6e8077d5";
+    token += "03b06fe2";
+    token += "3df10fd7";
+    token += "accbea88";
+
+    let headers = new HttpHeaders().set( "Authorization", "token  " + token );
+
+    this.http.put( url, body, { headers : headers } )
+      .subscribe( data => {
+        console.log( data );
+        this.onSaveResponse( <GithubUpdateContentsResponse>data );
+        callbackSaved();
+       } );
+  }
+
+  private onSaveResponse( data:GithubUpdateContentsResponse ):void
+  {
+    this.sha = data.content.sha;
+    this.updateOriginalState();
   }
 
   public updateOriginalState():void
@@ -282,6 +345,23 @@ class DataFile<T> implements IDataFile
   }
   
   private cacheBustSuffix():string { return '?' + ( new Date().valueOf() % 1000000 ) }
+}
+
+class GithubGetContentsResponse
+{
+  public name:string;
+  public path:string;
+  public sha:string;
+  public download_url:string;
+  public content:string;
+  public encoding:string;
+  public size:number;
+}
+
+class GithubUpdateContentsResponse
+{
+  public content:GithubGetContentsResponse;
+  public commit:object;
 }
 
 class ConfigurationData
@@ -312,5 +392,50 @@ class GUID {
           var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
           return v.toString(16);
       });
+  }
+}
+
+class B64UTF8 {
+  /*
+  * Function to convert from UTF8 to Base64 solving the Unicode Problem
+  * Requires: window.btoa and window.encodeURIComponent functions
+  * More info: http://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
+  * Samples:
+  *      b64EncodeUnicode('✓ à la mode'); // "4pyTIMOgIGxhIG1vZGU="
+  *      b64EncodeUnicode('\n'); // "Cg=="
+  */
+  public static Encode(str: string): string {
+    if (window
+        && "btoa" in window
+        && "encodeURIComponent" in window) {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+            return String.fromCharCode(("0x" + p1) as any);
+        }));
+    } else {
+        console.warn("b64EncodeUnicode requirements: window.btoa and window.encodeURIComponent functions");
+        return null;
+    }
+
+  }
+
+  /*
+  * Function to convert from Base64 to UTF8 solving the Unicode Problem
+  * Requires window.atob and window.decodeURIComponent functions
+  * More info: http://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
+  * Samples:
+  *      b64DecodeUnicode('4pyTIMOgIGxhIG1vZGU='); // "✓ à la mode"
+  *      b64DecodeUnicode('Cg=='); // "\n"
+  */
+  public static Decode(str: string): string {
+    if (window
+        && "atob" in window
+        && "decodeURIComponent" in window) {
+        return decodeURIComponent(Array.prototype.map.call(atob(str), (c) => {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(""));
+    } else {
+        console.warn("b64DecodeUnicode requirements: window.atob and window.decodeURIComponent functions");
+        return null;
+    }
   }
 }
