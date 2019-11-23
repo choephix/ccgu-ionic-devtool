@@ -11,5 +11,5 @@ jobs:
     - uses: actions/checkout@v1
     - name: Run a multi-line script
       run: |
-        npm build
-        npm lint
+        npm run build
+        npm run lint
